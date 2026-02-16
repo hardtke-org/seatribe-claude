@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 min-h-screen m-0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+}
