@@ -46,7 +46,7 @@ async function loadLogoBase64(): Promise<string | null> {
 export async function generatePdf(appData: AppData, skipper: SkipperInfo, includeImages = true): Promise<string> {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  const logoBase64 = await loadLogoBase64();
+  const logoBase64 = includeImages ? await loadLogoBase64() : null;
 
   let y = MARGIN;
 
