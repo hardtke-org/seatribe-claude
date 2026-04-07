@@ -37,10 +37,11 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks }),
       });
-      if (!res.ok) throw new Error('Fehler');
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? res.status);
       setSubmitted(true);
-    } catch {
-      alert('Fehler beim Senden. Bitte versuche es erneut.');
+    } catch (err) {
+      alert('Fehler: ' + String(err));
     } finally {
       setSubmitting(false);
     }
