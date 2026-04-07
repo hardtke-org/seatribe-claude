@@ -1,14 +1,15 @@
 import { Resend } from 'resend';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { pdf, skipper } = await req.json() as {
+    const { pdf, skipper } = req.body as {
       pdf: string;
       skipper: { name: string; auftragId: string; bootstyp: string; starthafen: string; zielhafen: string };
     };
@@ -39,17 +40,13 @@ export default async function handler(req: Request): Promise<Response> {
       ],
     });
 
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ ok: true });
   } catch (err) {
     console.error(err);
-    return new Response(JSON.stringify({ error: 'Fehler beim Senden' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: 'Fehler beim Senden' });
   }
 }
 
-export const config = { runtime: 'edge' };
+export const config = {
+  api: { bodyParser: { sizeLimit: '10mb' } },
+};
