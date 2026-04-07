@@ -24,7 +24,7 @@ let snapshot = data;
 const listeners = new Set<() => void>();
 
 function emit() {
-  snapshot = { ...data };
+  snapshot = { clusters: [...data.clusters], tasks: data.tasks.map(t => ({ ...t })) };
   listeners.forEach(l => l());
 }
 
@@ -44,6 +44,24 @@ export function useStore() {
     const task = data.tasks.find(t => t.id === taskId);
     if (task) {
       task.status = status;
+      saveData(data);
+      emit();
+    }
+  }, []);
+
+  const addTaskImage = useCallback((taskId: string, imageId: string) => {
+    const task = data.tasks.find(t => t.id === taskId);
+    if (task) {
+      task.imageIds = [...(task.imageIds ?? []), imageId];
+      saveData(data);
+      emit();
+    }
+  }, []);
+
+  const removeTaskImage = useCallback((taskId: string, imageId: string) => {
+    const task = data.tasks.find(t => t.id === taskId);
+    if (task) {
+      task.imageIds = (task.imageIds ?? []).filter(id => id !== imageId);
       saveData(data);
       emit();
     }
@@ -74,7 +92,7 @@ export function useStore() {
     return JSON.stringify(data, null, 2);
   }, []);
 
-  return { store, setTaskStatus, setTaskNote, resetToSeed, importData, exportData };
+  return { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed, importData, exportData };
 }
 
 export function getProgress(tasks: Task[]): { done: number; total: number; percent: number } {
