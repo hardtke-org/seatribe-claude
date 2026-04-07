@@ -32,7 +32,7 @@ export default function App() {
     if (!skipperInfo || !allDone) return;
     setSubmitting(true);
     try {
-      const pdf = await generatePdf(store, skipperInfo);
+      const pdf = await generatePdf(store, skipperInfo, false); // ohne Bilder für E-Mail
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -45,6 +45,15 @@ export default function App() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function handleDownloadPdf() {
+    if (!skipperInfo) return;
+    const pdf = await generatePdf(store, skipperInfo, true); // mit Bildern
+    const link = document.createElement('a');
+    link.href = `data:application/pdf;base64,${pdf}`;
+    link.download = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}.pdf`;
+    link.click();
   }
 
   const progress = useMemo(() => getProgress(store.tasks), [store.tasks]);
@@ -322,13 +331,19 @@ export default function App() {
         </div>
       )}
       {allDone && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2">
+          <button
+            onClick={handleDownloadPdf}
+            className="bg-slate-700 hover:bg-slate-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors"
+          >
+            PDF herunterladen
+          </button>
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
+            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
           >
-            {submitting ? 'Wird gesendet…' : 'Absenden & PDF erstellen'}
+            {submitting ? 'Wird gesendet…' : 'Absenden'}
           </button>
         </div>
       )}

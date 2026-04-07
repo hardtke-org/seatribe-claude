@@ -43,7 +43,7 @@ async function loadLogoBase64(): Promise<string | null> {
   }
 }
 
-export async function generatePdf(appData: AppData, skipper: SkipperInfo): Promise<string> {
+export async function generatePdf(appData: AppData, skipper: SkipperInfo, includeImages = true): Promise<string> {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const logoBase64 = await loadLogoBase64();
@@ -134,11 +134,13 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo): Promi
       // Fetch images
       const imageIds = task.imageIds ?? [];
       const loadedImages: { dataUrl: string; wMm: number; hMm: number }[] = [];
-      for (const id of imageIds) {
-        const raw = await getImage(id);
-        if (raw) {
-          const normalized = await normalizeImage(raw, 55);
-          loadedImages.push(normalized);
+      if (includeImages) {
+        for (const id of imageIds) {
+          const raw = await getImage(id);
+          if (raw) {
+            const normalized = await normalizeImage(raw, 55);
+            loadedImages.push(normalized);
+          }
         }
       }
 
