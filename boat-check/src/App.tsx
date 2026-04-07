@@ -32,11 +32,10 @@ export default function App() {
     if (!skipperInfo || !allDone) return;
     setSubmitting(true);
     try {
-      const pdf = await generatePdf(store, skipperInfo, false); // ohne Bilder für E-Mail
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pdf, skipper: skipperInfo }),
+        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks }),
       });
       if (!res.ok) throw new Error('Fehler');
       setSubmitted(true);
