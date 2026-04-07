@@ -28,9 +28,25 @@ function normalizeImage(dataUrl: string, maxMm: number): Promise<{ dataUrl: stri
   });
 }
 
+async function loadLogoBase64(): Promise<string | null> {
+  try {
+    const res = await fetch('/logo.png');
+    const blob = await res.blob();
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => resolve((reader.result as string).split(',')[1]);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
 export async function generatePdf(appData: AppData, skipper: SkipperInfo): Promise<string> {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const logoBase64 = await loadLogoBase64();
 
   let y = MARGIN;
 
@@ -43,15 +59,20 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo): Promi
 
   // --- Header ---
   doc.setFillColor(15, 23, 42); // slate-900
-  doc.rect(0, 0, PAGE_W, 28, 'F');
+  doc.rect(0, 0, PAGE_W, 32, 'F');
+
+  if (logoBase64) {
+    doc.addImage(logoBase64, 'PNG', MARGIN, 4, 24, 24);
+  }
+
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
-  doc.text('SEATRIBE DELIVERIES', MARGIN, 11);
+  doc.text('SEATRIBE DELIVERIES', logoBase64 ? MARGIN + 28 : MARGIN, 13);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.text('Bootsübernahme-Check', MARGIN, 19);
-  y = 36;
+  doc.text('Bootsübernahme-Check', logoBase64 ? MARGIN + 28 : MARGIN, 22);
+  y = 40;
 
   // --- Skipper info box ---
   doc.setTextColor(30, 41, 59); // slate-800

@@ -25,6 +25,7 @@ export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => voi
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
+          <img src="/logo.png" alt="Seatribe Deliveries" className="w-28 h-28 mx-auto mb-4 object-contain" />
           <h1 className="text-2xl font-bold text-slate-900">Bootsübernahme-Check</h1>
           <p className="mt-2 text-sm text-slate-500">Bitte fülle die folgenden Felder aus, bevor du die Checkliste startest.</p>
         </div>
