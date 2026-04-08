@@ -1,36 +1,12 @@
-"use client";
-
 import { courses, formatPrice, Course } from "@/lib/courses";
-import { useState } from "react";
+import Link from "next/link";
 
 function CourseCard({ course }: { course: Course }) {
-  const [loading, setLoading] = useState(false);
-
-  async function handleBuy() {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId: course.id }),
-      });
-
-      const data = await response.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Fehler: " + (data.error || "Unbekannter Fehler"));
-        setLoading(false);
-      }
-    } catch {
-      alert("Verbindungsfehler. Bitte versuche es erneut.");
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <Link
+      href={`/kurs/${course.id}`}
+      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 block"
+    >
       <div
         className={`h-3 ${course.type === "live" ? "bg-blue-500" : "bg-green-500"}`}
       />
@@ -78,16 +54,12 @@ function CourseCard({ course }: { course: Course }) {
           <span className="text-2xl font-bold text-gray-900">
             {formatPrice(course.price)}
           </span>
-          <button
-            onClick={handleBuy}
-            disabled={loading}
-            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Laden..." : "Jetzt kaufen"}
-          </button>
+          <span className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl">
+            Mehr erfahren
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
