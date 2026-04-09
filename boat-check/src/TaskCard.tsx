@@ -154,7 +154,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                       setEditing(false);
                     }
                   }}
-                  className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary bg-ui-card leading-relaxed box-border resize-none"
+                  className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 bg-ui-card leading-relaxed box-border resize-none transition-colors duration-150"
                   rows={2}
                   placeholder="Notiz..."
                 />
@@ -195,14 +195,14 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setEditing(true)}
-                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors"
+                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 active:scale-[0.97] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                 title="Notiz"
               >
                 &#9998;
               </button>
               <button
                 onClick={() => fileRef.current?.click()}
-                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors"
+                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 active:scale-[0.97] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                 title="Foto hinzufügen"
               >
                 &#128247;
@@ -222,7 +222,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               {task.status !== 'open' && (
                 <button
                   onClick={() => onStatus(task.id, 'open')}
-                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors"
+                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 active:scale-[0.97] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                   title="Zurück auf Offen"
                 >
                   &#8617;
@@ -231,7 +231,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               {task.status !== 'skip' && (
                 <button
                   onClick={() => onStatus(task.id, 'skip')}
-                  className="text-base px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors"
+                  className="text-base px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 active:scale-[0.97] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                   title="Nicht prüfen"
                 >
                   &#10680;
@@ -240,7 +240,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               {task.status !== 'done' && (
                 <button
                   onClick={() => onStatus(task.id, 'done')}
-                  className="text-base px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
+                  className="text-base px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 active:scale-[0.97] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                   title="Erledigt"
                 >
                   &#10003;

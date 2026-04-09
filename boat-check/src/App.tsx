@@ -213,7 +213,7 @@ export default function App() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Suche..."
-          className="w-full px-3 py-2 text-sm border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+          className="w-full px-3 py-2 text-sm border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-colors duration-150"
         />
       </div>
 
@@ -297,16 +297,17 @@ export default function App() {
                     </span>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="sm:columns-2 sm:gap-3">
                   {tasks.map(task => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onStatus={setTaskStatus}
-                      onNote={setTaskNote}
-                      onAddImage={addTaskImage}
-                      onRemoveImage={removeTaskImage}
-                    />
+                    <div key={task.id} className="mb-3 break-inside-avoid">
+                      <TaskCard
+                        task={task}
+                        onStatus={setTaskStatus}
+                        onNote={setTaskNote}
+                        onAddImage={addTaskImage}
+                        onRemoveImage={removeTaskImage}
+                      />
+                    </div>
                   ))}
                 </div>
               </section>
