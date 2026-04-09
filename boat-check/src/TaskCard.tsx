@@ -154,7 +154,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                       setEditing(false);
                     }
                   }}
-                  className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 bg-ui-card leading-relaxed box-border resize-none transition-colors duration-150"
+                  className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-inset focus:ring-brand-primary/30 bg-ui-card leading-relaxed box-border resize-none transition-colors duration-150"
                   rows={2}
                   placeholder="Notiz..."
                 />
