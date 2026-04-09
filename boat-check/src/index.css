@@ -18,10 +18,16 @@
 @layer base {
   html {
     overflow-x: hidden;
+    max-width: 100%;
   }
   body {
     @apply bg-ui-bg text-slate-900 min-h-screen m-0;
     -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
+    max-width: 100%;
+  }
+  #root {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
