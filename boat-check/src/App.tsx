@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import type { AppData, SkipperInfo, TaskStatus } from './types';
+import type { AppData, SkipperInfo } from './types';
 import { useStore, getProgress } from './useStore';
 import { TaskCard } from './TaskCard';
 import { ProgressBar } from './ProgressBar';
@@ -128,11 +128,6 @@ export default function App() {
     }
   }
 
-  function setAllClusterStatus(clusterId: string, status: TaskStatus) {
-    store.tasks
-      .filter(t => t.clusterId === clusterId && t.status !== status)
-      .forEach(t => setTaskStatus(t.id, status));
-  }
 
   if (!skipperInfo) return <SkipperForm onSubmit={setSkipperInfo} />;
 
