@@ -20,6 +20,5 @@
     @apply bg-ui-bg text-slate-900 min-h-screen m-0;
     -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
-    overflow-x: hidden;
   }
 }

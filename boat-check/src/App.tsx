@@ -213,7 +213,7 @@ export default function App() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-5 bg-slate-200 rounded-xl p-1" role="tablist" aria-label="Status-Filter">
+      <div className="flex flex-wrap gap-1 mb-5 bg-slate-200 rounded-xl p-1" role="tablist" aria-label="Status-Filter">
         {TABS.map(tab => {
           const count = tab.key === 'all'
             ? store.tasks.length
