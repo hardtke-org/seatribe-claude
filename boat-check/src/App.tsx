@@ -213,7 +213,7 @@ export default function App() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Suche..."
-          className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+          className="w-full px-3 py-2 text-sm border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
         />
       </div>
 
@@ -233,7 +233,7 @@ export default function App() {
               onClick={() => setFilter(tab.key)}
               className={`flex-1 text-xs font-medium py-2 px-1 rounded-lg transition-colors ${
                 filter === tab.key
-                  ? 'bg-white text-slate-900 shadow-sm'
+                  ? 'bg-white text-brand-primary shadow-sm'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -289,22 +289,13 @@ export default function App() {
               <section key={cluster.id}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">
+                    <h2 className="text-sm font-bold text-brand-dark uppercase tracking-wide">
                       {cluster.title}
                     </h2>
                     <span className="text-xs text-slate-400 font-medium">
                       {clusterProgress.done}/{clusterProgress.total}
                     </span>
                   </div>
-                  {filter === 'open' && tasks.length > 0 && (
-                    <button
-                      onClick={() => setAllClusterStatus(cluster.id, 'done')}
-                      className="text-xs px-2 py-1 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
-                      title="Alle in dieser Gruppe erledigen"
-                    >
-                      Alle &#10003;
-                    </button>
-                  )}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {tasks.map(task => (

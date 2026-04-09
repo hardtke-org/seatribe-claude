@@ -100,7 +100,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
   }
 
   const statusColors: Record<TaskStatus, string> = {
-    open: 'bg-white border-slate-200',
+    open: 'bg-ui-card border-ui-border',
     done: 'bg-emerald-50 border-emerald-200',
     skip: 'bg-slate-50 border-slate-300',
   };
@@ -154,7 +154,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                       setEditing(false);
                     }
                   }}
-                  className="mt-2 w-full max-w-full text-base border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white leading-relaxed box-border resize-none"
+                  className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary bg-ui-card leading-relaxed box-border resize-none"
                   rows={2}
                   placeholder="Notiz..."
                 />

@@ -22,18 +22,18 @@ export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => voi
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-ui-bg flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <img src="/logo.png" alt="Seatribe Deliveries" className="w-28 h-28 mx-auto mb-4 object-contain" />
-          <h1 className="text-2xl font-bold text-slate-900">Bootsübernahme-Check</h1>
-          <p className="mt-2 text-sm text-slate-500">Bitte fülle die folgenden Felder aus, bevor du die Checkliste startest.</p>
+          <h1 className="text-2xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
+          <p className="mt-2 text-sm text-ui-text-secondary">Bitte fülle die folgenden Felder aus, bevor du die Checkliste startest.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-ui-card rounded-2xl border border-ui-border p-6 space-y-4">
           {FIELDS.map(({ key, label, placeholder }) => (
             <div key={key}>
-              <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">
+              <label className="block text-xs font-semibold text-brand-dark uppercase tracking-wide mb-1">
                 {label}
               </label>
               <input
@@ -42,7 +42,7 @@ export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => voi
                 onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                 placeholder={placeholder}
                 required
-                className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                className="w-full px-3 py-2.5 text-sm border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-colors duration-150"
               />
             </div>
           ))}
@@ -50,7 +50,7 @@ export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => voi
           <button
             type="submit"
             disabled={!valid}
-            className="w-full mt-2 py-3 text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-700 active:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full mt-2 py-3 text-sm font-semibold rounded-xl bg-brand-dark text-white shadow-sm hover:brightness-110 hover:shadow-md active:brightness-90 active:scale-[0.98] active:shadow-none transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Weiter zur Checkliste →
           </button>

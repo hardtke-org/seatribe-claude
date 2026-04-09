@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-primary: #009FE0;
+  --color-brand-secondary: #0EA4DB;
+  --color-brand-dark: #0B3A53;
+  --color-brand-accent: #E89B5A;
+  --color-ui-bg: #F7FAFC;
+  --color-ui-card: #FFFFFF;
+  --color-ui-border: #D9E2EC;
+  --color-ui-text-secondary: #6B7A90;
+  --color-ui-muted: #E5EAF0;
+  --color-status-success: #7BCFA6;
+  --color-status-neutral: #C7CED6;
+  --color-status-warning: #F4B860;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 min-h-screen m-0;
+    @apply bg-ui-bg text-slate-900 min-h-screen m-0;
     -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
     overflow-x: hidden;
