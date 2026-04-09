@@ -25,6 +25,7 @@
     -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
     max-width: 100%;
+    overflow-x: hidden;
   }
   #root {
     max-width: 100%;

@@ -150,7 +150,7 @@ export default function App() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5 overflow-x-hidden">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
