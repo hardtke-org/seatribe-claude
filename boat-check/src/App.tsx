@@ -155,9 +155,9 @@ export default function App() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-28 pt-5">
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-xl font-bold text-slate-900">Bootsübernahme-Check</h1>
         </div>
@@ -196,18 +196,18 @@ export default function App() {
       {/* Reset */}
       <button
         onClick={handleReset}
-        className="w-full mb-3 py-2 text-sm font-medium rounded-xl bg-red-100 text-red-700 hover:bg-red-200 active:bg-red-300 transition-colors"
+        className="w-full mb-5 py-2 text-sm font-medium rounded-xl bg-red-100 text-red-700 hover:bg-red-200 active:bg-red-300 transition-colors"
       >
         Zurücksetzen
       </button>
 
       {/* Progress */}
-      <div className="mb-4">
+      <div className="mb-5">
         <ProgressBar {...progress} />
       </div>
 
       {/* Search */}
-      <div className="mb-3">
+      <div className="mb-4">
         <input
           type="search"
           value={search}
@@ -218,7 +218,7 @@ export default function App() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4 bg-slate-200 rounded-xl p-1" role="tablist" aria-label="Status-Filter">
+      <div className="flex gap-1 mb-5 bg-slate-200 rounded-xl p-1" role="tablist" aria-label="Status-Filter">
         {TABS.map(tab => {
           const count = tab.key === 'all'
             ? store.tasks.length
@@ -282,12 +282,12 @@ export default function App() {
           </p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {grouped.map(({ cluster, tasks }) => {
             const clusterProgress = getProgress(store.tasks.filter(t => t.clusterId === cluster.id));
             return (
               <section key={cluster.id}>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">
                       {cluster.title}
@@ -306,7 +306,7 @@ export default function App() {
                     </button>
                   )}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {tasks.map(task => (
                     <TaskCard
                       key={task.id}

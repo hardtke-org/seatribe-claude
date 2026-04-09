@@ -101,8 +101,8 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
 
   const statusColors: Record<TaskStatus, string> = {
     open: 'bg-white border-slate-200',
-    done: 'bg-emerald-50 border-emerald-300',
-    skip: 'bg-slate-100 border-slate-300 opacity-60',
+    done: 'bg-emerald-50 border-emerald-200',
+    skip: 'bg-slate-50 border-slate-300',
   };
 
   const swipeBg =
@@ -133,11 +133,11 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
             transform: `translateX(${offsetX}px)`,
             transition: swiping ? 'none' : 'transform 0.3s ease-out',
           }}
-          className={`relative border rounded-xl p-3 select-none touch-pan-y ${statusColors[task.status]} ${swiping ? 'cursor-grabbing' : 'cursor-grab'}`}
+          className={`relative border rounded-xl p-4 select-none touch-pan-y ${statusColors[task.status]} ${swiping ? 'cursor-grabbing' : 'cursor-grab'}`}
         >
           <div className="flex items-start gap-2">
             <div className="flex-1 min-w-0">
-              <p className={`text-sm leading-snug ${task.status === 'done' ? 'line-through text-slate-500' : ''} ${task.status === 'skip' ? 'text-slate-400' : ''}`}>
+              <p className={`text-sm leading-snug break-words ${task.status === 'done' ? 'line-through text-slate-500' : ''} ${task.status === 'skip' ? 'text-slate-400' : ''}`}>
                 {task.title}
               </p>
 
@@ -154,30 +154,30 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                       setEditing(false);
                     }
                   }}
-                  className="mt-2 w-full text-xs border border-slate-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                  className="mt-2 w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white leading-relaxed"
                   rows={2}
                   placeholder="Notiz..."
                 />
               ) : task.note ? (
-                <p onClick={() => setEditing(true)} className="mt-1 text-xs text-slate-500 italic cursor-pointer">
+                <p onClick={() => setEditing(true)} className="mt-2 text-xs text-slate-500 leading-relaxed cursor-pointer border-l-2 border-slate-300 pl-2">
                   {task.note}
                 </p>
               ) : null}
 
               {/* Image thumbnails */}
               {images.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {images.map(img => (
                     <div key={img.id} className="relative group">
                       <img
                         src={img.url}
                         alt=""
                         onClick={() => setLightbox(img.url)}
-                        className="w-14 h-14 object-cover rounded-lg border border-slate-200 cursor-pointer"
+                        className="w-16 h-16 object-cover rounded-lg border border-slate-200 cursor-pointer shadow-sm"
                       />
                       <button
                         onClick={() => handleRemoveImage(img.id)}
-                        className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white rounded-full text-xs leading-none flex items-center justify-center opacity-0 group-hover:opacity-100 active:opacity-100 transition-opacity"
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-xs leading-none flex items-center justify-center opacity-0 group-hover:opacity-100 active:opacity-100 transition-opacity"
                         title="Bild entfernen"
                       >
                         ×
@@ -190,57 +190,63 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-1.5 mt-2">
-            {task.status !== 'done' && (
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+            {/* Status-Aktionen */}
+            <div className="flex items-center gap-2">
+              {task.status !== 'done' && (
+                <button
+                  onClick={() => onStatus(task.id, 'done')}
+                  className="text-sm px-3 py-2 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
+                  title="Erledigt"
+                >
+                  &#10003;
+                </button>
+              )}
+              {task.status !== 'skip' && (
+                <button
+                  onClick={() => onStatus(task.id, 'skip')}
+                  className="text-sm px-3 py-2 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors"
+                  title="Nicht prüfen"
+                >
+                  &#10680;
+                </button>
+              )}
+              {task.status !== 'open' && (
+                <button
+                  onClick={() => onStatus(task.id, 'open')}
+                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors"
+                  title="Zurück auf Offen"
+                >
+                  &#8617;
+                </button>
+              )}
+            </div>
+            {/* Dokumentations-Aktionen */}
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => onStatus(task.id, 'done')}
-                className="text-xs px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
-                title="Erledigt"
+                onClick={() => setEditing(true)}
+                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors"
+                title="Notiz"
               >
-                &#10003;
+                &#9998;
               </button>
-            )}
-            {task.status !== 'skip' && (
               <button
-                onClick={() => onStatus(task.id, 'skip')}
-                className="text-xs px-2.5 py-1 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors"
-                title="Nicht prüfen"
+                onClick={() => fileRef.current?.click()}
+                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors"
+                title="Foto hinzufügen"
               >
-                &#10680;
+                &#128247;
               </button>
-            )}
-            {task.status !== 'open' && (
-              <button
-                onClick={() => onStatus(task.id, 'open')}
-                className="text-xs px-2.5 py-1 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors"
-                title="Zurück auf Offen"
-              >
-                &#8617;
-              </button>
-            )}
-            <button
-              onClick={() => setEditing(true)}
-              className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors"
-              title="Notiz"
-            >
-              &#9998;
-            </button>
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors ml-auto"
-              title="Foto hinzufügen"
-            >
-              &#128247;
-            </button>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              multiple
-              capture="environment"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                multiple
+                capture="environment"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
           </div>
         </div>
       </div>
