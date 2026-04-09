@@ -136,7 +136,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
           className={`relative border rounded-xl p-4 select-none touch-pan-y ${statusColors[task.status]} ${swiping ? 'cursor-grabbing' : 'cursor-grab'}`}
         >
           <div className="flex items-start gap-2">
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 overflow-hidden">
               <p className={`text-sm leading-snug break-words ${task.status === 'done' ? 'line-through text-slate-500' : ''} ${task.status === 'skip' ? 'text-slate-400' : ''}`}>
                 {task.title}
               </p>
@@ -154,7 +154,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                       setEditing(false);
                     }
                   }}
-                  className="mt-2 w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white leading-relaxed"
+                  className="mt-2 w-full max-w-full text-xs border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white leading-relaxed box-border"
                   rows={2}
                   placeholder="Notiz..."
                 />
@@ -166,7 +166,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
 
               {/* Image thumbnails */}
               {images.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-wrap gap-2 mt-3 max-w-full">
                   {images.map(img => (
                     <div key={img.id} className="relative group">
                       <img
@@ -191,37 +191,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
 
           {/* Action buttons */}
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-            {/* Status-Aktionen */}
-            <div className="flex items-center gap-2">
-              {task.status !== 'done' && (
-                <button
-                  onClick={() => onStatus(task.id, 'done')}
-                  className="text-sm px-3 py-2 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
-                  title="Erledigt"
-                >
-                  &#10003;
-                </button>
-              )}
-              {task.status !== 'skip' && (
-                <button
-                  onClick={() => onStatus(task.id, 'skip')}
-                  className="text-sm px-3 py-2 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors"
-                  title="Nicht prüfen"
-                >
-                  &#10680;
-                </button>
-              )}
-              {task.status !== 'open' && (
-                <button
-                  onClick={() => onStatus(task.id, 'open')}
-                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors"
-                  title="Zurück auf Offen"
-                >
-                  &#8617;
-                </button>
-              )}
-            </div>
-            {/* Dokumentations-Aktionen */}
+            {/* Dokumentations-Aktionen – links */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setEditing(true)}
@@ -246,6 +216,36 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                 onChange={handleFileChange}
                 className="hidden"
               />
+            </div>
+            {/* Status-Aktionen – rechts, daumenfreundlich */}
+            <div className="flex items-center gap-4">
+              {task.status !== 'open' && (
+                <button
+                  onClick={() => onStatus(task.id, 'open')}
+                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors"
+                  title="Zurück auf Offen"
+                >
+                  &#8617;
+                </button>
+              )}
+              {task.status !== 'skip' && (
+                <button
+                  onClick={() => onStatus(task.id, 'skip')}
+                  className="text-base px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors"
+                  title="Nicht prüfen"
+                >
+                  &#10680;
+                </button>
+              )}
+              {task.status !== 'done' && (
+                <button
+                  onClick={() => onStatus(task.id, 'done')}
+                  className="text-base px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors"
+                  title="Erledigt"
+                >
+                  &#10003;
+                </button>
+              )}
             </div>
           </div>
         </div>
