@@ -134,7 +134,7 @@ export default function App() {
       {/* Header – full width */}
       <div className="bg-brand-primary px-5 sm:px-8 pt-5 pb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
-        <img src="/logo.png" alt="Seatribe" className="h-9 w-auto object-contain" />
+        <img src="/logo.png" alt="Seatribe" className="h-10 w-10 object-contain" />
       </div>
 
       <div className="px-5 sm:px-8 pb-28 pt-5">
