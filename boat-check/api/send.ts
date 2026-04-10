@@ -15,9 +15,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       tasks: { id: string; clusterId: string; title: string; note?: string; status: string; order: number }[];
     };
 
-    const siteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
-    const logoUrl = siteUrl ? `${siteUrl}/logo.png` : null;
-
     const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
     const statusLabel = (s: string) => s === 'done' ? '✓ Erledigt' : s === 'skip' ? '→ Übersprungen' : '○ Offen';
@@ -45,15 +42,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const html = `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#009FE0;border-radius:8px 8px 0 0">
-          <tr>
-            <td style="padding:16px 24px;vertical-align:middle">
-              <p style="color:#fff;margin:0;font-size:18px;font-weight:bold;line-height:1.2">Bootsübernahme-Check</p>
-              <p style="color:#fff;margin:4px 0 0;font-size:13px;opacity:0.85">Seatribe Deliveries</p>
-            </td>
-            ${logoUrl ? `<td style="padding:16px 24px 16px 0;vertical-align:middle;text-align:right;width:60px"><img src="${logoUrl}" width="44" height="44" alt="Seatribe" style="display:block;filter:brightness(0) invert(1)" /></td>` : ''}
-          </tr>
-        </table>
+        <div style="background:#009FE0;padding:16px 24px;border-radius:8px 8px 0 0">
+          <p style="color:#fff;margin:0;font-size:18px;font-weight:bold;line-height:1.2">Bootsübernahme-Check</p>
+          <p style="color:#fff;margin:4px 0 0;font-size:13px;opacity:0.85">Seatribe Deliveries</p>
+        </div>
         <div style="background:#f8fafc;padding:20px 24px;border:1px solid #e2e8f0">
           <table style="width:100%;border-collapse:collapse">
             <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold;width:120px">Skipper</td><td style="padding:4px 0;font-size:13px">${skipper.name}</td></tr>
