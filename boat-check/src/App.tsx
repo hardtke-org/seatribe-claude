@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import type { AppData, SkipperInfo } from './types';
 import { useStore, getProgress } from './useStore';
 import { TaskCard } from './TaskCard';
@@ -149,10 +149,19 @@ export default function App() {
     );
   }
 
+  // DEBUG – danach entfernen
+  const [dbg, setDbg] = useState('');
+  useEffect(() => {
+    setDbg(`iW:${window.innerWidth} bSW:${document.body.scrollWidth} dSW:${document.documentElement.scrollWidth} dCW:${document.documentElement.clientWidth}`);
+  }, []);
+
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5 overflow-x-hidden">
+      {/* DEBUG */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white text-xs p-1 text-center">{dbg}</div>
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-5" style={{marginTop: '24px'}}>
         <div>
           <h1 className="text-xl font-bold text-slate-900">Bootsübernahme-Check</h1>
         </div>
