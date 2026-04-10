@@ -17,6 +17,29 @@ const TABS: { key: Filter; label: string }[] = [
   { key: 'notes', label: 'Anmerkungen' },
 ];
 
+async function loadWhiteLogoBase64(): Promise<string | null> {
+  try {
+    const res = await fetch('/logo.png');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        // Resize to 120px for compact email payload
+        canvas.width = 120; canvas.height = 120;
+        const ctx = canvas.getContext('2d')!;
+        ctx.filter = 'brightness(0) invert(1)';
+        ctx.drawImage(img, 0, 0, 120, 120);
+        resolve(canvas.toDataURL('image/png').split(',')[1]);
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    });
+  } catch { return null; }
+}
+
 export default function App() {
   const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed } = useStore();
   const [filter, setFilter] = useState<Filter>('open');
@@ -52,10 +75,11 @@ export default function App() {
     if (!skipperInfo || !allDone) return;
     setSubmitting(true);
     try {
+      const logoBase64 = await loadWhiteLogoBase64();
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks }),
+        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, logoBase64 }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? res.status);

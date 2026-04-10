@@ -71,17 +71,17 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
   doc.setFillColor(0, 159, 224); // brand-primary #009FE0
   doc.rect(0, 0, PAGE_W, 32, 'F');
 
-  if (logoBase64) {
-    doc.addImage(logoBase64, 'PNG', MARGIN, 4, 24, 24);
-  }
-
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
-  doc.text('SEATRIBE DELIVERIES', logoBase64 ? MARGIN + 28 : MARGIN, 13);
+  doc.text('SEATRIBE DELIVERIES', MARGIN, 13);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.text('Bootsübernahme-Check', logoBase64 ? MARGIN + 28 : MARGIN, 22);
+  doc.text('Bootsübernahme-Check', MARGIN, 22);
+
+  if (logoBase64) {
+    doc.addImage(logoBase64, 'PNG', PAGE_W - MARGIN - 24, 4, 24, 24);
+  }
   y = 40;
 
   // --- Skipper info box ---
