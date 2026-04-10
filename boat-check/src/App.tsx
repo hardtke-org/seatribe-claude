@@ -46,16 +46,10 @@ export default function App() {
     };
   }, []);
 
-  // Reset iOS Safari zoom/scroll when entering checklist
+  // Scroll to top when entering checklist
   useEffect(() => {
     if (!skipperInfo) return;
     window.scrollTo(0, 0);
-    const vp = document.querySelector('meta[name="viewport"]') as HTMLMetaElement | null;
-    if (vp) {
-      const orig = vp.content;
-      vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
-      requestAnimationFrame(() => { vp.content = orig; });
-    }
   }, [skipperInfo]);
 
   const allDone = store.tasks.every(t => t.status !== 'open');
@@ -243,7 +237,7 @@ export default function App() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Suche..."
-          className="w-full px-3 py-2 text-sm border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-inset focus:ring-brand-primary/30 transition-colors duration-150"
+          className="w-full px-3 py-2 text-base border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-inset focus:ring-brand-primary/30 transition-colors duration-150"
         />
       </div>
 
