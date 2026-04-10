@@ -192,17 +192,17 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
           {/* Action buttons */}
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
             {/* Dokumentations-Aktionen – links */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => setEditing(true)}
-                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors duration-150"
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 text-xl transition-colors duration-150"
                 title="Notiz"
               >
                 &#9998;
               </button>
               <button
                 onClick={() => fileRef.current?.click()}
-                className="text-sm px-3 py-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 font-medium transition-colors duration-150"
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 text-xl transition-colors duration-150"
                 title="Foto hinzufügen"
               >
                 &#128247;
@@ -218,11 +218,11 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               />
             </div>
             {/* Status-Aktionen – rechts, daumenfreundlich */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               {task.status !== 'open' && (
                 <button
                   onClick={() => onStatus(task.id, 'open')}
-                  className="text-sm px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 font-medium transition-colors duration-150"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300 text-xl transition-colors duration-150"
                   title="Zurück auf Offen"
                 >
                   &#8617;
@@ -231,7 +231,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               {task.status !== 'skip' && (
                 <button
                   onClick={() => onStatus(task.id, 'skip')}
-                  className="text-base px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 font-medium transition-colors duration-150"
+                  className="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-100 text-amber-700 hover:bg-amber-200 active:bg-amber-300 text-2xl transition-colors duration-150"
                   title="Nicht prüfen"
                 >
                   &#10680;
@@ -240,7 +240,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
               {task.status !== 'done' && (
                 <button
                   onClick={() => onStatus(task.id, 'done')}
-                  className="text-base px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 font-medium transition-colors duration-150"
+                  className="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-200 active:bg-emerald-300 text-2xl transition-colors duration-150"
                   title="Erledigt"
                 >
                   &#10003;
