@@ -25,6 +25,10 @@ export default function App() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [dbg, setDbg] = useState('');
+  useEffect(() => {
+    setDbg(`iW:${window.innerWidth} bSW:${document.body.scrollWidth} dSW:${document.documentElement.scrollWidth} dCW:${document.documentElement.clientWidth}`);
+  }, []);
 
   const allDone = store.tasks.every(t => t.status !== 'open');
 
@@ -148,12 +152,6 @@ export default function App() {
       </div>
     );
   }
-
-  // DEBUG – danach entfernen
-  const [dbg, setDbg] = useState('');
-  useEffect(() => {
-    setDbg(`iW:${window.innerWidth} bSW:${document.body.scrollWidth} dSW:${document.documentElement.scrollWidth} dCW:${document.documentElement.clientWidth}`);
-  }, []);
 
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5 overflow-x-hidden">
