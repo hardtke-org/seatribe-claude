@@ -27,7 +27,23 @@ export default function App() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [dbg, setDbg] = useState('');
   useEffect(() => {
-    setDbg(`iW:${window.innerWidth} bSW:${document.body.scrollWidth} dSW:${document.documentElement.scrollWidth} dCW:${document.documentElement.clientWidth}`);
+    const capture = () => {
+      const vvw = (window as any).visualViewport?.width;
+      const sX = window.scrollX;
+      const boW = document.body.offsetWidth;
+      setDbg(`iW:${window.innerWidth} dCW:${document.documentElement.clientWidth} vvW:${vvw != null ? Math.round(vvw) : '?'} sX:${sX} boW:${boW}`);
+    };
+    capture();
+    window.addEventListener('resize', capture);
+    window.addEventListener('scroll', capture);
+    (window as any).visualViewport?.addEventListener('resize', capture);
+    (window as any).visualViewport?.addEventListener('scroll', capture);
+    return () => {
+      window.removeEventListener('resize', capture);
+      window.removeEventListener('scroll', capture);
+      (window as any).visualViewport?.removeEventListener('resize', capture);
+      (window as any).visualViewport?.removeEventListener('scroll', capture);
+    };
   }, []);
 
   const allDone = store.tasks.every(t => t.status !== 'open');
@@ -156,7 +172,7 @@ export default function App() {
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5 overflow-x-hidden">
       {/* DEBUG */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white text-xs p-1 text-center">{dbg}</div>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white text-[10px] p-1 text-center font-mono">{dbg}</div>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-5" style={{marginTop: '24px'}}>
