@@ -21,10 +21,24 @@ export default function App() {
   const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed } = useStore();
   const [filter, setFilter] = useState<Filter>('open');
   const [search, setSearch] = useState('');
-  const [skipperInfo, setSkipperInfo] = useState<SkipperInfo | null>(null);
+  const [skipperInfo, setSkipperInfo] = useState<SkipperInfo | null>(() => {
+    try {
+      const s = localStorage.getItem('skipper-info');
+      return s ? (JSON.parse(s) as SkipperInfo) : null;
+    } catch { return null; }
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
+
+  // Persist skipperInfo to localStorage
+  useEffect(() => {
+    if (skipperInfo) {
+      localStorage.setItem('skipper-info', JSON.stringify(skipperInfo));
+    } else {
+      localStorage.removeItem('skipper-info');
+    }
+  }, [skipperInfo]);
 
   // Scroll to top when entering checklist
   useEffect(() => {
@@ -134,7 +148,7 @@ export default function App() {
       {/* Header – full width */}
       <div className="bg-brand-primary px-5 sm:px-8 pt-5 pb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
-        <img src="/logo.png" alt="Seatribe" className="h-10 w-10 object-contain" />
+        <img src="/logo.png" alt="Seatribe" className="h-10 w-10 object-contain brightness-0 invert" />
       </div>
 
       <div className="px-5 sm:px-8 pb-28 pt-5">
