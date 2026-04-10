@@ -25,6 +25,7 @@ export default function App() {
   const [skipperInfo, setSkipperInfo] = useState<SkipperInfo | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   // Scroll to top when entering checklist
@@ -55,12 +56,24 @@ export default function App() {
   }
 
   async function handleDownloadPdf() {
-    if (!skipperInfo) return;
-    const pdf = await generatePdf(store, skipperInfo, true); // mit Bildern
-    const link = document.createElement('a');
-    link.href = `data:application/pdf;base64,${pdf}`;
-    link.download = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}.pdf`;
-    link.click();
+    if (!skipperInfo || generatingPdf) return;
+    setGeneratingPdf(true);
+    try {
+      const base64 = await generatePdf(store, skipperInfo, true);
+      const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const filename = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}.pdf`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    } finally {
+      setGeneratingPdf(false);
+    }
   }
 
   const progress = useMemo(() => getProgress(store.tasks), [store.tasks]);
@@ -157,16 +170,16 @@ export default function App() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 pt-5 overflow-x-hidden">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900">Bootsübernahme-Check</h1>
-        </div>
-        <div className="relative">
+      <div className="-mx-5 sm:-mx-8 px-5 sm:px-8 bg-brand-dark pt-5 pb-4 mb-5 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-white">Bootsübernahme-Check</h1>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Seatribe" className="h-8 w-auto object-contain" />
+          <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2 rounded-lg hover:bg-slate-200 active:bg-slate-300 transition-colors text-slate-600"
+            className="p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors text-white"
             aria-label="Menü"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,8 +203,9 @@ export default function App() {
               </div>
             </>
           )}
-        </div>
-      </div>
+          </div>{/* end relative */}
+        </div>{/* end flex gap-3 */}
+      </div>{/* end header */}
 
       <input type="file" ref={fileRef} accept=".json" onChange={onFileSelected} className="hidden" />
 
@@ -328,9 +342,10 @@ export default function App() {
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2">
           <button
             onClick={handleDownloadPdf}
-            className="bg-slate-700 hover:bg-slate-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors"
+            disabled={generatingPdf}
+            className="bg-slate-700 hover:bg-slate-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
           >
-            PDF herunterladen
+            {generatingPdf ? 'PDF wird erstellt…' : 'PDF herunterladen'}
           </button>
           <button
             onClick={handleSubmit}
