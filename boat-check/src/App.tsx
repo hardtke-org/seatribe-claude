@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
-import type { AppData, SkipperInfo } from './types';
+import type { SkipperInfo } from './types';
 import { useStore, getProgress } from './useStore';
 import { TaskCard } from './TaskCard';
 import { ProgressBar } from './ProgressBar';
@@ -18,15 +18,13 @@ const TABS: { key: Filter; label: string }[] = [
 ];
 
 export default function App() {
-  const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed, importData, exportData } = useStore();
+  const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed } = useStore();
   const [filter, setFilter] = useState<Filter>('open');
   const [search, setSearch] = useState('');
-  const [showMenu, setShowMenu] = useState(false);
   const [skipperInfo, setSkipperInfo] = useState<SkipperInfo | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   // Scroll to top when entering checklist
   useEffect(() => {
@@ -102,49 +100,11 @@ export default function App() {
       .filter(g => g.tasks.length > 0);
   }, [store.clusters, filteredTasks]);
 
-  function handleExport() {
-    const json = exportData();
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `boat-check-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setShowMenu(false);
-  }
-
-  function handleImport() {
-    fileRef.current?.click();
-  }
-
-  function onFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const imported = JSON.parse(reader.result as string) as AppData;
-        if (imported.clusters?.length && imported.tasks?.length) {
-          importData(imported);
-          setShowMenu(false);
-        } else {
-          alert('Ungültige Datei: clusters oder tasks fehlen.');
-        }
-      } catch {
-        alert('Datei konnte nicht gelesen werden.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  }
-
   function handleReset() {
     if (confirm('Alle Daten zurücksetzen? Aktuelle Daten gehen verloren.')) {
       resetToSeed();
       setFilter('open');
       setSearch('');
-      setShowMenu(false);
     }
   }
 
@@ -170,44 +130,14 @@ export default function App() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-28 overflow-x-hidden">
-      {/* Header */}
-      <div className="-mx-5 sm:-mx-8 px-5 sm:px-8 bg-brand-dark pt-5 pb-4 mb-5 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-white">Bootsübernahme-Check</h1>
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Seatribe" className="h-8 w-auto object-contain" />
-          <div className="relative">
-          <button
-            onClick={() => setShowMenu(!showMenu)}
-            className="p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors text-white"
-            aria-label="Menü"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01" />
-            </svg>
-          </button>
-          {showMenu && (
-            <>
-              <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
-              <div className="absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-lg border border-slate-200 z-20 py-1">
-                <button onClick={handleExport} className="w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50 active:bg-slate-100">
-                  Export JSON
-                </button>
-                <button onClick={handleImport} className="w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50 active:bg-slate-100">
-                  Import JSON
-                </button>
-                <hr className="my-1 border-slate-100" />
-                <button onClick={handleReset} className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 active:bg-red-100">
-                  Reset auf Seed
-                </button>
-              </div>
-            </>
-          )}
-          </div>{/* end relative */}
-        </div>{/* end flex gap-3 */}
-      </div>{/* end header */}
+    <div className="max-w-3xl mx-auto overflow-x-hidden">
+      {/* Header – full width */}
+      <div className="bg-brand-primary px-5 sm:px-8 pt-5 pb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
+        <img src="/logo.png" alt="Seatribe" className="h-9 w-auto object-contain" />
+      </div>
 
-      <input type="file" ref={fileRef} accept=".json" onChange={onFileSelected} className="hidden" />
+      <div className="px-5 sm:px-8 pb-28 pt-5">
 
       {/* Reset */}
       <button
@@ -356,6 +286,7 @@ export default function App() {
           </button>
         </div>
       )}
+      </div>{/* end content */}
     </div>
   );
 }
