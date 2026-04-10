@@ -158,7 +158,7 @@ export default function App() {
           <p className="text-slate-500 text-sm mb-6">Die Checkliste wurde als PDF an Seatribe Deliveries gesendet.</p>
           <button
             onClick={() => { resetToSeed(); setSubmitted(false); setSkipperInfo(null); setFilter('open'); }}
-            className="px-6 py-2.5 text-sm font-medium rounded-xl bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+            className="px-6 py-2.5 text-sm font-medium rounded-xl bg-brand-primary text-white hover:brightness-110 transition-all"
           >
             Neue Checkliste starten
           </button>

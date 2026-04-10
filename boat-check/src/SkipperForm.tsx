@@ -50,7 +50,7 @@ export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => voi
           <button
             type="submit"
             disabled={!valid}
-            className="w-full mt-2 py-3 text-sm font-semibold rounded-xl bg-brand-dark text-white shadow-sm hover:brightness-110 hover:shadow-md active:brightness-90 active:scale-[0.98] active:shadow-none transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full mt-2 py-3 text-sm font-semibold rounded-xl bg-brand-primary text-white shadow-sm hover:brightness-110 hover:shadow-md active:brightness-90 active:shadow-none transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Weiter zur Checkliste →
           </button>
