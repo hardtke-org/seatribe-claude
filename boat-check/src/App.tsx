@@ -46,6 +46,18 @@ export default function App() {
     };
   }, []);
 
+  // Reset iOS Safari zoom/scroll when entering checklist
+  useEffect(() => {
+    if (!skipperInfo) return;
+    window.scrollTo(0, 0);
+    const vp = document.querySelector('meta[name="viewport"]') as HTMLMetaElement | null;
+    if (vp) {
+      const orig = vp.content;
+      vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+      requestAnimationFrame(() => { vp.content = orig; });
+    }
+  }, [skipperInfo]);
+
   const allDone = store.tasks.every(t => t.status !== 'open');
 
   async function handleSubmit() {
