@@ -42,9 +42,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const html = `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <div style="background:#0f172a;padding:20px 24px;border-radius:8px 8px 0 0">
-          <h1 style="color:#fff;margin:0;font-size:18px">Bootsübernahme-Check</h1>
-          <p style="color:#94a3b8;margin:4px 0 0;font-size:13px">Seatribe Deliveries</p>
+        <div style="background:#009FE0;padding:20px 24px;border-radius:8px 8px 0 0">
+          <h1 style="color:#0B3A53;margin:0;font-size:18px;font-weight:bold">Bootsübernahme-Check</h1>
+          <p style="color:#0B3A53;margin:4px 0 0;font-size:13px;opacity:0.75">Seatribe Deliveries</p>
         </div>
         <div style="background:#f8fafc;padding:20px 24px;border:1px solid #e2e8f0">
           <table style="width:100%;border-collapse:collapse">

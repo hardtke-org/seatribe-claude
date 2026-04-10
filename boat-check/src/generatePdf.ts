@@ -28,15 +28,25 @@ function normalizeImage(dataUrl: string, maxMm: number): Promise<{ dataUrl: stri
   });
 }
 
-async function loadLogoBase64(): Promise<string | null> {
+async function loadLogoWhiteBase64(): Promise<string | null> {
   try {
     const res = await fetch('/logo.png');
     const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
     return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = () => resolve((reader.result as string).split(',')[1]);
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d')!;
+        ctx.filter = 'brightness(0) invert(1)';
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png').split(',')[1]);
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
     });
   } catch {
     return null;
@@ -46,7 +56,7 @@ async function loadLogoBase64(): Promise<string | null> {
 export async function generatePdf(appData: AppData, skipper: SkipperInfo, includeImages = true): Promise<string> {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  const logoBase64 = includeImages ? await loadLogoBase64() : null;
+  const logoBase64 = includeImages ? await loadLogoWhiteBase64() : null;
 
   let y = MARGIN;
 
@@ -58,7 +68,7 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
   }
 
   // --- Header ---
-  doc.setFillColor(15, 23, 42); // slate-900
+  doc.setFillColor(0, 159, 224); // brand-primary #009FE0
   doc.rect(0, 0, PAGE_W, 32, 'F');
 
   if (logoBase64) {
