@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "googleapis": "^171.4.0",
     "jspdf": "^4.2.1",
     "react": "^19.2.0",
