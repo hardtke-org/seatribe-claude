@@ -53,14 +53,38 @@ export default function App() {
     setSubmitting(true);
     try {
       const filename = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.pdf`;
+
+      // 1. Generate PDF client-side
       const pdfBase64 = await generatePdf(store, skipperInfo, true);
-      const res = await fetch('/api/send', {
+      const pdfBytes = Uint8Array.from(atob(pdfBase64), c => c.charCodeAt(0));
+
+      // 2. Get resumable upload URL from API (only metadata goes through Vercel)
+      const urlRes = await fetch('/api/get-upload-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, pdfBase64, pdfFilename: filename }),
+        body: JSON.stringify({ filename }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? res.status);
+      if (!urlRes.ok) throw new Error('Upload-URL konnte nicht erstellt werden');
+      const { uploadUrl } = await urlRes.json();
+
+      // 3. Upload PDF directly to Google Drive (bypasses Vercel size limit)
+      const uploadRes = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/pdf' },
+        body: pdfBytes,
+      });
+      if (!uploadRes.ok) throw new Error('Drive-Upload fehlgeschlagen');
+      const driveData = await uploadRes.json();
+      const driveLink = `https://drive.google.com/file/d/${driveData.id}/view`;
+
+      // 4. Send email with Drive link
+      const sendRes = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, driveLink }),
+      });
+      const json = await sendRes.json();
+      if (!sendRes.ok) throw new Error(json.error ?? sendRes.status);
       setSubmitted(true);
     } catch (err) {
       alert('Fehler: ' + String(err));
