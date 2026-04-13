@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 import type { SkipperInfo } from './types';
 import { useStore, getProgress } from './useStore';
@@ -335,6 +336,7 @@ export default function App() {
         </div>
       )}
       </div>{/* end content */}
+      <Analytics />
     </div>
   );
 }
