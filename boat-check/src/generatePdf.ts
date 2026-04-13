@@ -36,13 +36,14 @@ async function loadLogoWhiteBase64(): Promise<string | null> {
     return new Promise(resolve => {
       const img = new Image();
       img.onload = () => {
+        const SIZE = 200; // resize to 200px – enough for PDF, keeps file small
         const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
+        canvas.width = SIZE;
+        canvas.height = SIZE;
         const ctx = canvas.getContext('2d')!;
         ctx.filter = 'brightness(0) invert(1)';
-        ctx.drawImage(img, 0, 0);
-        resolve(canvas.toDataURL('image/png').split(',')[1]);
+        ctx.drawImage(img, 0, 0, SIZE, SIZE);
+        resolve(canvas.toDataURL('image/jpeg', 0.9).split(',')[1]);
         URL.revokeObjectURL(url);
       };
       img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };

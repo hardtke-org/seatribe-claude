@@ -58,24 +58,17 @@ export default function App() {
       const pdfBase64 = await generatePdf(store, skipperInfo, true);
       const pdfBytes = Uint8Array.from(atob(pdfBase64), c => c.charCodeAt(0));
 
-      // 2. Get resumable upload URL from API (only metadata goes through Vercel)
-      const urlRes = await fetch('/api/get-upload-url', {
+      // 2. Upload PDF as binary through Vercel to Google Drive
+      const uploadRes = await fetch('/api/upload-pdf', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename }),
-      });
-      if (!urlRes.ok) throw new Error('Upload-URL konnte nicht erstellt werden');
-      const { uploadUrl } = await urlRes.json();
-
-      // 3. Upload PDF directly to Google Drive (bypasses Vercel size limit)
-      const uploadRes = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/pdf' },
+        headers: {
+          'Content-Type': 'application/pdf',
+          'X-Filename': filename,
+        },
         body: pdfBytes,
       });
       if (!uploadRes.ok) throw new Error('Drive-Upload fehlgeschlagen');
-      const driveData = await uploadRes.json();
-      const driveLink = `https://drive.google.com/file/d/${driveData.id}/view`;
+      const { driveLink } = await uploadRes.json();
 
       // 4. Send email with Drive link
       const sendRes = await fetch('/api/send', {
