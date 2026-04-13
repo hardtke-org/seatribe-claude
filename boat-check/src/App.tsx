@@ -2,24 +2,28 @@ import { useMemo, useState, useEffect } from 'react';
 
 import type { SkipperInfo } from './types';
 import { useStore, getProgress } from './useStore';
+import { useLanguage } from './useLanguage';
 import { TaskCard } from './TaskCard';
 import { ProgressBar } from './ProgressBar';
 import { SkipperForm } from './SkipperForm';
 import { generatePdf } from './generatePdf';
+import { ui, clusterTitles, taskTitles } from './i18n';
 
 type Filter = 'open' | 'done' | 'skip' | 'all' | 'notes';
 
-const TABS: { key: Filter; label: string }[] = [
-  { key: 'open', label: 'Offen' },
-  { key: 'done', label: 'Erledigt' },
-  { key: 'skip', label: 'Übersprungen' },
-  { key: 'all', label: 'Alle' },
-  { key: 'notes', label: 'Anmerkungen' },
-];
-
-
 export default function App() {
   const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed } = useStore();
+  const [lang, setLang] = useLanguage();
+  const t = ui[lang];
+
+  const TABS: { key: Filter; label: string }[] = [
+    { key: 'open',  label: t.tabOpen },
+    { key: 'done',  label: t.tabDone },
+    { key: 'skip',  label: t.tabSkip },
+    { key: 'all',   label: t.tabAll },
+    { key: 'notes', label: t.tabNotes },
+  ];
+
   const [filter, setFilter] = useState<Filter>('open');
   const [search, setSearch] = useState('');
   const [skipperInfo, setSkipperInfo] = useState<SkipperInfo | null>(() => {
@@ -56,7 +60,7 @@ export default function App() {
       const filename = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.pdf`;
 
       // 1. Generate PDF client-side
-      const pdfBase64 = await generatePdf(store, skipperInfo, true);
+      const pdfBase64 = await generatePdf(store, skipperInfo, true, lang);
       const pdfBytes = Uint8Array.from(atob(pdfBase64), c => c.charCodeAt(0));
 
       // 2. Upload PDF as binary through Vercel to Google Drive
@@ -74,11 +78,17 @@ export default function App() {
       }
       const { driveLink } = await uploadRes.json();
 
-      // 4. Send email with Drive link
+      // 3. Send email with Drive link
       const sendRes = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, driveLink }),
+        body: JSON.stringify({
+          skipper: skipperInfo,
+          clusters: store.clusters.map(c => ({ ...c, title: clusterTitles[c.id]?.[lang] ?? c.title })),
+          tasks: store.tasks.map(task => ({ ...task, title: taskTitles[task.id]?.[lang] ?? task.title })),
+          driveLink,
+          lang,
+        }),
       });
       const json = await sendRes.json();
       if (!sendRes.ok) throw new Error(json.error ?? sendRes.status);
@@ -97,12 +107,15 @@ export default function App() {
   const searchLower = search.toLowerCase();
 
   const filteredTasks = useMemo(() => {
-    return store.tasks.filter(t => {
-      if (filter !== 'all' && t.status !== filter) return false;
-      if (searchLower && !t.title.toLowerCase().includes(searchLower)) return false;
+    return store.tasks.filter(task => {
+      if (filter !== 'all' && task.status !== filter) return false;
+      if (searchLower) {
+        const translated = taskTitles[task.id]?.[lang] ?? task.title;
+        if (!translated.toLowerCase().includes(searchLower)) return false;
+      }
       return true;
     });
-  }, [store.tasks, filter, searchLower]);
+  }, [store.tasks, filter, searchLower, lang]);
 
   const grouped = useMemo(() => {
     const clusters = [...store.clusters].sort((a, b) => a.order - b.order);
@@ -110,24 +123,25 @@ export default function App() {
       .map(c => ({
         cluster: c,
         tasks: filteredTasks
-          .filter(t => t.clusterId === c.id)
+          .filter(task => task.clusterId === c.id)
           .sort((a, b) => a.order - b.order),
       }))
       .filter(g => g.tasks.length > 0);
   }, [store.clusters, filteredTasks]);
 
   function handleReset() {
-    if (confirm('Alle Daten zurücksetzen? Aktuelle Daten gehen verloren.')) {
+    if (confirm(t.resetConfirm)) {
       resetToSeed();
       setFilter('open');
       setSearch('');
     }
   }
 
-
   if (!skipperInfo || editingSkipper) return (
     <SkipperForm
       initial={skipperInfo}
+      lang={lang}
+      onLangChange={setLang}
       onSubmit={info => { setSkipperInfo(info); setEditingSkipper(false); }}
     />
   );
@@ -137,13 +151,13 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
           <div className="text-5xl mb-4">✓</div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Erfolgreich eingereicht</h1>
-          <p className="text-slate-500 text-sm mb-6">Die Checkliste wurde als PDF an Seatribe Deliveries gesendet.</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">{t.successTitle}</h1>
+          <p className="text-slate-500 text-sm mb-6">{t.successText}</p>
           <button
             onClick={() => { resetToSeed(); setSubmitted(false); setSkipperInfo(null); setFilter('open'); }}
             className="px-6 py-2.5 text-sm font-medium rounded-xl bg-brand-primary text-white hover:brightness-110 transition-all"
           >
-            Neue Checkliste starten
+            {t.newChecklist}
           </button>
         </div>
       </div>
@@ -154,8 +168,17 @@ export default function App() {
     <div className="max-w-3xl mx-auto overflow-x-hidden">
       {/* Header – full width */}
       <div className="bg-brand-primary px-5 sm:px-8 pt-5 pb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
-        <img src="/logo.png" alt="Seatribe" className="h-12 w-12 object-contain brightness-0 invert" />
+        <h1 className="text-xl font-bold text-brand-dark">{t.appTitle}</h1>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setLang(lang === 'de' ? 'en' : 'de')}
+            className="text-2xl leading-none"
+            title={lang === 'de' ? 'Switch to English' : 'Auf Deutsch wechseln'}
+          >
+            {lang === 'de' ? '🇬🇧' : '🇩🇪'}
+          </button>
+          <img src="/logo.png" alt="Seatribe" className="h-12 w-12 object-contain brightness-0 invert" />
+        </div>
       </div>
 
       <div className="px-5 sm:px-8 pb-28 pt-5">
@@ -166,19 +189,19 @@ export default function App() {
           onClick={() => setEditingSkipper(true)}
           className="flex-1 py-2 text-sm font-medium rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 transition-colors"
         >
-          Boots-Informationen
+          {t.boatInfoButton}
         </button>
         <button
           onClick={handleReset}
           className="flex-1 py-2 text-sm font-medium rounded-xl bg-red-100 text-red-700 hover:bg-red-200 active:bg-red-300 transition-colors"
         >
-          Zurücksetzen
+          {t.resetButton}
         </button>
       </div>
 
       {/* Progress */}
       <div className="mb-5">
-        <ProgressBar {...progress} />
+        <ProgressBar {...progress} label={t.progressLabel(progress.done, progress.total)} />
       </div>
 
       {/* Search */}
@@ -187,7 +210,7 @@ export default function App() {
           type="search"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Suche..."
+          placeholder={t.searchPlaceholder}
           className="w-full px-3 py-2 text-base border border-ui-border rounded-xl bg-ui-card focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-inset focus:ring-brand-primary/30 transition-colors duration-150"
         />
       </div>
@@ -199,7 +222,7 @@ export default function App() {
             ? store.tasks.length
             : tab.key === 'notes'
             ? tasksWithNotes.length
-            : store.tasks.filter(t => t.status === tab.key).length;
+            : store.tasks.filter(task => task.status === tab.key).length;
           return (
             <button
               key={tab.key}
@@ -223,21 +246,22 @@ export default function App() {
       {filter === 'notes' ? (
         tasksWithNotes.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
-            <p className="text-lg">Keine Anmerkungen</p>
+            <p className="text-lg">{t.noNotes}</p>
           </div>
         ) : (
           <div className="space-y-2">
             {tasksWithNotes.map(task => {
               const statusConfig = {
-                open:  { label: 'Offen',        cls: 'bg-slate-100 text-slate-500' },
-                done:  { label: 'Erledigt',      cls: 'bg-emerald-100 text-emerald-700' },
-                skip:  { label: 'Übersprungen',  cls: 'bg-amber-100 text-amber-700' },
+                open:  { label: t.statusOpen, cls: 'bg-slate-100 text-slate-500' },
+                done:  { label: t.statusDone, cls: 'bg-emerald-100 text-emerald-700' },
+                skip:  { label: t.statusSkip, cls: 'bg-amber-100 text-amber-700' },
               }[task.status];
+              const title = taskTitles[task.id]?.[lang] ?? task.title;
               return (
                 <div key={task.id} className="border border-slate-200 rounded-xl p-3 bg-white">
                   <div className="flex items-start justify-between gap-2">
                     <p className={`text-sm leading-snug ${task.status === 'done' ? 'line-through text-slate-500' : ''} ${task.status === 'skip' ? 'text-slate-400' : ''}`}>
-                      {task.title}
+                      {title}
                     </p>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${statusConfig.cls}`}>
                       {statusConfig.label}
@@ -251,21 +275,22 @@ export default function App() {
         )
       ) : grouped.length === 0 ? (
         <div className="text-center py-16 text-slate-400">
-          <p className="text-lg">Keine Tasks gefunden</p>
+          <p className="text-lg">{t.noTasks}</p>
           <p className="text-sm mt-1">
-            {filter !== 'all' ? 'Anderen Filter wählen oder Suche anpassen.' : 'Suche anpassen.'}
+            {filter !== 'all' ? t.tryFilter : t.adjustSearch}
           </p>
         </div>
       ) : (
         <div className="space-y-8">
           {grouped.map(({ cluster, tasks }) => {
-            const clusterProgress = getProgress(store.tasks.filter(t => t.clusterId === cluster.id));
+            const clusterProgress = getProgress(store.tasks.filter(task => task.clusterId === cluster.id));
+            const clusterTitle = clusterTitles[cluster.id]?.[lang] ?? cluster.title;
             return (
               <section key={cluster.id}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <h2 className="text-sm font-bold text-brand-dark uppercase tracking-wide">
-                      {cluster.title}
+                      {clusterTitle}
                     </h2>
                     <span className="text-xs text-slate-400 font-medium">
                       {clusterProgress.done}/{clusterProgress.total}
@@ -281,6 +306,7 @@ export default function App() {
                         onNote={setTaskNote}
                         onAddImage={addTaskImage}
                         onRemoveImage={removeTaskImage}
+                        lang={lang}
                       />
                     </div>
                   ))}
@@ -291,10 +317,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Floating progress / Absenden */}
+      {/* Floating progress / Submit */}
       {!allDone && progress.percent > 0 && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg z-50">
-          {progress.percent}% erledigt
+          {t.percentDone(progress.percent)}
         </div>
       )}
       {allDone && (
@@ -304,7 +330,7 @@ export default function App() {
             disabled={submitting}
             className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
           >
-            {submitting ? 'Bericht wird gespeichert…' : 'Absenden'}
+            {submitting ? t.saving : t.submit}
           </button>
         </div>
       )}

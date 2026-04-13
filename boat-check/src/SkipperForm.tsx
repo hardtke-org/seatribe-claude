@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import type { SkipperInfo } from './types';
+import { ui, type Lang } from './i18n';
 
-const FIELDS: { key: keyof SkipperInfo; label: string; placeholder: string }[] = [
-  { key: 'name',        label: 'Name Skipper',  placeholder: 'Max Mustermann' },
-  { key: 'auftragId',   label: 'Auftrags-ID',   placeholder: 'A-2024-001' },
-  { key: 'bootstyp',    label: 'Bootstyp',      placeholder: 'Bavaria 40' },
-  { key: 'starthafen',  label: 'Starthafen',    placeholder: 'Hamburg' },
-  { key: 'zielhafen',   label: 'Zielhafen',     placeholder: 'Kiel' },
-];
+export function SkipperForm({ onSubmit, initial, lang, onLangChange }: {
+  onSubmit: (info: SkipperInfo) => void;
+  initial?: SkipperInfo | null;
+  lang: Lang;
+  onLangChange: (l: Lang) => void;
+}) {
+  const t = ui[lang];
+  const fields: { key: keyof SkipperInfo; label: string; placeholder: string }[] = [
+    { key: 'name',       label: t.fieldName,       placeholder: t.placeholderName },
+    { key: 'auftragId',  label: t.fieldAuftragId,  placeholder: t.placeholderAuftragId },
+    { key: 'bootstyp',   label: t.fieldBootstyp,   placeholder: t.placeholderBootstyp },
+    { key: 'starthafen', label: t.fieldStarthafen, placeholder: t.placeholderStarthafen },
+    { key: 'zielhafen',  label: t.fieldZielhafen,  placeholder: t.placeholderZielhafen },
+  ];
 
-export function SkipperForm({ onSubmit, initial }: { onSubmit: (info: SkipperInfo) => void; initial?: SkipperInfo | null }) {
   const [form, setForm] = useState<SkipperInfo>(
     initial ?? { name: '', auftragId: '', bootstyp: '', starthafen: '', zielhafen: '' }
   );
@@ -25,13 +32,23 @@ export function SkipperForm({ onSubmit, initial }: { onSubmit: (info: SkipperInf
     <div className="min-h-screen bg-ui-bg flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
+          <div className="flex justify-end mb-2">
+            <button
+              type="button"
+              onClick={() => onLangChange(lang === 'de' ? 'en' : 'de')}
+              className="text-2xl leading-none"
+              title={lang === 'de' ? 'Switch to English' : 'Auf Deutsch wechseln'}
+            >
+              {lang === 'de' ? '🇬🇧' : '🇩🇪'}
+            </button>
+          </div>
           <img src="/logo.png" alt="Seatribe Deliveries" className="w-28 h-28 mx-auto mb-4 object-contain" />
-          <h1 className="text-2xl font-bold text-brand-dark">Bootsübernahme-Check</h1>
-          <p className="mt-2 text-sm text-ui-text-secondary">Bitte fülle die folgenden Felder aus, bevor du die Checkliste startest.</p>
+          <h1 className="text-2xl font-bold text-brand-dark">{t.appTitle}</h1>
+          <p className="mt-2 text-sm text-ui-text-secondary">{t.formSubtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-ui-card rounded-2xl border border-ui-border p-6 space-y-4">
-          {FIELDS.map(({ key, label, placeholder }) => (
+          {fields.map(({ key, label, placeholder }) => (
             <div key={key}>
               <label className="block text-xs font-semibold text-brand-dark uppercase tracking-wide mb-1">
                 {label}
@@ -52,7 +69,7 @@ export function SkipperForm({ onSubmit, initial }: { onSubmit: (info: SkipperInf
             disabled={!valid}
             className="w-full mt-2 py-3 text-sm font-semibold rounded-xl bg-brand-primary text-white shadow-sm hover:brightness-110 hover:shadow-md active:brightness-90 active:shadow-none transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Weiter zur Checkliste →
+            {t.formSubmit}
           </button>
         </form>
       </div>

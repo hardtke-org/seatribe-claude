@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import type { AppData, SkipperInfo } from './types';
 import { getImage } from './imageStore';
+import { ui, clusterTitles, taskTitles, type Lang } from './i18n';
 
 const MARGIN = 15;
 const PAGE_W = 210;
@@ -54,9 +55,11 @@ async function loadLogoWhiteBase64(): Promise<string | null> {
   }
 }
 
-export async function generatePdf(appData: AppData, skipper: SkipperInfo, includeImages = true): Promise<string> {
+export async function generatePdf(appData: AppData, skipper: SkipperInfo, includeImages = true, lang: Lang = 'de'): Promise<string> {
+  const t = ui[lang];
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const locale = lang === 'de' ? 'de-DE' : 'en-GB';
+  const date = new Date().toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
   const logoBase64 = includeImages ? await loadLogoWhiteBase64() : null;
 
   let y = MARGIN;
@@ -78,7 +81,7 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
   doc.text('SEATRIBE DELIVERIES', MARGIN, 13);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.text('Bootsübernahme-Check', MARGIN, 22);
+  doc.text(t.pdfHeader, MARGIN, 22);
 
   if (logoBase64) {
     doc.addImage(logoBase64, 'PNG', PAGE_W - MARGIN - 24, 4, 24, 24);
@@ -106,14 +109,14 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
     doc.text(value, x, yy + 4);
   }
 
-  infoRow('Skipper', skipper.name, col1, iy);
-  infoRow('Auftrags-ID', skipper.auftragId, col2, iy);
+  infoRow(t.pdfSkipper, skipper.name, col1, iy);
+  infoRow(t.pdfAuftragId, skipper.auftragId, col2, iy);
   iy += lineH + 4;
-  infoRow('Bootstyp', skipper.bootstyp, col1, iy);
-  infoRow('Datum', date, col2, iy);
+  infoRow(t.pdfBootstyp, skipper.bootstyp, col1, iy);
+  infoRow(t.pdfDatum, date, col2, iy);
   iy += lineH + 4;
-  infoRow('Starthafen', skipper.starthafen, col1, iy);
-  infoRow('Zielhafen', skipper.zielhafen, col2, iy);
+  infoRow(t.pdfStarthafen, skipper.starthafen, col1, iy);
+  infoRow(t.pdfZielhafen, skipper.zielhafen, col2, iy);
 
   y += 44;
 
@@ -135,7 +138,8 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.setTextColor(51, 65, 85); // slate-700
-    doc.text(cluster.title.toUpperCase(), MARGIN + 3, y + 5);
+    const clusterLabel = clusterTitles[cluster.id]?.[lang] ?? cluster.title;
+    doc.text(clusterLabel.toUpperCase(), MARGIN + 3, y + 5);
     y += 10;
 
     for (const task of tasks) {
@@ -172,15 +176,16 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
       doc.text(isDone ? '✓' : '→', MARGIN + 1, y + 5.5);
 
       // Task title
+      const taskLabel = taskTitles[task.id]?.[lang] ?? task.title;
       doc.setFont('helvetica', isDone ? 'normal' : 'normal');
       doc.setFontSize(9);
       doc.setTextColor(isDone ? 100 : isSkip ? 148 : 30, isDone ? 116 : isSkip ? 163 : 41, isDone ? 139 : isSkip ? 173 : 59);
-      doc.text(task.title, MARGIN + 7, y + 5.5);
+      doc.text(taskLabel, MARGIN + 7, y + 5.5);
 
       // Status label right-aligned
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
-      const statusLabel = isDone ? 'Erledigt' : 'Übersprungen';
+      const statusLabel = isDone ? t.pdfStatusDone : t.pdfStatusSkip;
       doc.setTextColor(isDone ? 5 : 161, isDone ? 150 : 161, isDone ? 105 : 170);
       doc.text(statusLabel, PAGE_W - MARGIN - doc.getTextWidth(statusLabel), y + 5.5);
 
@@ -191,7 +196,7 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
         doc.setFont('helvetica', 'italic');
         doc.setFontSize(7.5);
         doc.setTextColor(100, 116, 139);
-        doc.text(`Notiz: ${task.note}`, MARGIN + 7, subY);
+        doc.text(`${t.pdfNote}: ${task.note}`, MARGIN + 7, subY);
         subY += 6;
       }
 
@@ -223,7 +228,7 @@ export async function generatePdf(appData: AppData, skipper: SkipperInfo, includ
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
     doc.setTextColor(148, 163, 184);
-    doc.text(`Seite ${i} von ${totalPages}`, PAGE_W - MARGIN, PAGE_H - 8, { align: 'right' });
+    doc.text(t.pdfPage(i, totalPages), PAGE_W - MARGIN, PAGE_H - 8, { align: 'right' });
     doc.text('Seatribe Deliveries GmbH', MARGIN, PAGE_H - 8);
   }
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import type { Task, TaskStatus } from './types';
 import { saveImage, getImage, deleteImage } from './imageStore';
+import { taskTitles, ui, type Lang } from './i18n';
 
 interface Props {
   task: Task;
@@ -8,11 +9,14 @@ interface Props {
   onNote: (id: string, note: string) => void;
   onAddImage: (taskId: string, imageId: string) => void;
   onRemoveImage: (taskId: string, imageId: string) => void;
+  lang: Lang;
 }
 
 const SWIPE_THRESHOLD = 80;
 
-export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: Props) {
+export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage, lang }: Props) {
+  const t = ui[lang];
+  const title = taskTitles[task.id]?.[lang] ?? task.title;
   const ref = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [offsetX, setOffsetX] = useState(0);
@@ -110,8 +114,8 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
     offsetX > 30 ? 'bg-amber-500' : 'bg-transparent';
 
   const swipeLabel =
-    offsetX < -SWIPE_THRESHOLD / 2 ? 'Erledigt' :
-    offsetX > SWIPE_THRESHOLD / 2 ? 'Übersprungen' : '';
+    offsetX < -SWIPE_THRESHOLD / 2 ? t.swipeDone :
+    offsetX > SWIPE_THRESHOLD / 2 ? t.swipeSkip : '';
 
   return (
     <>
@@ -138,7 +142,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
           <div className="flex items-start gap-2">
             <div className="flex-1 min-w-0 overflow-hidden">
               <p className={`text-sm leading-snug break-words ${task.status === 'done' ? 'line-through text-slate-500' : ''} ${task.status === 'skip' ? 'text-slate-400' : ''}`}>
-                {task.title}
+                {title}
               </p>
 
               {/* Note */}
@@ -156,7 +160,7 @@ export function TaskCard({ task, onStatus, onNote, onAddImage, onRemoveImage }: 
                   }}
                   className="mt-2 w-full max-w-full text-base border border-ui-border rounded-lg p-2.5 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-inset focus:ring-brand-primary/30 bg-ui-card leading-relaxed box-border resize-none transition-colors duration-150"
                   rows={2}
-                  placeholder="Notiz..."
+                  placeholder={t.notePlaceholder}
                 />
               ) : task.note ? (
                 <p onClick={() => setEditing(true)} className="mt-2 text-xs text-slate-500 leading-relaxed cursor-pointer border-l-2 border-slate-300 pl-2">

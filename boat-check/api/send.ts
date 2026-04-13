@@ -9,16 +9,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { skipper, clusters, tasks, driveLink } = req.body as {
+    const { skipper, clusters, tasks, driveLink, lang } = req.body as {
       skipper: { name: string; auftragId: string; bootstyp: string; starthafen: string; zielhafen: string };
       clusters: { id: string; title: string; order: number }[];
       tasks: { id: string; clusterId: string; title: string; note?: string; status: string; order: number }[];
       driveLink?: string;
+      lang?: string;
     };
 
-    const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const isEn = lang === 'en';
+    const locale = isEn ? 'en-GB' : 'de-DE';
+    const date = new Date().toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    const statusLabel = (s: string) => s === 'done' ? '✓ Erledigt' : s === 'skip' ? '→ Übersprungen' : '○ Offen';
+    const labels = isEn
+      ? { done: '✓ Done', skip: '→ Skipped', open: '○ Open', skipper: 'Skipper', orderId: 'Order ID', boatType: 'Boat Type', departure: 'Departure Port', destination: 'Destination Port', datum: 'Date', openLink: 'Open report in Google Drive', footer: 'Submitted on', company: 'Seatribe Deliveries' }
+      : { done: '✓ Erledigt', skip: '→ Übersprungen', open: '○ Offen', skipper: 'Skipper', orderId: 'Auftrags-ID', boatType: 'Bootstyp', departure: 'Starthafen', destination: 'Zielhafen', datum: 'Datum', openLink: 'Bericht in Google Drive öffnen', footer: 'Eingereicht am', company: 'Seatribe Deliveries' };
+
+    const statusLabel = (s: string) => s === 'done' ? labels.done : s === 'skip' ? labels.skip : labels.open;
     const statusColor = (s: string) => s === 'done' ? '#059669' : s === 'skip' ? '#92400e' : '#64748b';
 
     const sortedClusters = [...clusters].sort((a, b) => a.order - b.order);
@@ -31,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const tasksHtml = clusterTasks.map(t => `
         <tr>
           <td style="padding:6px 8px;font-size:13px;color:${statusColor(t.status)};white-space:nowrap;font-weight:bold">${statusLabel(t.status)}</td>
-          <td style="padding:6px 8px;font-size:13px;color:#1e293b">${t.title}${t.note ? `<br><span style="color:#64748b;font-style:italic;font-size:12px">Notiz: ${t.note}</span>` : ''}</td>
+          <td style="padding:6px 8px;font-size:13px;color:#1e293b">${t.title}${t.note ? `<br><span style="color:#64748b;font-style:italic;font-size:12px">${isEn ? 'Note' : 'Notiz'}: ${t.note}</span>` : ''}</td>
         </tr>
       `).join('');
 
@@ -44,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const driveLinkHtml = driveLink ? `
       <div style="padding:16px 24px;background:#f0fdf4;border:1px solid #bbf7d0;border-top:none">
         <p style="margin:0;font-size:13px;color:#166534">
-          📄 <a href="${driveLink}" style="color:#166534;font-weight:bold">Bericht in Google Drive öffnen</a>
+          📄 <a href="${driveLink}" style="color:#166534;font-weight:bold">${labels.openLink}</a>
         </p>
       </div>
     ` : '';
@@ -52,17 +59,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const html = `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
         <div style="background:#009FE0;padding:16px 24px;border-radius:8px 8px 0 0">
-          <p style="color:#fff;margin:0;font-size:18px;font-weight:bold;line-height:1.2">Bootsübernahme-Check</p>
+          <p style="color:#fff;margin:0;font-size:18px;font-weight:bold;line-height:1.2">${isEn ? 'Boat Handover Check' : 'Bootsübernahme-Check'}</p>
           <p style="color:#fff;margin:4px 0 0;font-size:13px;opacity:0.85">Seatribe Deliveries</p>
         </div>
         <div style="background:#f8fafc;padding:20px 24px;border:1px solid #e2e8f0;border-top:none">
           <table style="width:100%;border-collapse:collapse">
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold;width:120px">Skipper</td><td style="padding:4px 0;font-size:13px">${skipper.name}</td></tr>
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">Auftrags-ID</td><td style="padding:4px 0;font-size:13px">${skipper.auftragId}</td></tr>
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">Bootstyp</td><td style="padding:4px 0;font-size:13px">${skipper.bootstyp}</td></tr>
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">Starthafen</td><td style="padding:4px 0;font-size:13px">${skipper.starthafen}</td></tr>
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">Zielhafen</td><td style="padding:4px 0;font-size:13px">${skipper.zielhafen}</td></tr>
-            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">Datum</td><td style="padding:4px 0;font-size:13px">${date}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold;width:120px">${labels.skipper}</td><td style="padding:4px 0;font-size:13px">${skipper.name}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">${labels.orderId}</td><td style="padding:4px 0;font-size:13px">${skipper.auftragId}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">${labels.boatType}</td><td style="padding:4px 0;font-size:13px">${skipper.bootstyp}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">${labels.departure}</td><td style="padding:4px 0;font-size:13px">${skipper.starthafen}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">${labels.destination}</td><td style="padding:4px 0;font-size:13px">${skipper.zielhafen}</td></tr>
+            <tr><td style="padding:4px 0;font-size:13px;color:#64748b;font-weight:bold">${labels.datum}</td><td style="padding:4px 0;font-size:13px">${date}</td></tr>
           </table>
         </div>
         ${driveLinkHtml}
@@ -72,7 +79,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           </table>
         </div>
         <div style="padding:12px 24px;background:#f1f5f9;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 8px 8px">
-          <p style="margin:0;font-size:11px;color:#94a3b8">Eingereicht am ${date} · Seatribe Deliveries</p>
+          <p style="margin:0;font-size:11px;color:#94a3b8">${labels.footer} ${date} · ${labels.company}</p>
         </div>
       </div>
     `;
@@ -80,7 +87,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from: 'Bootsübernahme-Check <checklist@seatribe-deliveries.com>',
       to: 'delivery@seatribe-deliveries.com',
-      subject: `Übergabe-Check: ${skipper.name} | ${skipper.auftragId} | ${date}`,
+      subject: isEn ? `Handover Check: ${skipper.name} | ${skipper.auftragId} | ${date}` : `Übergabe-Check: ${skipper.name} | ${skipper.auftragId} | ${date}`,
       html,
     });
 

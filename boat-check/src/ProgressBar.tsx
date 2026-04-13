@@ -2,9 +2,10 @@ interface Props {
   done: number;
   total: number;
   percent: number;
+  label: string;
 }
 
-export function ProgressBar({ done, total, percent }: Props) {
+export function ProgressBar({ percent, label }: Props) {
   const color =
     percent === 100 ? 'bg-emerald-500' :
     percent >= 60 ? 'bg-blue-500' :
@@ -13,7 +14,7 @@ export function ProgressBar({ done, total, percent }: Props) {
   return (
     <div className="w-full">
       <div className="flex justify-between text-xs text-slate-500 mb-1">
-        <span>{done} / {total} erledigt</span>
+        <span>{label}</span>
         <span className="font-semibold">{percent}%</span>
       </div>
       <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden">
