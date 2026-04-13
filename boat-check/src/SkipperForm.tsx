@@ -43,8 +43,7 @@ export function SkipperForm({ onSubmit, initial, lang, onLangChange }: {
             </button>
           </div>
           <img src="/logo.png" alt="Seatribe Deliveries" className="w-28 h-28 mx-auto mb-4 object-contain" />
-          <p className="text-lg font-medium text-slate-500 mb-1">Hallo Björn</p>
-          <h1 className="text-2xl font-bold text-brand-dark">{t.appTitle}</h1>
+<h1 className="text-2xl font-bold text-brand-dark">{t.appTitle}</h1>
           <p className="mt-2 text-sm text-ui-text-secondary">{t.formSubtitle}</p>
         </div>
 
