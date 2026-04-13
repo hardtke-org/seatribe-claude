@@ -17,28 +17,6 @@ const TABS: { key: Filter; label: string }[] = [
   { key: 'notes', label: 'Anmerkungen' },
 ];
 
-async function loadWhiteLogoBase64(): Promise<string | null> {
-  try {
-    const res = await fetch('/logo.png');
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        // Resize to 120px for compact email payload
-        canvas.width = 120; canvas.height = 120;
-        const ctx = canvas.getContext('2d')!;
-        ctx.filter = 'brightness(0) invert(1)';
-        ctx.drawImage(img, 0, 0, 120, 120);
-        resolve(canvas.toDataURL('image/png').split(',')[1]);
-        URL.revokeObjectURL(url);
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-      img.src = url;
-    });
-  } catch { return null; }
-}
 
 export default function App() {
   const { store, setTaskStatus, setTaskNote, addTaskImage, removeTaskImage, resetToSeed } = useStore();
@@ -52,7 +30,6 @@ export default function App() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [generatingPdf, setGeneratingPdf] = useState(false);
 
   // Persist skipperInfo to localStorage
   useEffect(() => {
@@ -75,11 +52,12 @@ export default function App() {
     if (!skipperInfo || !allDone) return;
     setSubmitting(true);
     try {
-      const logoBase64 = await loadWhiteLogoBase64();
+      const filename = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.pdf`;
+      const pdfBase64 = await generatePdf(store, skipperInfo, true);
       const res = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, logoBase64 }),
+        body: JSON.stringify({ skipper: skipperInfo, clusters: store.clusters, tasks: store.tasks, pdfBase64, pdfFilename: filename }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? res.status);
@@ -88,27 +66,6 @@ export default function App() {
       alert('Fehler: ' + String(err));
     } finally {
       setSubmitting(false);
-    }
-  }
-
-  async function handleDownloadPdf() {
-    if (!skipperInfo || generatingPdf) return;
-    setGeneratingPdf(true);
-    try {
-      const base64 = await generatePdf(store, skipperInfo, true);
-      const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-      const blob = new Blob([bytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const filename = `check-${skipperInfo.auftragId}-${skipperInfo.name.replace(/\s+/g, '-')}.pdf`;
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 30000);
-    } finally {
-      setGeneratingPdf(false);
     }
   }
 
@@ -307,20 +264,13 @@ export default function App() {
         </div>
       )}
       {allDone && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2">
-          <button
-            onClick={handleDownloadPdf}
-            disabled={generatingPdf}
-            className="bg-slate-700 hover:bg-slate-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
-          >
-            {generatingPdf ? 'PDF wird erstellt…' : 'PDF herunterladen'}
-          </button>
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
+            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg transition-colors disabled:opacity-60"
           >
-            {submitting ? 'Wird gesendet…' : 'Absenden'}
+            {submitting ? 'Bericht wird gespeichert…' : 'Absenden'}
           </button>
         </div>
       )}
