@@ -43,8 +43,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       fileId: file.data.id,
     });
   } catch (err) {
-    console.error('Upload error:', err);
-    return res.status(500).json({ error: 'Upload fehlgeschlagen' });
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('Upload error:', msg);
+    return res.status(500).json({ error: msg });
   }
 }
 
