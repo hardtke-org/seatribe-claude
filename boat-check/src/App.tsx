@@ -28,6 +28,7 @@ export default function App() {
       return s ? (JSON.parse(s) as SkipperInfo) : null;
     } catch { return null; }
   });
+  const [editingSkipper, setEditingSkipper] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -124,7 +125,12 @@ export default function App() {
   }
 
 
-  if (!skipperInfo) return <SkipperForm onSubmit={setSkipperInfo} />;
+  if (!skipperInfo || editingSkipper) return (
+    <SkipperForm
+      initial={skipperInfo}
+      onSubmit={info => { setSkipperInfo(info); setEditingSkipper(false); }}
+    />
+  );
 
   if (submitted) {
     return (
@@ -157,7 +163,7 @@ export default function App() {
       {/* Buttons */}
       <div className="flex gap-2 mb-5">
         <button
-          onClick={() => setSkipperInfo(null)}
+          onClick={() => setEditingSkipper(true)}
           className="flex-1 py-2 text-sm font-medium rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 transition-colors"
         >
           Boots-Informationen

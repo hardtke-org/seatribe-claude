@@ -9,10 +9,10 @@ const FIELDS: { key: keyof SkipperInfo; label: string; placeholder: string }[] =
   { key: 'zielhafen',   label: 'Zielhafen',     placeholder: 'Kiel' },
 ];
 
-export function SkipperForm({ onSubmit }: { onSubmit: (info: SkipperInfo) => void }) {
-  const [form, setForm] = useState<SkipperInfo>({
-    name: '', auftragId: '', bootstyp: '', starthafen: '', zielhafen: '',
-  });
+export function SkipperForm({ onSubmit, initial }: { onSubmit: (info: SkipperInfo) => void; initial?: SkipperInfo | null }) {
+  const [form, setForm] = useState<SkipperInfo>(
+    initial ?? { name: '', auftragId: '', bootstyp: '', starthafen: '', zielhafen: '' }
+  );
 
   const valid = Object.values(form).every(v => v.trim() !== '');
 
