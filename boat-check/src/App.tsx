@@ -154,13 +154,21 @@ export default function App() {
 
       <div className="px-5 sm:px-8 pb-28 pt-5">
 
-      {/* Reset */}
-      <button
-        onClick={handleReset}
-        className="w-full mb-5 py-2 text-sm font-medium rounded-xl bg-red-100 text-red-700 hover:bg-red-200 active:bg-red-300 transition-colors"
-      >
-        Zurücksetzen
-      </button>
+      {/* Buttons */}
+      <div className="flex gap-2 mb-5">
+        <button
+          onClick={() => setSkipperInfo(null)}
+          className="flex-1 py-2 text-sm font-medium rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 active:bg-slate-300 transition-colors"
+        >
+          Boots-Informationen
+        </button>
+        <button
+          onClick={handleReset}
+          className="flex-1 py-2 text-sm font-medium rounded-xl bg-red-100 text-red-700 hover:bg-red-200 active:bg-red-300 transition-colors"
+        >
+          Zurücksetzen
+        </button>
+      </div>
 
       {/* Progress */}
       <div className="mb-5">
