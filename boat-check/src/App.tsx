@@ -67,7 +67,10 @@ export default function App() {
         },
         body: pdfBytes,
       });
-      if (!uploadRes.ok) throw new Error('Drive-Upload fehlgeschlagen');
+      if (!uploadRes.ok) {
+        const errText = await uploadRes.text();
+        throw new Error(`Drive-Upload fehlgeschlagen (${uploadRes.status}): ${errText}`);
+      }
       const { driveLink } = await uploadRes.json();
 
       // 4. Send email with Drive link

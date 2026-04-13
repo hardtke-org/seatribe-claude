@@ -16,6 +16,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const pdfBuffer = Buffer.concat(chunks);
 
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!);
+    // Fix double-escaped newlines that can occur when pasting JSON into Vercel env vars
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
     const auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/drive.file'],
