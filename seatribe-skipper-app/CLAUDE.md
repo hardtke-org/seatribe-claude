@@ -28,7 +28,7 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Thema | Entscheidung |
 |---|---|
 | Zielkunde | Zuerst einzelne Skipper (ein Konto = ein Skipper). Charterunternehmen später. |
-| Eigner | Bekommt kein Konto. Ausnahme: Der Skipper schickt ihm die Ausrüstungs- & Zustandsliste als Link, der Eigner füllt sie selbst aus (ohne Login). Vollmacht, Versicherung, MwSt-Nachweis lädt zunächst der Skipper hoch; Eigner-Upload ist ein späterer Ausbau. |
+| Eigner | Bekommt kein Konto. Die Ausrüstungs- & Zustandsliste füllt er heute über ein HubSpot-Formular aus; das bleibt vorerst so. Später: E-Mail mit Link, über den er sie ohne Login ausfüllt, die Angaben landen im Törn. Vollmacht, Versicherung, MwSt-Nachweis lädt zunächst der Skipper hoch; Eigner-Upload ist ein späterer Ausbau. |
 | Branding | Standard: Seatribe Deliveries. Eigenes Branding gegen Aufpreis. |
 | Bedienung | Große Buttons, Fotos, Spracheingabe statt Tippen. |
 | Form | Web-App, die sich wie eine App installieren lässt (PWA), keine App-Stores. |
@@ -37,7 +37,7 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Baukasten | Pro Reise wird angehakt, welche Dokumente gebraucht werden; nur die entstehen als PDF. Geändert wird immer in der Bearbeitungsansicht, danach wird das PDF neu erzeugt (kein Bearbeiten im PDF). |
 | AGB | Grundlage ist die Fassung mit dem neuesten Datum (15.09.2026). AGB sind vom Vertrag getrennt. Zuerst wird ohne AGB- und Haftungsteil gebaut; der kommt später und wird juristisch geprüft. |
 | Begriffe | „Skipperhonorar" (nicht Heuer). Weitere Begriffe siehe Abschnitt Preisbaukasten. |
-| Konto | Ein „Seatribe-Konto" für alles (Skipper App, später Academy). Technik dafür: Supabase (Login, Datenbank, Dateiablage, EU-Region) – bestätigt am 2026-11-15; der Auftraggeber legt das Supabase-Konto auf Seatribe an. |
+| Konto | Ein „Seatribe-Konto" für alles (Skipper App, später Academy). Technik dafür: Supabase (Login, Datenbank, Dateiablage, EU-Region) – bestätigt am 2026-11-15; Projekt angelegt: `https://gurqbvdumczbaddoodub.supabase.co` (Region noch zu prüfen: muss EU sein). Geheime Schlüssel nie in den Chat oder ins Repository. |
 | Academy | Später im selben Konto: Videos nur ansehen (kein Download), Handouts zum Download, Inhalte nur für Käufer. Videos brauchen einen eigenen Streaming-Dienst mit geschützter Wiedergabe; Supabase regelt nur, wer was sehen darf. |
 | Startseite | Große Kacheln („Briefmarken"): Törn anlegen, Meine Törns usw. Ein Törn kann mit fast leeren Bootsdaten angelegt werden. Auf der Törn-Seite stehen die Aktionen: Angebot erstellen, Vertrag erstellen, Checkliste an Kunden schicken … |
 | Reihenfolge | 1. Fundament (Login, Konto-Einstellungen, Reise) + Boat Check zieht um · 2. Schaden aufnehmen + Übergabe · 3. Angebots-Wizard · 4. Vertrag aus Angebot · 5. Unterlagen/Scheine, Branding, Bezahlung |
