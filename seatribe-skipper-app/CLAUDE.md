@@ -41,20 +41,63 @@ Vorschläge, noch nicht bestätigt:
 - Sprache: Aufnahme + serverseitige Transkription statt Browser-Diktat.
 - Zeitstempel vom Server und PDF unveränderbar ablegen (Beweiswert).
 
-## Angebots-Wizard – gewünschte Eingaben
+## Dokumente, die die App erzeugen soll
 
-- Tagespauschale
-- Abrechnungsbeginn: ab Abfahrt zu Hause oder ab Ankunft am Hafen
-- Sonderpreise für Hafentage, Sondertermine
-- Mindest- und Maximalabrechnungstage
-- Reisekosten: Pauschale oder nach Aufwand
-- Bordkasse
+Gesichtet am 2026-11-15 anhand der Vorlagen im Drive-Ordner „Vorlagen" (elf PDFs + ein Beispielangebot als Google Doc). Alle lassen sich aus denselben Stammdaten einer Reise füllen.
 
-Aus den Angebotsdaten entsteht später der Vertrag. Grundlage sind die Vorlagen des Auftraggebers (siehe Google Drive unten).
+| Dokument | Zwischen wem | Wann |
+|---|---|---|
+| Angebot (E-Mail-Text) | Anbieter → Eigner | vor Auftrag |
+| Überführungsvertrag + AGB | Anbieter ↔ Eigner | nach Zusage |
+| Ausrüstungs- & Zustandsliste | Selbstauskunft des Eigners | vor der Reise |
+| Vollmacht (englisch) | Eigner → Skipper | vor der Reise |
+| Crewvereinbarung „Hand gegen Koje" mit Packliste | Anbieter ↔ Crewmitglied | vor der Reise |
+| Crewliste (englisch) | für Behörden/Häfen | vor der Reise |
+| Übernahme-, Schadens-, Übergabeprotokoll | Skipper | während der Reise |
+| Meilenbestätigung (deutsch/englisch) | Anbieter → Crewmitglied | nach der Reise |
+| Schlussabrechnung / Rechnung | Anbieter → Eigner | nach der Reise |
+| Skippervertrag + AGB, Skipper-Rechnung | Agentur ↔ beauftragter Skipper | nur Agentur-Fall |
+
+**Zwei Ebenen:** Seatribe arbeitet als Agentur (Vertrag mit dem Eigner *und* Vertrag mit einem beauftragten Skipper, inkl. Kundenschutz und Geheimhaltung). Ein einzelner Skipper als Käufer braucht nur die Ebene Skipper ↔ Eigner. Ob die Agentur-Ebene Teil des Produkts wird oder nur intern genutzt wird, ist offen.
+
+### Stammdaten (einmal erfassen, überall verwenden)
+
+- **Boot:** Name, Typ/Modell, Baujahr, Flagge, Rufzeichen, MMSI, Registriernummer
+- **Eigner:** Name, Anschrift, Nationalität, Passnummer
+- **Skipper:** Name, Anschrift, Nationalität, Geburtsdatum, Passnummer, Scheinnummer, Telefon, Notfallkontakt, Haftpflichtversicherung
+- **Crew:** je Person dieselben Felder wie Skipper (ohne Schein), Funktion an Bord
+- **Reise:** Start- und Zielhafen (mit Marina), geplanter Start, kalkulierte Dauer, gesegelte Seemeilen, Gültigkeit der Vollmacht
+
+### Angebot und Vertrag – drei Preismodelle
+
+1. **Festpreis:** Heuer fix, Verpflegung fix, Bordkassenvorschuss; Zusatztagessatz nur bei Verzögerungen durch Yacht/Dritte.
+2. **Tagessatz + Logistikpauschale:** Tagessatz × Kalendertage, Pauschale deckt Reise und Verpflegung, voraussichtliche Nebenkosten.
+3. **Tagessatz + Reisekosten nach Aufwand:** Tagessatz × Kalendertage, Verpflegungspauschale, Sicherheitsrücklage, Reisekosten gegen Beleg.
+
+Eingaben des Wizards:
+
+- Preismodell, Tagessatz bzw. Festpreis
+- kalkulierte Dauer (optional aufgeteilt in An-/Abreise, Seetage, Hafen-/Puffertage) und Mindestabrechnungsdauer; gewünscht außerdem Maximaltage und Sonderpreis für Hafentage (steht in keiner heutigen Vorlage)
+- Abrechnungsbeginn: ab Abreise vom Heimatort bis Rückkehr, oder ab Eintreffen an Bord bis Übergabe
+- Logistik-/Reisekosten: Pauschale oder nach Aufwand; Verpflegungspauschale
+- Administrations-/Bearbeitungspauschale
+- Bordkasse: Vorschuss oder kalkulatorischer Ansatz, Abrechnung gegen Beleg; Sicherheitsrücklage
+- Mehrwertsteuer: Netto/Brutto je Position; die Aufteilung der Tage innerhalb/außerhalb der EU entscheidet der Nutzer, die App rechnet nur
+- Zahlungsplan (heute: 50 % bei Abschluss, Rest 14 Tage vor Start) und Stornostaffel (30/50/80/100 %)
+- Crew: „Hand gegen Koje" oder bezahlt
+
+### Beobachtungen zu den Vorlagen
+
+- Es gibt drei AGB-Fassungen (15.12.2025, 20.02.2026, 15.09.2026) mit unterschiedlicher Haftungs-, Storno- und Abrechnungsregelung. Die App braucht **eine** geprüfte Grundfassung mit Bausteinen je Preismodell.
+- Begriffe schwanken: Heuer / Skipperhonorar, Bordkasse / Sicherheitsrücklage / Nebenkosten, Einsatztage / Kalendertage, Administrations- / Bearbeitungspauschale. Vor dem Bau festlegen.
+- Die AGB vom 20.02.2026 verlangen eine Zustandsdokumentation vor Beginn und bei Übergabe; die Fassung vom 15.12.2025 verlangt dokumentierte Schadensmeldungen binnen 48 Stunden. Genau das liefern Übernahme-, Schadens- und Übergabeprotokoll.
+- Die Ausrüstungsliste (Selbstauskunft des Eigners) und die Übernahme-Checkliste decken dieselben Themen ab. Idee: Die Angaben des Eigners erscheinen beim Check als Soll, der Skipper bestätigt oder widerspricht.
+- Die Vorlagen im Drive sind ausgefüllte Echtfälle mit personenbezogenen Daten (Anschriften, Geburtsdaten, Passnummern). Nur dort belassen; für die App neutrale Fassungen ableiten.
 
 ## Offene Punkte
 
-- Angebots- und Vertragsvorlagen sichten, sobald sie im Drive-Ordner „Vorlagen" liegen (am 2026-11-15 noch leer).
+- Agentur-Ebene (Skippervertrag, Skipper-Rechnung, Kundenschutz): Teil des Produkts oder nur für Seatribe intern?
+- Eine AGB-Grundfassung und einheitliche Begriffe festlegen.
 - Vertragsvorlagen vor dem Verkauf anwaltlich prüfen lassen; Haftung beim Nutzer.
 - Datenschutz für fremde Skipper: AV-Vertrag, EU-Hosting, Löschkonzept.
 - Preismodell und Bezahlung (Stripe) noch nicht besprochen.
