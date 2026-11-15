@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-15 – Konzeptphase, es ist noch kein Code für die neue App geschrieben.
+Stand: 2026-11-15 – Konzeptphase. Es gibt einen klickbaren Prototyp (`prototyp/index.html`, Beispieldaten, ohne Login und Speicherung), noch keine echte App.
 
 ## Worum es geht
 
@@ -40,12 +40,12 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Konto | Ein „Seatribe-Konto" für alles (Skipper App, später Academy). Technik dafür: Supabase (Login, Datenbank, Dateiablage, EU-Region) – bestätigt am 2026-11-15; Projekt angelegt: `https://kfyltkepnyrdqvhmjymg.supabase.co` (Region Europa; Projektkennung `kfyltkepnyrdqvhmjymg`). Geheime Schlüssel nie in den Chat oder ins Repository. |
 | Academy | Später im selben Konto: Videos nur ansehen (kein Download), Handouts zum Download, Inhalte nur für Käufer. Videos brauchen einen eigenen Streaming-Dienst mit geschützter Wiedergabe; Supabase regelt nur, wer was sehen darf. |
 | Startseite | Große Kacheln („Briefmarken"): Törn anlegen, Meine Törns usw. Ein Törn kann mit fast leeren Bootsdaten angelegt werden. Auf der Törn-Seite stehen die Aktionen: Angebot erstellen, Vertrag erstellen, Checkliste an Kunden schicken … |
+| Wort in der Oberfläche | „Überführung" (nicht Törn oder Reise). |
+| Vorgehen | Erst klickbarer Prototyp, am Handy durchgehen und zurechtrücken, dann richtig bauen. Prototyp: `prototyp/index.html`, veröffentlicht als privates Artifact https://claude.ai/artifact/HTgxCjottbvSUHuDH326Ta (aus anderer Sitzung mit dieser Adresse als `url` aktualisieren). Enthält Kachel-Startseite, Überführung anlegen, Überführungs-Seite mit Bausteinen, Angebots-Wizard mit Live-Summe, Ausrüstungsliste samt Eigner-Ansicht; übrige Bausteine nur als Beschreibung. |
 | Reihenfolge | 1. Fundament (Login, Konto-Einstellungen, Reise) + Boat Check zieht um · 2. Schaden aufnehmen + Übergabe · 3. Angebots-Wizard · 4. Vertrag aus Angebot · 5. Unterlagen/Scheine, Branding, Bezahlung |
 
 Vorschläge, noch nicht bestätigt:
-- Vorgehen: zuerst ein klickbarer Prototyp der Bildschirme ohne echte Daten, am Handy durchgehen, dann erst richtig bauen.
 - MVP-Umfang und Reihenfolge neu festlegen (Angebot/Vertrag evtl. vor dem Umzug des Boat Check).
-- Wort in der Oberfläche: „Törn" oder „Überführung" (intern heißt es hier „Reise").
 - Offline-fähig (lokal speichern, später hochladen), weil das Netz im Hafen oft schlecht ist.
 - Sprache: Aufnahme + serverseitige Transkription statt Browser-Diktat.
 - Zeitstempel vom Server und PDF unveränderbar ablegen (Beweiswert).
