@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Noch nicht im Netz veröffentlicht. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
+Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
 
 ## Worum es geht
 
@@ -130,6 +130,7 @@ Entschieden am 2026-11-15 (im Prototyp unter „Mein Konto" eingebaut):
 
 Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernommen (kein Tailwind). Befehle im Ordner `app/`: `npm install`, `npm run dev`, `npm run build`.
 
+- **Veröffentlichung:** Vercel-Projekt `seatribe-skipper-app` (Team „hardtke-org's projects", Root Directory `seatribe-skipper-app/app`), Adresse https://seatribe-skipper-app.vercel.app. Vercel baut bei jeder Änderung der Hauptversion (`main`) automatisch neu; Änderungen kommen also erst nach dem Mergen eines Pull Requests live. Neue Vercel-Projekte kann Claude über den Connector nicht anlegen (keine Berechtigung), nur lesen.
 - **Supabase:** Adresse und Publishable Key stehen in `app/.env` (öffentlich, kein Geheimnis). Schema in `supabase/migrations/`; Änderungen immer als neue Migration anwenden und dort ablegen.
 - **Tabellen:** `profiles` (Kontoart, Sitzland, Mehrwertsteuer, Steuernummer, Versand), `boats`, `owners`, `deliveries` (mit `modules` = angehakte Bausteine). Überall gilt: Jeder sieht und ändert nur eigene Zeilen (RLS). Das Profil entsteht automatisch bei der Registrierung.
 - **Anmeldung:** E-Mail + Passwort, Konto anlegen, Passwort zurücksetzen. Bestätigungs- und Reset-Links führen auf die Adresse der App; diese muss in Supabase unter Authentication → URL Configuration als Site URL eingetragen sein, sobald die App veröffentlicht ist.
