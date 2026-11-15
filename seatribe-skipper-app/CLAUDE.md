@@ -94,7 +94,7 @@ Hafen- und Liegegebühren, Diesel, Schleusen, kleine Reparaturen und Ersatzteile
 
 **5. Optional:** Administrationspauschale, Mehrwertsteuer je Position (die Aufteilung der Tage innerhalb/außerhalb der EU entscheidet der Nutzer, die App rechnet nur), Zahlungsplan, Crew „Hand gegen Koje" oder bezahlt.
 
-Vorschlag von Claude zu den Begriffen, noch nicht bestätigt:
+Begriffe (bestätigt am 2026-11-15; die AGB werden an diese Begriffe angepasst, nicht umgekehrt – Seatribe schreibt die eigenen Verträge künftig selbst über die App):
 - Nur noch **ein** Topf namens „Bordkasse" = Betriebskosten der Yacht. „Sicherheitsrücklage" und „Nebenkosten" entfallen als eigene Begriffe; der vorab gezahlte Betrag heißt „Bordkassen-Vorschuss".
 - Verpflegung gehört ausdrücklich **nicht** in die Bordkasse, sondern läuft über Schalter 2.
 - „Kalendertage" statt „Einsatztage", „Administrationspauschale" statt „Bearbeitungs- & Koordinationspauschale" (so steht es in der neuesten AGB).
@@ -109,7 +109,7 @@ Vorschlag von Claude zu den Begriffen, noch nicht bestätigt:
 
 ## Offene Punkte
 
-- Begriffsvorschlag (ein Topf „Bordkasse") bestätigen.
+- AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
 - Maximalabrechnungstage: Was gilt bei Überschreitung? Ein aktuelles Angebot mit Maximaltagen fehlt noch im Ordner „Vorlagen".
 - Dritte Variante des Abrechnungsbeginns bestätigen.
 - Vertragsvorlagen vor dem Verkauf anwaltlich prüfen lassen; Haftung beim Nutzer.
