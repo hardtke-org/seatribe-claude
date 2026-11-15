@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-15 – Konzeptphase. Es gibt einen klickbaren Prototyp (`prototyp/index.html`, Beispieldaten, ohne Login und Speicherung), noch keine echte App.
+Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Noch nicht im Netz veröffentlicht. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
 
 ## Worum es geht
 
@@ -125,6 +125,19 @@ Entschieden am 2026-11-15 (im Prototyp unter „Mein Konto" eingebaut):
 - Die E-Mail des Eigners bleibt beim Anlegen freiwillig.
 - **Sitz und Mehrwertsteuer im Konto:** Der Nutzer wählt das Land, in dem er oder seine Firma sitzt; daraus kommt der Mehrwertsteuersatz für seine Angebote (so wird die App international nutzbar). „Ich weise keine Mehrwertsteuer aus" (z. B. Kleinunternehmer) ist für beide Kontoarten wählbar, auch für Agenturen. Wer Mehrwertsteuer ausweist, hinterlegt im Konto seine Umsatzsteuer-ID oder Steuernummer; sie erscheint auf Angebot und Rechnung. Die Steuersätze im Prototyp stammen aus Claudes Wissen und müssen vor der echten Version geprüft werden. Der Satz des Sitzlandes ist nur die Voreinstellung – was im Einzelfall gilt (Leistungsort, Auslandskunden), entscheidet der Nutzer.
 - **Veröffentlichung:** Der Prototyp bleibt vorerst nur als privates Artifact; auf Vercel kommt er erst später.
+
+## Die echte App (`app/`)
+
+Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernommen (kein Tailwind). Befehle im Ordner `app/`: `npm install`, `npm run dev`, `npm run build`.
+
+- **Supabase:** Adresse und Publishable Key stehen in `app/.env` (öffentlich, kein Geheimnis). Schema in `supabase/migrations/`; Änderungen immer als neue Migration anwenden und dort ablegen.
+- **Tabellen:** `profiles` (Kontoart, Sitzland, Mehrwertsteuer, Steuernummer, Versand), `boats`, `owners`, `deliveries` (mit `modules` = angehakte Bausteine). Überall gilt: Jeder sieht und ändert nur eigene Zeilen (RLS). Das Profil entsteht automatisch bei der Registrierung.
+- **Anmeldung:** E-Mail + Passwort, Konto anlegen, Passwort zurücksetzen. Bestätigungs- und Reset-Links führen auf die Adresse der App; diese muss in Supabase unter Authentication → URL Configuration als Site URL eingetragen sein, sobald die App veröffentlicht ist.
+- **Fertig (Schritt 1 und 2):** Start mit Kacheln, Mein Konto, Liste, Überführung anlegen/bearbeiten (Route, Boot mit Baujahr, Flagge, Länge, Breite, Tiefgang, MMSI, Rufzeichen; Eigner), Überführungs-Seite mit Baustein-Auswahl, Löschen mit Rückfrage.
+- **Als Nächstes (Schritt 3):** Angebots-Wizard aus dem Prototyp in die App übernehmen, Angebot speichern, PDF mit Briefkopf. Danach Vertrag ohne AGB.
+- **Getestet am 2026-11-15** mit zwei Testkonten im Browser gegen die echte Datenbank: Anmeldung, falsches Passwort, Konto speichern, Überführung anlegen/ändern/löschen, Bausteine, und dass Konto B die Daten von Konto A weder in der Liste noch über die direkte Adresse sieht. Testkonten danach gelöscht. Nicht getestet: Registrierung und Passwort-Reset per E-Mail (brauchen die veröffentlichte Adresse).
+- Der Sicherheitshinweis von Supabase zu `public.rls_auto_enable()` betrifft eine von Supabase selbst angelegte Funktion, nicht unseren Code.
+- Steuernummer bzw. Umsatzsteuer-ID ist immer einzutragen, auch ohne Mehrwertsteuer (Rechnung mit Hinweis auf die Kleinunternehmerregelung).
 
 ## Offene Punkte
 

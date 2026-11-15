@@ -250,7 +250,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
   var S = {
     sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach', land: 'DE', keineMwst: false, ustid: '',
     list: [
-      { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
+      { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', baujahr: '2016', flagge: 'Deutschland', laenge: '14,27', breite: '4,35', tiefgang: '2,10', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
       { id: 2, von: 'Lelystad', nach: 'Lissabon', start: '2027-06-03', typ: 'Hallberg-Rassy 40', boot: 'Aurelia', mmsi: '211234560', eigner: 'Erika Beispiel', mail: 'erika.beispiel@example.com', bau: alle(), angebot: { brutto: 9044, art: 'tag' }, ausr: 'ausgefuellt', status: { vertrag: 'Entwurf' } }
     ]
   };
@@ -304,14 +304,18 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<button class="btn wide" data-go="neu">Überführung anlegen</button>';
   };
   V.neu = function () {
-    var u = S.edit ? cur() : { von: '', nach: '', start: '', typ: '', boot: '', mmsi: '', eigner: '', mail: '' };
+    var u = S.edit ? cur() : { von: '', nach: '', start: '', typ: '', boot: '', mmsi: '', eigner: '', mail: '', baujahr: '', laenge: '', breite: '', tiefgang: '', flagge: '' };
+    function m(id, lab, val, unit) { return '<label class="field"><span>' + lab + '</span><span class="unit"><input id="' + id + '" inputmode="decimal" value="' + esc(val || '') + '"><b>' + unit + '</b></span></label>'; }
     function f(id, lab, val, extra, small) { return '<label class="field"><span>' + lab + '</span><input class="inp" id="' + id + '" value="' + esc(val) + '" ' + (extra || '') + '>' + (small ? '<small>' + small + '</small>' : '') + '</label>'; }
     return top() + back(S.edit ? 'fahrt' : 'start', S.edit ? 'Überführung' : 'Start') + '<h1>' + (S.edit ? 'Daten ergänzen' : 'Überführung anlegen') + '</h1>' +
       '<p class="lead">Nur Start und Ziel sind nötig. Alles andere kannst du später ergänzen.</p>' +
       '<form id="f-neu" class="stack" novalidate><span class="label">Route</span><div class="two">' + f('n-von', 'Starthafen', u.von, 'required autocomplete="off"') + f('n-nach', 'Zielhafen', u.nach, 'required autocomplete="off"') + '</div>' +
       f('n-start', 'Geplanter Start', u.start, 'type="date"') +
       '<span class="label">Boot</span><div class="two">' + f('n-typ', 'Typ', u.typ, 'placeholder="z. B. Bavaria 46"') + f('n-boot', 'Name', u.boot) + '</div>' +
-      f('n-mmsi', 'MMSI', u.mmsi, 'inputmode="numeric" maxlength="9"', 'Neun Ziffern. Wird für Crewliste und Vollmacht gebraucht.') +
+      '<div class="two">' + f('n-baujahr', 'Baujahr', u.baujahr || '', 'inputmode="numeric" maxlength="4"') + f('n-flagge', 'Flagge', u.flagge || '') + '</div>' +
+      '<div class="two">' + m('n-laenge', 'Länge', u.laenge, 'm') + m('n-breite', 'Breite', u.breite, 'm') + '</div>' +
+      '<div class="two">' + m('n-tiefgang', 'Tiefgang', u.tiefgang, 'm') + f('n-mmsi', 'MMSI', u.mmsi, 'inputmode="numeric" maxlength="9"') + '</div>' +
+      '<p class="hint">Länge, Breite und Tiefgang brauchst du für Liegeplätze und Schleusen. MMSI und Flagge stehen in Crewliste und Vollmacht.</p>' +
       '<span class="label">Eigner</span>' + f('n-eigner', 'Name', u.eigner) + f('n-mail', 'E-Mail', u.mail, 'type="email"') +
       '<p id="n-err" class="note" hidden>Bitte Start- und Zielhafen eintragen.</p>' +
       '<button class="btn wide" type="submit">' + (S.edit ? 'Speichern' : 'Überführung anlegen') + '</button></form>';
@@ -321,7 +325,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     var fehlt = ['start', 'typ', 'boot', 'mmsi', 'eigner', 'mail'].filter(function (k) { return !u[k]; }).length;
     var html = top() + back('liste', 'Meine Überführungen') +
       '<section class="route"><div class="ports">' + esc(u.von) + '<span>→</span>' + esc(u.nach) + '</div><div class="meta">' +
-      [u.start ? 'Start ' + datum(u.start) : 'Starttermin offen', u.typ || 'Bootstyp offen', u.boot ? '„' + esc(u.boot) + '"' : '', u.eigner ? 'Eigner: ' + esc(u.eigner) : 'Eigner offen'].filter(Boolean).map(function (x) { return '<span>' + x + '</span>'; }).join('') +
+      [u.start ? 'Start ' + datum(u.start) : 'Starttermin offen', u.typ || 'Bootstyp offen', u.laenge ? esc(u.laenge) + ' m' + (u.breite ? ' × ' + esc(u.breite) + ' m' : '') : '', u.baujahr ? 'Baujahr ' + esc(u.baujahr) : '', u.boot ? '„' + esc(u.boot) + '"' : '', u.eigner ? 'Eigner: ' + esc(u.eigner) : 'Eigner offen'].filter(Boolean).map(function (x) { return '<span>' + x + '</span>'; }).join('') +
       '</div><button data-act="edit">' + (fehlt ? 'Daten ergänzen (' + fehlt + ' offen)' : 'Daten bearbeiten') + '</button></section>';
     var phase = '';
     BAUSTEINE.forEach(function (b) {
@@ -353,7 +357,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<div class="stack"><span class="label">Sitz und Mehrwertsteuer</span><label class="field"><span>Land, in dem du oder deine Firma sitzt</span><select class="inp" id="p-land" data-p="land">' +
       LAENDER.map(function (l) { return '<option value="' + l[0] + '"' + (l[0] === S.land ? ' selected' : '') + '>' + l[1] + '</option>'; }).join('') + '</select><small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: ' + pz() + '.</small></label>' +
       '<label class="opt"><input type="checkbox" id="p-keine" data-pc="keineMwst"' + (S.keineMwst ? ' checked' : '') + '><span><span class="ot">Ich weise keine Mehrwertsteuer aus</span><br><span class="os">Zum Beispiel als Kleinunternehmer. Angebote und Rechnungen nennen dann nur Nettobeträge.</span></span></label>' +
-      (S.keineMwst ? '' : '<label class="field"><span>Umsatzsteuer-ID oder Steuernummer</span><input class="inp" id="p-ustid" data-pt="ustid" value="' + esc(S.ustid) + '" placeholder="z. B. DE123456789" autocomplete="off"><small>Erscheint auf Angebot und Rechnung.</small></label>') + '</div>' +
+      '<label class="field"><span>Umsatzsteuer-ID oder Steuernummer</span><input class="inp" id="p-ustid" data-pt="ustid" value="' + esc(S.ustid) + '" placeholder="z. B. DE123456789 oder 22/123/45678" autocomplete="off"><small>' + (S.keineMwst ? 'Erscheint auf der Rechnung, zusammen mit dem Hinweis auf die Kleinunternehmerregelung.' : 'Erscheint auf Angebot und Rechnung.') + '</small></label></div>' +
       '<div class="stack"><span class="label">E-Mail-Versand</span>' +
       o('mail', 'postfach', 'Aus meinem Postfach senden', 'Du hinterlegst hier dein Postfach. Angebot, Vollmacht und Ausrüstungsliste gehen dann direkt aus der App raus.') +
       o('mail', 'kopieren', 'Nicht aus der App senden', 'Du kopierst den Text oder speicherst das PDF und verschickst es selbst.') +
@@ -642,7 +646,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     if (ev.target.id === 'f-neu') {
       var von = val('n-von'), nach = val('n-nach');
       if (!von || !nach) { document.getElementById('n-err').hidden = false; return; }
-      var data = { von: von, nach: nach, start: val('n-start'), typ: val('n-typ'), boot: val('n-boot'), mmsi: val('n-mmsi'), eigner: val('n-eigner'), mail: val('n-mail') };
+      var data = { von: von, nach: nach, start: val('n-start'), typ: val('n-typ'), boot: val('n-boot'), mmsi: val('n-mmsi'), eigner: val('n-eigner'), mail: val('n-mail'), baujahr: val('n-baujahr'), flagge: val('n-flagge'), laenge: val('n-laenge'), breite: val('n-breite'), tiefgang: val('n-tiefgang') };
       if (S.edit) { var u = cur(); for (var k in data) u[k] = data[k]; }
       else { data.id = Math.max.apply(null, S.list.map(function (x) { return x.id; })) + 1; data.bau = alle(); data.angebot = null; data.ausr = 'offen'; data.status = {}; S.list.push(data); S.sel = data.id; }
       S.edit = false; S.auswahl = false; go('fahrt'); toast('Überführung gespeichert (nur in diesem Prototyp).');
