@@ -123,6 +123,8 @@ Entschieden am 2026-11-15 (im Prototyp unter „Mein Konto" eingebaut):
 - **E-Mail-Versand:** Jeder Nutzer hinterlegt in den Einstellungen sein eigenes Postfach, aus dem die App sendet. Alternative: nicht aus der App senden, Text kopieren bzw. PDF speichern und selbst verschicken.
 - **Mehrwertsteuer bei gemischten Tagen:** Nur das Honorar ist anteilig steuerfrei. Administrations- und Logistikpauschale laufen immer voll mit 19 %.
 - Die E-Mail des Eigners bleibt beim Anlegen freiwillig.
+- **Sitz und Mehrwertsteuer im Konto:** Der Nutzer wählt das Land, in dem er oder seine Firma sitzt; daraus kommt der Mehrwertsteuersatz für seine Angebote (so wird die App international nutzbar). Skipper können zusätzlich „Ich weise keine Mehrwertsteuer aus" wählen (z. B. Kleinunternehmer); Agenturen weisen immer Mehrwertsteuer aus. Die Steuersätze im Prototyp stammen aus Claudes Wissen und müssen vor der echten Version geprüft werden. Der Satz des Sitzlandes ist nur die Voreinstellung – was im Einzelfall gilt (Leistungsort, Auslandskunden), entscheidet der Nutzer.
+- **Veröffentlichung:** Der Prototyp bleibt vorerst nur als privates Artifact; auf Vercel kommt er erst später.
 
 ## Offene Punkte
 

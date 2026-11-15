@@ -228,6 +228,12 @@ textarea.inp { min-height: 96px; resize: vertical; }
   ];
   var STEPS = ['Dauer und Honorar', 'Abrechnungsbeginn', 'Reise und Verpflegung', 'Bordkasse und Zusätze', 'Vorschau'];
 
+  var LAENDER = [['DE', 'Deutschland', 19], ['AT', 'Österreich', 20], ['CH', 'Schweiz', 8.1], ['NL', 'Niederlande', 21], ['DK', 'Dänemark', 25], ['SE', 'Schweden', 25],
+    ['FR', 'Frankreich', 20], ['ES', 'Spanien', 21], ['IT', 'Italien', 22], ['HR', 'Kroatien', 25], ['GR', 'Griechenland', 24], ['PL', 'Polen', 23]];
+  function land() { return LAENDER.filter(function (l) { return l[0] === S.land; })[0] || LAENDER[0]; }
+  function ustSatz() { return land()[2]; }
+  function pz() { return String(ustSatz()).replace('.', ',') + ' %'; }
+  function ohneMwst() { return S.konto === 'skipper' && S.keineMwst; }
   function defaults() {
     var d = { art: 'tag', festpreis: 6000, satz: 300, dauer: 21, min: 16, maxOn: true, max: 24, beginn: 'heim', anreise: 1, rueck: 1,
       reise: 'pauschale', logistik: 1500, reiseSchaetz: 600, verpf: 'keine', verpfSatz: 25, personen: 3,
@@ -236,12 +242,13 @@ textarea.inp { min-height: 96px; resize: vertical; }
     d.adminOn = S.konto === 'agentur';
     try { var s2 = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s2 && s2.konto === S.konto && 'adminOn' in s2) d.adminOn = s2.adminOn; } catch (e) {}
     if (typeof d.mwst === 'boolean') d.mwst = d.mwst ? 'alle' : 'keine';
+    if (ohneMwst()) d.mwst = 'keine'; else if (d.mwst === 'keine') d.mwst = 'alle';
     return d;
   }
   function alle() { var o = {}; BAUSTEINE.forEach(function (b) { o[b.k] = b.k !== 'meilen'; }); return o; }
 
   var S = {
-    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach',
+    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach', land: 'DE', keineMwst: false,
     list: [
       { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
       { id: 2, von: 'Lelystad', nach: 'Lissabon', start: '2027-06-03', typ: 'Hallberg-Rassy 40', boot: 'Aurelia', mmsi: '211234560', eigner: 'Erika Beispiel', mail: 'erika.beispiel@example.com', bau: alle(), angebot: { brutto: 9044, art: 'tag' }, ausr: 'ausgefuellt', status: { vertrag: 'Entwurf' } }
@@ -261,7 +268,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     var basisTage = tag ? tage : d.dauer;
     var tageOhne = d.mwst === 'teil' ? Math.min(d.tageOhne || 0, basisTage) : 0;
     var honSteuer = basisTage > 0 ? honorar * (1 - tageOhne / basisTage) : honorar;
-    var ust = d.mwst === 'keine' ? 0 : (honSteuer + log + verpf + admin) * 0.19;
+    var ust = d.mwst === 'keine' ? 0 : (honSteuer + log + verpf + admin) * ustSatz() / 100;
     return { basisTage: basisTage, tageOhne: tageOhne, honSteuer: honSteuer, tag: tag, billDays: billDays, tage: tage, honorar: honorar, log: log, verpf: verpf, admin: admin, netto: netto, ust: ust, brutto: netto + ust,
       unterMin: tag && billDays < (d.min || 0), ueberMax: tag && d.maxOn && billDays > d.max, minGroesserMax: tag && d.maxOn && d.min > d.max };
   }
@@ -288,7 +295,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<div class="tiles">' +
       '<button class="tile main" data-go="neu">' + icon('plus') + '<span><span class="t">Überführung anlegen</span><br><span class="s">Start, Ziel, Boot</span></span></button>' +
       '<button class="tile" data-go="liste">' + icon('list') + '<span><span class="t">Meine Überführungen</span><br><span class="s">' + S.list.length + ' angelegt</span></span></button>' +
-      '<button class="tile" data-go="profil">' + icon('id') + '<span><span class="t">Mein Konto</span><br><span class="s">Kontoart, Scheine, Versand</span></span></button>' +
+      '<button class="tile" data-go="profil">' + icon('id') + '<span><span class="t">Mein Konto</span><br><span class="s">Kontoart, Steuer, Versand</span></span></button>' +
       '<button class="tile soon" data-go="academy">' + icon('play') + '<span><span class="t">Academy</span><br><span class="s">kommt später</span></span></button>' +
       '</div><div class="stack"><span class="label">Zuletzt bearbeitet</span>' + S.list.slice().reverse().slice(0, 2).map(fahrtRow).join('') + '</div>';
   };
@@ -343,6 +350,10 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<div class="stack"><span class="label">Kontoart</span>' +
       o('konto', 'skipper', 'Skipper', 'Du fährst selbst. Angebote ohne Administrationspauschale, sie lässt sich pro Angebot zuschalten.') +
       o('konto', 'agentur', 'Agentur', 'Du vermittelst und koordinierst Skipper und Crew. Die Administrationspauschale ist voreingestellt.') + '</div>' +
+      '<div class="stack"><span class="label">Sitz und Mehrwertsteuer</span><label class="field"><span>Land, in dem du oder deine Firma sitzt</span><select class="inp" id="p-land" data-p="land">' +
+      LAENDER.map(function (l) { return '<option value="' + l[0] + '"' + (l[0] === S.land ? ' selected' : '') + '>' + l[1] + '</option>'; }).join('') + '</select><small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: ' + pz() + '.</small></label>' +
+      (S.konto === 'skipper' ? '<label class="opt"><input type="checkbox" id="p-keine" data-pc="keineMwst"' + (S.keineMwst ? ' checked' : '') + '><span><span class="ot">Ich weise keine Mehrwertsteuer aus</span><br><span class="os">Zum Beispiel als Kleinunternehmer. Angebote nennen dann nur Nettobeträge.</span></span></label>'
+        : '<div class="hint">Als Agentur weist du immer Mehrwertsteuer aus.</div>') + '</div>' +
       '<div class="stack"><span class="label">E-Mail-Versand</span>' +
       o('mail', 'postfach', 'Aus meinem Postfach senden', 'Du hinterlegst hier dein Postfach. Angebot, Vollmacht und Ausrüstungsliste gehen dann direkt aus der App raus.') +
       o('mail', 'kopieren', 'Nicht aus der App senden', 'Du kopierst den Text oder speicherst das PDF und verschickst es selbst.') +
@@ -446,11 +457,15 @@ textarea.inp { min-height: 96px; resize: vertical; }
         num('w-bk', 'Kalkulatorischer Ansatz', 'bordkasse', '€') + chk('vorschuss', 'Als Vorschuss vorab erheben', 'Nicht verbrauchte Beträge werden nach der Überführung erstattet.') +
         '<span class="label">Zusätze</span>' + chk('adminOn', 'Administrationspauschale', S.konto === 'agentur' ? 'Angebot, Koordination von Skipper und Crew, Dokumentation.' : 'Bei einzelnen Skippern unüblich. Für Angebot, Vorbereitung und Dokumentation.');
       if (d.adminOn) h += '<div class="sub">' + num('w-admin', 'Administrationspauschale', 'admin', '€ netto') + '</div>';
-      h += '<span class="label">Mehrwertsteuer</span><p class="lead">Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.</p>' +
-        opt('mwst', 'alle', '19 % auf alles', 'Alle Tage und alle Pauschalen mit Mehrwertsteuer.') +
-        opt('mwst', 'teil', 'Ein Teil der Tage ohne Mehrwertsteuer', 'Zum Beispiel Tage außerhalb der EU. Die Pauschalen bleiben mit 19 %.') +
-        opt('mwst', 'keine', 'Ohne Mehrwertsteuer', 'Das Angebot weist nur Nettobeträge aus.');
-      if (d.mwst === 'teil') h += '<div class="sub">' + num('w-ohne', 'Tage ohne Mehrwertsteuer', 'tageOhne', 'von ' + c.basisTage) + '</div>';
+      h += '<span class="label">Mehrwertsteuer</span>';
+      if (ohneMwst()) h += '<div class="hint">In deinem Konto ist eingestellt, dass du keine Mehrwertsteuer ausweist. Das Angebot nennt nur Nettobeträge.</div>';
+      else {
+        h += '<p class="lead">Satz aus deinem Konto: ' + pz() + ' (' + land()[1] + '). Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.</p>' +
+          opt('mwst', 'alle', pz() + ' auf alles', 'Alle Tage und alle Pauschalen mit Mehrwertsteuer.') +
+          opt('mwst', 'teil', 'Ein Teil der Tage ohne Mehrwertsteuer', 'Zum Beispiel Tage außerhalb der EU. Die Pauschalen bleiben mit ' + pz() + '.') +
+          opt('mwst', 'keine', 'Ohne Mehrwertsteuer', 'Dieses Angebot weist nur Nettobeträge aus.');
+        if (d.mwst === 'teil') h += '<div class="sub">' + num('w-ohne', 'Tage ohne Mehrwertsteuer', 'tageOhne', 'von ' + c.basisTage) + '</div>';
+      }
       h += '<span class="label">Crew</span>' + opt('crew', 'hgk', 'Hand gegen Koje', 'Keine zusätzlichen Personalkosten.') + opt('crew', 'bezahlt', 'Bezahlte Crew', 'Wird im Angebot als gesonderter Hinweis genannt.');
     } else h += preview(c);
     return h;
@@ -480,7 +495,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     if (c.verpf) rows.push(['Verpflegung: ' + eur0(d.verpfSatz) + ' pro Tag' + (d.verpf === 'person' ? ' und Person, ' + d.personen + ' Personen' : '') + ', ' + d.dauer + ' Tage', eur(c.verpf)]);
     if (c.admin) rows.push(['Administrationspauschale', eur(c.admin)]);
     rows.push(['Summe netto', eur(c.netto), 1]);
-    if (d.mwst !== 'keine') { rows.push([c.tageOhne ? '19 % Mehrwertsteuer auf ' + (c.basisTage - c.tageOhne) + ' von ' + c.basisTage + ' Kalendertagen und auf die Pauschalen' : '19 % Mehrwertsteuer', eur(c.ust)]); rows.push(['Summe brutto', eur(c.brutto), 1]); }
+    if (d.mwst !== 'keine') { rows.push([c.tageOhne ? pz() + ' Mehrwertsteuer auf ' + (c.basisTage - c.tageOhne) + ' von ' + c.basisTage + ' Kalendertagen und auf die Pauschalen' : pz() + ' Mehrwertsteuer', eur(c.ust)]); rows.push(['Summe brutto', eur(c.brutto), 1]); }
     var steuerNote = c.tageOhne ? 'Die Kalkulation geht davon aus, dass ' + c.tageOhne + ' der ' + c.basisTage + ' Kalendertage ohne Mehrwertsteuer abgerechnet werden. Die endgültige umsatzsteuerliche Behandlung richtet sich nach den tatsächlichen Leistungsorten.' : '';
     b.push({ rows: rows });
     if (steuerNote) b.push({ p: steuerNote });
@@ -607,7 +622,8 @@ textarea.inp { min-height: 96px; resize: vertical; }
   });
   document.addEventListener('change', function (ev) {
     var t = ev.target, d = t.dataset || {};
-    if (d.p) { S[d.p] = t.value; if (d.p === 'konto') S.draft = null; var yy = window.scrollY, pid = t.id; render(); window.scrollTo(0, yy); var pe = document.getElementById(pid); if (pe) pe.focus({ preventScroll: true }); return toast(d.p === 'konto' ? 'Kontoart: ' + (t.value === 'agentur' ? 'Agentur' : 'Skipper') : 'Einstellung übernommen.'); }
+    if (d.pc) { S[d.pc] = t.checked; S.draft = null; var y2 = window.scrollY; render(); window.scrollTo(0, y2); var pc = document.getElementById(t.id); if (pc) pc.focus({ preventScroll: true }); return toast('Einstellung übernommen.'); }
+    if (d.p) { S[d.p] = t.value; if (d.p === 'konto' || d.p === 'land') S.draft = null; var yy = window.scrollY, pid = t.id; render(); window.scrollTo(0, yy); var pe = document.getElementById(pid); if (pe) pe.focus({ preventScroll: true }); return toast(d.p === 'konto' ? 'Kontoart: ' + (t.value === 'agentur' ? 'Agentur' : 'Skipper') : 'Einstellung übernommen.'); }
     if (t.id === 'vm-file') { var cu = cur(); if (t.files && t.files[0]) { cu.vm = 'hinterlegt'; cu.vmName = t.files[0].name; render(); toast('Vollmacht hinterlegt (nur in diesem Prototyp).'); } return; }
     if (!S.draft) return;
     if (d.r) { S.draft[d.r] = t.value; }
