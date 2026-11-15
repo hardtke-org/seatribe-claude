@@ -1,0 +1,662 @@
+<title>Seatribe Skipper App Prototyp</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: eine schmale App-Spalte wie auf dem Handy; Startseite aus Kacheln, darunter Listen und ein Schritt-für-Schritt-Wizard mit fester Summenleiste. */
+:root {
+  --bg: #F3F7FA;
+  --surface: #FFFFFF;
+  --sunken: #E8EFF4;
+  --ink: #0B3A53;
+  --muted: #566B7D;
+  --line: #D3DEE8;
+  --brand: #009FE0;
+  --brand-ink: #00709F;
+  --btn: #007BB0;
+  --btn-ink: #FFFFFF;
+  --deep: #0B3A53;
+  --deep-ink: #FFFFFF;
+  --accent: #E89B5A;
+  --ok: #1F8A5C;
+  --ok-bg: #DDF3E8;
+  --warn: #96600B;
+  --warn-bg: #FCEFD6;
+  --paper: #FFFFFF;
+  --f-display: "Space Grotesk", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #061B27; --surface: #0D2A3A; --sunken: #0A2230; --ink: #E4F0F6; --muted: #94ABBA;
+    --line: #1D4055; --brand: #2BB3EC; --brand-ink: #62C8F3; --btn: #2BB3EC; --btn-ink: #04202D;
+    --deep: #134B69; --deep-ink: #FFFFFF; --accent: #F0AC72; --ok: #63CE9E; --ok-bg: #0F3B2C;
+    --warn: #F4B860; --warn-bg: #3B2C0E; --paper: #102F41; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #061B27; --surface: #0D2A3A; --sunken: #0A2230; --ink: #E4F0F6; --muted: #94ABBA;
+  --line: #1D4055; --brand: #2BB3EC; --brand-ink: #62C8F3; --btn: #2BB3EC; --btn-ink: #04202D;
+  --deep: #134B69; --deep-ink: #FFFFFF; --accent: #F0AC72; --ok: #63CE9E; --ok-bg: #0F3B2C;
+  --warn: #F4B860; --warn-bg: #3B2C0E; --paper: #102F41; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 120px;
+}
+#app { max-width: 34rem; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; line-height: 1.15; }
+h1 { font-size: 1.6rem; font-weight: 700; }
+h2 { font-size: 1.15rem; font-weight: 600; }
+p { margin: 0; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+.top { display: flex; align-items: center; gap: 12px; padding-block: 14px 2px; }
+.top img { width: 48px; height: 48px; flex: none; background: #fff; border-radius: 50%; }
+.top .name { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; line-height: 1.1; }
+.top .tag { color: var(--muted); font-size: .8rem; }
+.pill { margin-left: auto; font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--warn); background: var(--warn-bg); padding: 4px 9px; border-radius: 99px; white-space: nowrap; }
+.back { align-self: flex-start; background: none; border: 0; padding: 6px 0; color: var(--brand-ink); font-weight: 600;
+  display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; max-width: 100%; }
+.back svg { width: 18px; height: 18px; flex: none; }
+.nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.letter { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--brand); padding-bottom: 14px; }
+.letter img { width: 58px; height: 58px; flex: none; background: #fff; border-radius: 50%; }
+.letter .who { font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; line-height: 1.15; }
+.letter .adr { color: var(--muted); font-size: .78rem; }
+.paper .title { font-family: var(--f-display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; }
+.paper .when { color: var(--muted); font-size: .84rem; }
+.paper ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+.paper dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; }
+.paper dt { color: var(--muted); } .paper dd { margin: 0; overflow-wrap: anywhere; }
+.miss { color: var(--warn); }
+textarea.inp { min-height: 96px; resize: vertical; }
+.lead { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.label { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Kacheln */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile { aspect-ratio: 1 / .86; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r);
+  padding: 14px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; min-width: 0; }
+.tile svg { width: 30px; height: 30px; color: var(--brand-ink); }
+.tile .t { font-family: var(--f-display); font-weight: 600; font-size: 1.08rem; line-height: 1.15; }
+.tile .s { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+.tile.main { background: var(--deep); border-color: var(--deep); color: var(--deep-ink); }
+.tile.main svg { color: var(--accent); }
+.tile.main .s { color: #C5DCE8; }
+.tile.soon { background: transparent; border-style: dashed; }
+
+/* Listen */
+.row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r); padding: 13px 14px; min-width: 0; }
+.row .ic { flex: none; width: 38px; height: 38px; border-radius: 10px; background: var(--sunken); display: grid; place-items: center; }
+.row .ic svg { width: 21px; height: 21px; color: var(--brand-ink); }
+.row .tx { flex: 1; min-width: 0; }
+.row .tt { font-weight: 600; overflow-wrap: anywhere; }
+.row .ss { font-size: .84rem; color: var(--muted); overflow-wrap: anywhere; }
+.row .chev { flex: none; width: 18px; height: 18px; color: var(--muted); }
+.row.done .ic { background: var(--ok-bg); }
+.row.done .ic svg { color: var(--ok); }
+.state { font-size: .74rem; font-weight: 600; padding: 3px 8px; border-radius: 99px; background: var(--sunken); color: var(--muted); white-space: nowrap; }
+.state.ok { background: var(--ok-bg); color: var(--ok); }
+.state.wait { background: var(--warn-bg); color: var(--warn); }
+
+.route { background: var(--deep); color: var(--deep-ink); border-radius: var(--r); padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.route .ports { font-family: var(--f-display); font-weight: 700; font-size: 1.45rem; line-height: 1.15; overflow-wrap: anywhere; }
+.route .ports span { color: var(--accent); padding-inline: 4px; }
+.route .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .86rem; color: #C5DCE8; }
+.route button { align-self: flex-start; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); color: #fff;
+  border-radius: 10px; padding: 8px 12px; font-weight: 600; font-size: .88rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 7px 12px; font-size: .86rem; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px; }
+.chip[aria-pressed="true"] { background: var(--deep); border-color: var(--deep); color: var(--deep-ink); }
+.chip svg { width: 14px; height: 14px; }
+
+/* Formulare */
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field > span { font-weight: 600; font-size: .9rem; }
+.field small { color: var(--muted); font-size: .8rem; }
+.inp { width: 100%; background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; padding: 12px 13px; min-height: 48px; }
+.unit { display: flex; align-items: stretch; background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; overflow: hidden; }
+.unit input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 12px 13px; min-height: 48px; font-variant-numeric: tabular-nums; }
+.unit b { flex: none; display: grid; place-items: center; padding-inline: 12px; background: var(--sunken); color: var(--muted); font-weight: 500; font-size: .86rem; }
+.unit:focus-within { border-color: var(--brand); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--r); padding: 14px; cursor: pointer; }
+.opt input { flex: none; width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--btn); }
+.opt .ot { font-weight: 600; }
+.opt .os { color: var(--muted); font-size: .86rem; }
+.opt:has(input:checked) { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 9%, var(--surface)); }
+.sub { border-left: 3px solid var(--line); padding-left: 14px; display: flex; flex-direction: column; gap: 12px; }
+.note { background: var(--warn-bg); color: var(--warn); border-radius: 11px; padding: 10px 12px; font-size: .88rem; }
+.hint { background: var(--sunken); border-radius: 11px; padding: 11px 13px; font-size: .88rem; color: var(--muted); }
+
+.btn { background: var(--btn); color: var(--btn-ink); border: 0; border-radius: 12px; padding: 14px 18px; font-weight: 600; min-height: 50px; }
+.btn.ghost { background: transparent; color: var(--brand-ink); border: 1.5px solid var(--line); }
+.btn.wide { width: 100%; }
+.steps { display: flex; gap: 5px; }
+.steps i { flex: 1; height: 5px; border-radius: 3px; background: var(--line); }
+.steps i.on { background: var(--brand); }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); z-index: 5; }
+.bar .in { max-width: 34rem; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+.bar .sum { flex: 1; min-width: 0; }
+.bar .sum small { display: block; color: var(--muted); font-size: .74rem; white-space: nowrap; }
+.bar .sum strong { font-family: var(--f-display); font-size: 1.2rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar .btn { padding-inline: 16px; }
+
+/* Angebotsvorschau */
+.paper { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 22px 18px; display: flex; flex-direction: column; gap: 12px; font-size: .95rem; }
+.paper h3 { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+.paper .total { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; font-variant-numeric: tabular-nums; }
+.paper table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.paper td { padding: 5px 0; vertical-align: top; }
+.paper td:last-child { text-align: right; white-space: nowrap; padding-left: 10px; }
+.paper tr.sumrow td { border-top: 1px solid var(--line); font-weight: 600; }
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--deep); color: var(--deep-ink);
+  padding: 10px 16px; border-radius: 99px; font-size: .9rem; font-weight: 500; z-index: 9; max-width: calc(100% - 32px); }
+.owner { background: var(--warn-bg); color: var(--warn); border-radius: 11px; padding: 10px 12px; font-size: .88rem; font-weight: 500; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg label { border: 1.5px solid var(--line); background: var(--surface); border-radius: 11px; padding: 11px; text-align: center; font-weight: 600; cursor: pointer; }
+.seg input { position: absolute; opacity: 0; }
+.seg label:has(input:checked) { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
+.seg label:has(input:focus-visible) { outline: 3px solid var(--brand); outline-offset: 2px; }
+@media (max-width: 360px) { .two { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .tile, .row, .btn, .chip { transition: transform .12s ease; } .tile:active, .row:active, .btn:active { transform: scale(.98); } }
+</style>
+
+<div id="app"></div>
+<div id="bar"></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function () {
+  var LOGO = "data:image/png;base64,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";
+  var IC = {
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    list: '<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+    id: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.6 5.4-1.6 6 0M15 10h3M15 14h3"/>',
+    play: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.5v5l4.5-2.5z"/>',
+    doc: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+    pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',
+    clip: '<rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 5V3h6v2M9 11l1.5 1.5L13 10M9 16h6"/>',
+    key: '<circle cx="8" cy="14" r="3.5"/><path d="M10.5 11.5L19 3M15 7l3 3"/>',
+    users: '<circle cx="9" cy="9" r="3"/><path d="M3 19c.8-4 11.2-4 12 0"/><circle cx="17" cy="8" r="2.3"/><path d="M17 13c2.4 0 3.6 1.4 4 3.5"/>',
+    anchor: '<circle cx="12" cy="5" r="2"/><path d="M12 7v13M8 11h8M5 14c.5 4 3.5 6 7 6s6.5-2 7-6"/>',
+    alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+    flag: '<path d="M6 21V4M6 5h11l-2 3.5 2 3.5H6"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+    euro: '<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10.5h9M4 13.5h9"/>',
+    chev: '<path d="M9 6l6 6-6 6"/>',
+    left: '<path d="M15 6l-6 6 6 6"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+  };
+  function icon(n, cls) { return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>'; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function eur(n) { return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+  function eur0(n) { return n.toLocaleString('de-DE', { maximumFractionDigits: 0 }) + ' €'; }
+  function datum(s) { if (!s) return ''; var p = s.split('-'); return p[2] + '.' + p[1] + '.' + p[0]; }
+
+  var BAUSTEINE = [
+    { k: 'angebot', phase: 'Vor dem Auftrag', t: 'Angebot erstellen', ic: 'euro' },
+    { k: 'vertrag', phase: 'Vor dem Auftrag', t: 'Vertrag erstellen', ic: 'pen',
+      d: 'Der Vertrag übernimmt alle Angaben aus dem Angebot und aus den Boots- und Eignerdaten. Du prüfst ihn in der Bearbeitungsansicht und erzeugst daraus das PDF. Die AGB kommen später als eigener, geprüfter Baustein dazu.' },
+    { k: 'ausruestung', phase: 'Vor der Abfahrt', t: 'Ausrüstungsliste an Eigner schicken', ic: 'clip' },
+    { k: 'vollmacht', phase: 'Vor der Abfahrt', t: 'Vollmacht', ic: 'key',
+      d: 'Die Vollmacht (englisch) wird aus Eigner, Skipper, Boot und Route gefüllt. Der Eigner unterschreibt, du lädst die unterschriebene Fassung zur Überführung hoch.' },
+    { k: 'crew', phase: 'Vor der Abfahrt', t: 'Crewliste und Crewvereinbarung', ic: 'users',
+      d: 'Du trägst die Crew einmal ein. Daraus entstehen die Crewliste für Häfen und Behörden und je Person eine Crewvereinbarung „Hand gegen Koje" mit Packliste.' },
+    { k: 'uebernahme', phase: 'Unterwegs', t: 'Boot übernehmen', ic: 'anchor',
+      d: 'Die Checkliste mit großen Buttons und Fotos. Jeder Punkt bekommt einen Status: in Ordnung, Mangel oder nicht vorhanden. Die Angaben des Eigners aus der Ausrüstungsliste stehen als Soll daneben. Am Ende entsteht ein PDF mit Datum und Uhrzeit.' },
+    { k: 'schaden', phase: 'Unterwegs', t: 'Schaden aufnehmen', ic: 'alert',
+      d: 'Ein Knopf für unterwegs: Foto machen, kurz einsprechen, was wo wann passiert ist. Die App schreibt den Text mit, stempelt Datum und Uhrzeit und legt die Meldung zur Überführung.' },
+    { k: 'uebergabe', phase: 'Unterwegs', t: 'Boot übergeben', ic: 'flag',
+      d: 'Wie die Übernahme, nur am Zielhafen. Die App zeigt, was sich gegenüber der Übernahme geändert hat, und erzeugt das Übergabeprotokoll als PDF.' },
+    { k: 'meilen', phase: 'Nach der Ankunft', t: 'Meilenbestätigung', ic: 'compass',
+      d: 'Für jedes Crewmitglied eine Meilenbestätigung auf Deutsch und Englisch mit Route, Datum und gesegelten Seemeilen.' },
+    { k: 'abrechnung', phase: 'Nach der Ankunft', t: 'Schlussabrechnung', ic: 'doc',
+      d: 'Abrechnung nach tatsächlichen Kalendertagen mit Mindest- und Maximaltagen, dazu die Bordkasse gegen Beleg. Der Vorschuss wird verrechnet.' }
+  ];
+  var STEPS = ['Dauer und Honorar', 'Abrechnungsbeginn', 'Reise und Verpflegung', 'Bordkasse und Zusätze', 'Vorschau'];
+
+  var LAENDER = [['DE', 'Deutschland', 19], ['AT', 'Österreich', 20], ['CH', 'Schweiz', 8.1], ['NL', 'Niederlande', 21], ['DK', 'Dänemark', 25], ['SE', 'Schweden', 25],
+    ['FR', 'Frankreich', 20], ['ES', 'Spanien', 21], ['IT', 'Italien', 22], ['HR', 'Kroatien', 25], ['GR', 'Griechenland', 24], ['PL', 'Polen', 23]];
+  function land() { return LAENDER.filter(function (l) { return l[0] === S.land; })[0] || LAENDER[0]; }
+  function ustSatz() { return land()[2]; }
+  function pz() { return String(ustSatz()).replace('.', ',') + ' %'; }
+  function ohneMwst() { return S.keineMwst; }
+  function defaults() {
+    var d = { art: 'tag', festpreis: 6000, satz: 300, dauer: 21, min: 16, maxOn: true, max: 24, beginn: 'heim', anreise: 1, rueck: 1,
+      reise: 'pauschale', logistik: 1500, reiseSchaetz: 600, verpf: 'keine', verpfSatz: 25, personen: 3,
+      bordkasse: 1500, vorschuss: true, adminOn: true, admin: 500, mwst: 'alle', tageOhne: 0, crew: 'hgk' };
+    try { var s = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s) for (var k in s) if (k in d) d[k] = s[k]; } catch (e) {}
+    d.adminOn = S.konto === 'agentur';
+    try { var s2 = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s2 && s2.konto === S.konto && 'adminOn' in s2) d.adminOn = s2.adminOn; } catch (e) {}
+    if (typeof d.mwst === 'boolean') d.mwst = d.mwst ? 'alle' : 'keine';
+    if (ohneMwst()) d.mwst = 'keine'; else if (d.mwst === 'keine') d.mwst = 'alle';
+    return d;
+  }
+  function alle() { var o = {}; BAUSTEINE.forEach(function (b) { o[b.k] = b.k !== 'meilen'; }); return o; }
+
+  var S = {
+    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach', land: 'DE', keineMwst: false, ustid: '',
+    list: [
+      { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', baujahr: '2016', flagge: 'Deutschland', laenge: '14,27', breite: '4,35', tiefgang: '2,10', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
+      { id: 2, von: 'Lelystad', nach: 'Lissabon', start: '2027-06-03', typ: 'Hallberg-Rassy 40', boot: 'Aurelia', mmsi: '211234560', eigner: 'Erika Beispiel', mail: 'erika.beispiel@example.com', bau: alle(), angebot: { brutto: 9044, art: 'tag' }, ausr: 'ausgefuellt', status: { vertrag: 'Entwurf' } }
+    ]
+  };
+  function cur() { return S.list.filter(function (x) { return x.id === S.sel; })[0] || S.list[0]; }
+
+  function calc(d) {
+    var tag = d.art === 'tag';
+    var billDays = d.dauer + (tag && d.beginn === 'hafenplus' ? d.anreise + d.rueck : 0);
+    var tage = tag ? Math.max(billDays, d.min || 0) : billDays;
+    var honorar = tag ? d.satz * tage : d.festpreis;
+    var log = d.reise === 'pauschale' ? d.logistik : 0;
+    var verpf = d.reise === 'einzeln' ? (d.verpf === 'tag' ? d.verpfSatz * d.dauer : d.verpf === 'person' ? d.verpfSatz * d.dauer * d.personen : 0) : 0;
+    var admin = d.adminOn ? d.admin : 0;
+    var netto = honorar + log + verpf + admin;
+    var basisTage = tag ? tage : d.dauer;
+    var tageOhne = d.mwst === 'teil' ? Math.min(d.tageOhne || 0, basisTage) : 0;
+    var honSteuer = basisTage > 0 ? honorar * (1 - tageOhne / basisTage) : honorar;
+    var ust = d.mwst === 'keine' ? 0 : (honSteuer + log + verpf + admin) * ustSatz() / 100;
+    return { basisTage: basisTage, tageOhne: tageOhne, honSteuer: honSteuer, tag: tag, billDays: billDays, tage: tage, honorar: honorar, log: log, verpf: verpf, admin: admin, netto: netto, ust: ust, brutto: netto + ust,
+      unterMin: tag && billDays < (d.min || 0), ueberMax: tag && d.maxOn && billDays > d.max, minGroesserMax: tag && d.maxOn && d.min > d.max };
+  }
+
+  /* ---------- Ansichten ---------- */
+  function top(owner) {
+    if (owner) return '';
+    return '<header class="top"><img src="' + LOGO + '" alt="Seatribe Deliveries"><div><div class="name">Skipper App</div><div class="tag">Seatribe Deliveries</div></div><span class="pill">Prototyp</span></header>';
+  }
+  function back(to, txt) { return '<div class="nav"><button class="back" data-go="' + to + '">' + icon('left') + esc(txt) + '</button>' + (view !== 'profil' ? '<button class="back" data-go="profil">Mein Konto</button>' : '') + '</div>'; }
+  function rowStatus(u) {
+    if (u.angebot && u.status.vertrag) return 'Vertrag im Entwurf';
+    if (u.angebot) return 'Angebot erstellt';
+    return 'Neu angelegt';
+  }
+  function fahrtRow(u) {
+    return '<button class="row" data-open="' + u.id + '"><span class="ic">' + icon('compass') + '</span><span class="tx"><span class="tt">' + esc(u.von) + ' → ' + esc(u.nach) + '</span><br><span class="ss">' +
+      esc([u.typ, u.start ? 'ab ' + datum(u.start) : '', rowStatus(u)].filter(Boolean).join(' · ')) + '</span></span>' + icon('chev', 'chev') + '</button>';
+  }
+
+  var V = {};
+  V.start = function () {
+    return top() + '<div class="stack"><h1>Was möchtest du tun?</h1><p class="lead">Beispieldaten zum Durchklicken. Hier wird nichts gespeichert und nichts verschickt.</p></div>' +
+      '<div class="tiles">' +
+      '<button class="tile main" data-go="neu">' + icon('plus') + '<span><span class="t">Überführung anlegen</span><br><span class="s">Start, Ziel, Boot</span></span></button>' +
+      '<button class="tile" data-go="liste">' + icon('list') + '<span><span class="t">Meine Überführungen</span><br><span class="s">' + S.list.length + ' angelegt</span></span></button>' +
+      '<button class="tile" data-go="profil">' + icon('id') + '<span><span class="t">Mein Konto</span><br><span class="s">Kontoart, Steuer, Versand</span></span></button>' +
+      '<button class="tile soon" data-go="academy">' + icon('play') + '<span><span class="t">Academy</span><br><span class="s">kommt später</span></span></button>' +
+      '</div><div class="stack"><span class="label">Zuletzt bearbeitet</span>' + S.list.slice().reverse().slice(0, 2).map(fahrtRow).join('') + '</div>';
+  };
+  V.liste = function () {
+    return top() + back('start', 'Start') + '<h1>Meine Überführungen</h1><div class="stack">' + S.list.slice().reverse().map(fahrtRow).join('') + '</div>' +
+      '<button class="btn wide" data-go="neu">Überführung anlegen</button>';
+  };
+  V.neu = function () {
+    var u = S.edit ? cur() : { von: '', nach: '', start: '', typ: '', boot: '', mmsi: '', eigner: '', mail: '', baujahr: '', laenge: '', breite: '', tiefgang: '', flagge: '' };
+    function m(id, lab, val, unit) { return '<label class="field"><span>' + lab + '</span><span class="unit"><input id="' + id + '" inputmode="decimal" value="' + esc(val || '') + '"><b>' + unit + '</b></span></label>'; }
+    function f(id, lab, val, extra, small) { return '<label class="field"><span>' + lab + '</span><input class="inp" id="' + id + '" value="' + esc(val) + '" ' + (extra || '') + '>' + (small ? '<small>' + small + '</small>' : '') + '</label>'; }
+    return top() + back(S.edit ? 'fahrt' : 'start', S.edit ? 'Überführung' : 'Start') + '<h1>' + (S.edit ? 'Daten ergänzen' : 'Überführung anlegen') + '</h1>' +
+      '<p class="lead">Nur Start und Ziel sind nötig. Alles andere kannst du später ergänzen.</p>' +
+      '<form id="f-neu" class="stack" novalidate><span class="label">Route</span><div class="two">' + f('n-von', 'Starthafen', u.von, 'required autocomplete="off"') + f('n-nach', 'Zielhafen', u.nach, 'required autocomplete="off"') + '</div>' +
+      f('n-start', 'Geplanter Start', u.start, 'type="date"') +
+      '<span class="label">Boot</span><div class="two">' + f('n-typ', 'Typ', u.typ, 'placeholder="z. B. Bavaria 46"') + f('n-boot', 'Name', u.boot) + '</div>' +
+      '<div class="two">' + f('n-baujahr', 'Baujahr', u.baujahr || '', 'inputmode="numeric" maxlength="4"') + f('n-flagge', 'Flagge', u.flagge || '') + '</div>' +
+      '<div class="two">' + m('n-laenge', 'Länge', u.laenge, 'm') + m('n-breite', 'Breite', u.breite, 'm') + '</div>' +
+      '<div class="two">' + m('n-tiefgang', 'Tiefgang', u.tiefgang, 'm') + f('n-mmsi', 'MMSI', u.mmsi, 'inputmode="numeric" maxlength="9"') + '</div>' +
+      '<p class="hint">Länge, Breite und Tiefgang brauchst du für Liegeplätze und Schleusen. MMSI und Flagge stehen in Crewliste und Vollmacht.</p>' +
+      '<span class="label">Eigner</span>' + f('n-eigner', 'Name', u.eigner) + f('n-mail', 'E-Mail', u.mail, 'type="email"') +
+      '<p id="n-err" class="note" hidden>Bitte Start- und Zielhafen eintragen.</p>' +
+      '<button class="btn wide" type="submit">' + (S.edit ? 'Speichern' : 'Überführung anlegen') + '</button></form>';
+  };
+  V.fahrt = function () {
+    var u = cur();
+    var fehlt = ['start', 'typ', 'boot', 'mmsi', 'eigner', 'mail'].filter(function (k) { return !u[k]; }).length;
+    var html = top() + back('liste', 'Meine Überführungen') +
+      '<section class="route"><div class="ports">' + esc(u.von) + '<span>→</span>' + esc(u.nach) + '</div><div class="meta">' +
+      [u.start ? 'Start ' + datum(u.start) : 'Starttermin offen', u.typ || 'Bootstyp offen', u.laenge ? esc(u.laenge) + ' m' + (u.breite ? ' × ' + esc(u.breite) + ' m' : '') : '', u.baujahr ? 'Baujahr ' + esc(u.baujahr) : '', u.boot ? '„' + esc(u.boot) + '"' : '', u.eigner ? 'Eigner: ' + esc(u.eigner) : 'Eigner offen'].filter(Boolean).map(function (x) { return '<span>' + x + '</span>'; }).join('') +
+      '</div><button data-act="edit">' + (fehlt ? 'Daten ergänzen (' + fehlt + ' offen)' : 'Daten bearbeiten') + '</button></section>';
+    var phase = '';
+    BAUSTEINE.forEach(function (b) {
+      if (!u.bau[b.k]) return;
+      if (b.phase !== phase) { phase = b.phase; html += '<span class="label">' + phase + '</span>'; }
+      var st = '', done = false, sub = '';
+      if (b.k === 'angebot') { if (u.angebot) { st = '<span class="state ok">' + eur0(u.angebot.brutto) + '</span>'; done = true; sub = 'Erstellt. Antippen zum Ändern.'; } else sub = 'Preisbaukasten, rechnet live mit'; }
+      else if (b.k === 'vertrag') { sub = u.angebot ? 'Übernimmt die Angaben aus dem Angebot' : 'Braucht zuerst ein Angebot'; if (u.status.vertrag) st = '<span class="state wait">Entwurf</span>'; }
+      else if (b.k === 'ausruestung') { if (u.ausr === 'ausgefuellt') { st = '<span class="state ok">ausgefüllt</span>'; done = true; sub = 'Vom Eigner beantwortet'; } else if (u.ausr === 'gesendet') { st = '<span class="state wait">gesendet</span>'; sub = 'Wartet auf den Eigner'; } else sub = 'Der Eigner füllt sie selbst aus'; }
+      else if (b.k === 'vollmacht') { if (u.vm === 'hinterlegt') { st = '<span class="state ok">hinterlegt</span>'; done = true; sub = 'Unterschrieben zurück'; } else if (u.vm === 'gesendet') { st = '<span class="state wait">versendet</span>'; sub = 'Wartet auf die Unterschrift'; } else sub = 'Ansehen, versenden, unterschrieben hochladen'; }
+      html += '<button class="row' + (done ? ' done' : '') + '" data-bau="' + b.k + '"><span class="ic">' + icon(done ? 'check' : b.ic) + '</span><span class="tx"><span class="tt">' + b.t + '</span>' + (sub ? '<br><span class="ss">' + sub + '</span>' : '') + '</span>' + st + icon('chev', 'chev') + '</button>';
+    });
+    html += '<div class="stack"><button class="btn ghost" data-act="auswahl" aria-expanded="' + S.auswahl + '">' + (S.auswahl ? 'Auswahl schließen' : 'Bausteine auswählen') + '</button>';
+    if (S.auswahl) html += '<p class="lead">Nur was angehakt ist, erscheint oben und wird später zum PDF.</p><div class="chips">' + BAUSTEINE.map(function (b) {
+      return '<button class="chip" aria-pressed="' + !!u.bau[b.k] + '" data-chip="' + b.k + '">' + (u.bau[b.k] ? icon('check') : '') + b.t + '</button>'; }).join('') + '</div>';
+    return html + '</div>';
+  };
+  V.baustein = function () {
+    var b = BAUSTEINE.filter(function (x) { return x.k === S.baustein; })[0] || BAUSTEINE[1];
+    return top() + back('fahrt', 'Überführung') + '<h1>' + b.t + '</h1><div class="hint">Dieser Baustein ist im Prototyp noch nicht ausgebaut.</div><div class="stack"><span class="label">So ist er gedacht</span><p>' + b.d + '</p></div>' +
+      '<button class="btn ghost wide" data-go="fahrt">Zurück zur Überführung</button>';
+  };
+  V.profil = function () {
+    function o(grp, val, t, sub) { return '<label class="opt"><input type="radio" name="p-' + grp + '" id="p-' + grp + '-' + val + '" data-p="' + grp + '" value="' + val + '"' + (S[grp] === val ? ' checked' : '') + '><span><span class="ot">' + t + '</span><br><span class="os">' + sub + '</span></span></label>'; }
+    return top() + back('start', 'Start') + '<h1>Mein Konto</h1>' +
+      '<div class="stack"><span class="label">Kontoart</span>' +
+      o('konto', 'skipper', 'Skipper', 'Du fährst selbst. Angebote ohne Administrationspauschale, sie lässt sich pro Angebot zuschalten.') +
+      o('konto', 'agentur', 'Agentur', 'Du vermittelst und koordinierst Skipper und Crew. Die Administrationspauschale ist voreingestellt.') + '</div>' +
+      '<div class="stack"><span class="label">Sitz und Mehrwertsteuer</span><label class="field"><span>Land, in dem du oder deine Firma sitzt</span><select class="inp" id="p-land" data-p="land">' +
+      LAENDER.map(function (l) { return '<option value="' + l[0] + '"' + (l[0] === S.land ? ' selected' : '') + '>' + l[1] + '</option>'; }).join('') + '</select><small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: ' + pz() + '.</small></label>' +
+      '<label class="opt"><input type="checkbox" id="p-keine" data-pc="keineMwst"' + (S.keineMwst ? ' checked' : '') + '><span><span class="ot">Ich weise keine Mehrwertsteuer aus</span><br><span class="os">Zum Beispiel als Kleinunternehmer. Angebote und Rechnungen nennen dann nur Nettobeträge.</span></span></label>' +
+      '<label class="field"><span>Umsatzsteuer-ID oder Steuernummer</span><input class="inp" id="p-ustid" data-pt="ustid" value="' + esc(S.ustid) + '" placeholder="z. B. DE123456789 oder 22/123/45678" autocomplete="off"><small>' + (S.keineMwst ? 'Erscheint auf der Rechnung, zusammen mit dem Hinweis auf die Kleinunternehmerregelung.' : 'Erscheint auf Angebot und Rechnung.') + '</small></label></div>' +
+      '<div class="stack"><span class="label">E-Mail-Versand</span>' +
+      o('mail', 'postfach', 'Aus meinem Postfach senden', 'Du hinterlegst hier dein Postfach. Angebot, Vollmacht und Ausrüstungsliste gehen dann direkt aus der App raus.') +
+      o('mail', 'kopieren', 'Nicht aus der App senden', 'Du kopierst den Text oder speicherst das PDF und verschickst es selbst.') +
+      (S.mail === 'postfach' ? '<label class="field"><span>Absenderadresse</span><input class="inp" id="p-absender" type="email" placeholder="name@beispiel.de"><small>Im Prototyp wird nichts verbunden.</small></label>' : '') + '</div>' +
+      '<div class="stack"><span class="label">Noch nicht ausgebaut</span><p>Deine Daten trägst du einmal ein: Name, Anschrift, Passnummer, Scheinnummer, Notfallkontakt. Scheine und die Police der Skipper-Haftpflicht lädst du als Foto oder PDF hoch. Angebot, Vertrag, Vollmacht und Crewliste holen sich die Angaben von hier.</p></div>';
+  };
+  V.academy = function () {
+    return top() + back('start', 'Start') + '<h1>Academy</h1><div class="hint">Kommt später.</div><p>Mit demselben Seatribe-Konto siehst du hier deine gekauften Kurse: Videos zum Ansehen und Handouts zum Herunterladen.</p>';
+  };
+
+  V.vollmacht = function () {
+    var u = cur();
+    function v(x) { return x ? esc(x) : '<span class="miss">fehlt noch</span>'; }
+    var html = top() + back('fahrt', 'Überführung') + '<h1>Vollmacht</h1><p class="lead">Die Vollmacht füllt sich aus Eigner, Skipper, Boot und Route. Fehlende Angaben ergänzt du bei der Überführung oder in deinem Profil.</p>' +
+      '<div class="paper"><div class="title">Power of Attorney</div><div class="when">Vessel Command &amp; Delivery</div>' +
+      '<h3>1. Grantor (Owner)</h3><dl><dt>Name</dt><dd>' + v(u.eigner) + '</dd><dt>Address</dt><dd>' + v('') + '</dd></dl>' +
+      '<h3>2. Authorized Person (Skipper)</h3><dl><dt>Name</dt><dd>aus deinem Profil</dd><dt>Licence No.</dt><dd>aus deinem Profil</dd></dl>' +
+      '<h3>3. Vessel</h3><dl><dt>Name</dt><dd>' + v(u.boot) + '</dd><dt>Type</dt><dd>' + v(u.typ) + '</dd><dt>MMSI</dt><dd>' + v(u.mmsi) + '</dd></dl>' +
+      '<h3>4. Delivery Route</h3><dl><dt>Departure</dt><dd>' + esc(u.von) + '</dd><dt>Destination</dt><dd>' + esc(u.nach) + '</dd><dt>Planned</dt><dd>' + v(datum(u.start)) + '</dd></dl>' +
+      '<h3>5. Granted Authorities</h3><ul><li>Command the vessel along the stated route and at any intermediate stops</li><li>Check in and out of foreign ports and present crew lists</li><li>Arrange necessary repairs and provisioning in the course of normal voyage operations</li><li>Act as vessel master before authorities, port offices and customs</li></ul>' +
+      '<p>Excluded: sale, mortgaging, chartering or any other legal disposition of the vessel.</p><h3>6. Signatures</h3><p>Owner · Authorized Person (Skipper)</p></div>';
+    if (u.vm === 'hinterlegt') return html + '<p class="state ok" style="align-self:flex-start">Unterschriebene Vollmacht hinterlegt' + (u.vmName ? ': ' + esc(u.vmName) : '') + '</p>';
+    if (u.vm === 'gesendet') html += '<p class="state wait" style="align-self:flex-start">Vollmacht versendet (Beispiel)</p>';
+    else html += '<button class="btn wide" data-act="vm-senden">An den Eigner senden (Beispiel)</button>';
+    return html + '<label class="field"><span>Unterschriebene Vollmacht hochladen</span><input class="inp" type="file" id="vm-file" accept="image/*,application/pdf"><small>Foto oder PDF. Im Prototyp wird die Datei nicht gespeichert.</small></label>';
+  };
+
+  /* ---------- Ausrüstungsliste ---------- */
+  V.ausruestung = function () {
+    var u = cur();
+    var html = top() + back('fahrt', 'Überführung') + '<h1>Ausrüstungsliste an Eigner schicken</h1>';
+    if (u.ausr === 'ausgefuellt') return html + '<p class="state ok" style="align-self:flex-start">Vom Eigner ausgefüllt</p><p>Die Angaben liegen bei der Überführung und erscheinen bei der Übernahme als Soll neben jedem Checkpunkt.</p><button class="btn ghost wide" data-go="eigner">Ansicht des Eigners noch einmal öffnen</button>';
+    html += '<p class="lead">Der Eigner bekommt eine E-Mail mit einem Link und füllt die Liste selbst aus. Er braucht dafür kein Konto.</p>' +
+      '<div class="paper"><p><b>An:</b> ' + esc(u.mail || 'E-Mail des Eigners fehlt noch') + '</p><p><b>Betreff:</b> Ausrüstungsliste für die Überführung ' + esc(u.von) + ' → ' + esc(u.nach) + '</p>' +
+      '<p>Guten Tag' + (u.eigner ? ' ' + esc(u.eigner) : '') + ',</p><p>damit wir die Überführung gut vorbereiten können, bitten wir Sie um einige Angaben zu Zustand und Ausrüstung Ihrer Yacht. Das Ausfüllen dauert etwa zehn Minuten.</p><p><u>Ausrüstungsliste ausfüllen</u></p><p>Vielen Dank<br>Seatribe Deliveries</p></div>';
+    if (u.ausr === 'gesendet') html += '<p class="state wait" style="align-self:flex-start">Gesendet (Beispiel)</p>';
+    else html += '<button class="btn wide" data-act="senden">E-Mail senden (Beispiel)</button>';
+    return html + '<button class="btn ghost wide" data-go="eigner">So sieht es der Eigner</button><div class="hint">In der ersten Version führt der Link zu deinem heutigen HubSpot-Formular. Die eigene Seite kommt später.</div>';
+  };
+  V.eigner = function () {
+    var u = cur();
+    function jn(id, lab) { return '<div class="field"><span>' + lab + '</span><div class="seg"><label><input type="radio" name="' + id + '" id="' + id + '-j" value="ja">Ja</label><label><input type="radio" name="' + id + '" id="' + id + '-n" value="nein">Nein</label></div></div>'; }
+    function tx(id, lab, unit) { return '<label class="field"><span>' + lab + '</span>' + (unit ? '<span class="unit"><input id="' + id + '" inputmode="numeric"><b>' + unit + '</b></span>' : '<input class="inp" id="' + id + '">') + '</label>'; }
+    return '<div class="owner" style="margin-top:14px">Ansicht des Eigners. So sieht die Seite aus, die er über den Link öffnet.</div>' +
+      '<header class="top" style="padding-top:0"><img src="' + LOGO + '" alt="Seatribe Deliveries"><div><div class="name">Ausrüstungs- und Zustandsliste</div><div class="tag">' + esc(u.typ || 'Ihre Yacht') + ' · ' + esc(u.von) + ' → ' + esc(u.nach) + '</div></div></header>' +
+      '<button class="back" data-go="ausruestung">' + icon('left') + 'Zurück zur Skipper-Ansicht</button>' +
+      '<form id="f-eigner" class="stack"><span class="label">Motor und Technik</span>' + tx('e-masch', 'Maschinentyp') + '<div class="two">' + tx('e-std', 'Motorstunden', 'h') + tx('e-tank', 'Dieseltank', 'L') + '</div>' +
+      tx('e-insp', 'Letzte Inspektion oder Ölwechsel') + '<div class="two">' + tx('e-kan', 'Zusätzliche Kanister', 'L') + tx('e-teile', 'Ersatzteile an Bord') + '</div>' + jn('e-ap', 'Autopilot funktioniert?') +
+      '<span class="label">Segel und Rigg</span>' + tx('e-segel', 'Vorhandene Segel') + '<div class="two">' + tx('e-salter', 'Alter der Segel', 'Jahre') + tx('e-szust', 'Zustand der Segel') + '</div>' + tx('e-rigg', 'Rigg zuletzt geprüft') + jn('e-leinen', 'Ersatzleinen an Bord?') +
+      '<span class="label">Navigation und Kommunikation</span>' + jn('e-karten', 'Plotter mit Seekarten für das Fahrtgebiet?') + jn('e-ais', 'AIS sendet und empfängt?') + jn('e-radar', 'Radar funktioniert?') + jn('e-ukw', 'UKW-Funk mit DSC?') + jn('e-hand', 'Handfunkgerät an Bord?') +
+      '<span class="label">Energie und Wasser</span><div class="two">' + tx('e-batt', 'Servicebatterien', 'Ah') + tx('e-solar', 'Solarleistung', 'W') + '</div><div class="two">' + tx('e-wasser', 'Wassertank', 'L') + tx('e-lade', 'Ladequellen') + '</div>' + jn('e-wm', 'Wassermacher an Bord?') +
+      '<span class="label">Sicherheit und Seeventile</span>' + jn('e-insel', 'Rettungsinsel mit gültigem Service?') + '<div class="two">' + tx('e-westen', 'Rettungswesten', 'Stück') + tx('e-ventile', 'Zustand der Seeventile') + '</div>' +
+      jn('e-bilge', 'Elektrische und manuelle Bilgenpumpe funktionieren?') + jn('e-notp', 'Notpinne an Bord?') + jn('e-dicht', 'Luken und Fenster dicht?') +
+      '<span class="label">Dokumente und Versicherung</span>' + jn('e-kasko', 'Deckt die Kaskoversicherung die Überführung durch einen fremden Skipper?') + jn('e-papiere', 'Bootspapiere und Eigentumsnachweis an Bord?') + jn('e-eu', 'Yacht in der EU versteuert?') +
+      '<span class="label">Bekannte Mängel</span><label class="field"><span>Was sollten wir vor der Abfahrt wissen?</span><textarea class="inp" id="e-maengel"></textarea><small>Vorschäden, laufende Reparaturen, Dinge, die nicht funktionieren.</small></label>' +
+      '<button class="btn wide" type="submit">Liste absenden</button></form>' +
+      '<button class="btn ghost wide" data-go="ausruestung">Zurück zur Skipper-Ansicht</button>';
+  };
+
+  /* ---------- Angebots-Wizard ---------- */
+  function num(id, lab, key, unit, small) {
+    return '<label class="field"><span>' + lab + '</span><span class="unit"><input id="' + id + '" data-f="' + key + '" inputmode="decimal" value="' + S.draft[key] + '"><b>' + unit + '</b></span>' + (small ? '<small>' + small + '</small>' : '') + '</label>';
+  }
+  function opt(name, val, t, s) {
+    return '<label class="opt"><input type="radio" name="' + name + '" id="' + name + '-' + val + '" data-r="' + name + '" value="' + val + '"' + (S.draft[name] === val ? ' checked' : '') + '><span><span class="ot">' + t + '</span><br><span class="os">' + s + '</span></span></label>';
+  }
+  function chk(key, t, s) {
+    return '<label class="opt"><input type="checkbox" id="c-' + key + '" data-c="' + key + '"' + (S.draft[key] ? ' checked' : '') + '><span><span class="ot">' + t + '</span><br><span class="os">' + s + '</span></span></label>';
+  }
+  function stepBody() {
+    var d = S.draft, c = calc(d), h = '';
+    if (S.step === 0) {
+      h += num('w-dauer', 'Geplante Dauer', 'dauer', 'Kalendertage', 'Deine Einschätzung, inklusive Wetter- und Hafentage.') +
+        opt('art', 'tag', 'Tagessatz', 'Abgerechnet wird nach Kalendertagen.') + opt('art', 'fest', 'Festpreis', 'Ein fester Betrag, egal wie lange es dauert.');
+      if (d.art === 'tag') {
+        h += '<div class="sub">' + num('w-satz', 'Tagessatz', 'satz', '€ netto') + num('w-min', 'Mindestens berechnet', 'min', 'Tage', 'Damit sich der Auftrag auch bei schneller Fahrt lohnt.') +
+          chk('maxOn', 'Höchstens berechnete Tage festlegen', 'Dauert es länger, trägst du die Differenz. Ausgenommen sind Verzögerungen durch die Yacht oder Dritte.');
+        if (d.maxOn) h += num('w-max', 'Höchstens berechnet', 'max', 'Tage');
+        h += '</div>';
+      } else h += '<div class="sub">' + num('w-fest', 'Festpreis', 'festpreis', '€ netto') + '</div>';
+    } else if (S.step === 1) {
+      if (d.art === 'fest') h += '<div class="hint">Beim Festpreis gibt es keinen Abrechnungsbeginn. Weiter zum nächsten Schritt.</div>';
+      else {
+        h += opt('beginn', 'heim', 'Ab Abreise von zu Hause', 'Bis zur Rückkehr. Jeder angefangene Kalendertag zählt.') +
+          opt('beginn', 'hafen', 'Ab Ankunft am Hafen', 'Bis zur Übergabe im Zielhafen. An- und Rückreise werden nicht berechnet.') +
+          opt('beginn', 'hafenplus', 'Ab Ankunft am Hafen, plus feste Reisetage', 'Du berechnest eine feste Zahl Tage für An- und Rückreise. Dauert die Reise länger, ist das dein Risiko.');
+        if (d.beginn === 'hafenplus') h += '<div class="sub"><div class="two">' + num('w-an', 'Anreise', 'anreise', 'Tage') + num('w-rueck', 'Rückreise', 'rueck', 'Tage') + '</div></div>';
+        h += '<div class="hint" id="w-tage"></div>';
+      }
+    } else if (S.step === 2) {
+      h += opt('reise', 'pauschale', 'Logistikpauschale', 'Ein Betrag deckt Reisekosten und Verpflegung vollständig ab.') + opt('reise', 'einzeln', 'Einzeln abrechnen', 'Reisekosten nach Aufwand gegen Beleg, Verpflegung nach Wahl.');
+      if (d.reise === 'pauschale') h += '<div class="sub">' + num('w-log', 'Logistikpauschale', 'logistik', '€ netto') + '</div>';
+      else {
+        h += '<div class="sub">' + num('w-reise', 'Reisekosten, Schätzung', 'reiseSchaetz', '€', 'Steht als Schätzung im Angebot und zählt nicht zur Summe.') + '<span class="label">Verpflegung</span>' +
+          opt('verpf', 'keine', 'Nicht berechnen', 'Die Crew versorgt sich selbst.') + opt('verpf', 'tag', 'Betrag pro Tag', 'Für die ganze Crew zusammen.') + opt('verpf', 'person', 'Betrag pro Tag und Person', 'Mit Anzahl der Personen an Bord.');
+        if (d.verpf !== 'keine') h += '<div class="two">' + num('w-vs', 'Satz', 'verpfSatz', '€ netto') + (d.verpf === 'person' ? num('w-pers', 'Personen', 'personen', 'Pers.') : '') + '</div>';
+        h += '</div>';
+      }
+    } else if (S.step === 3) {
+      h += '<span class="label">Bordkasse</span><p class="lead">Hafen- und Liegegebühren, Diesel, Schleusen, Ersatzteile und kleine Reparaturen. Kommt immer dazu und wird gegen Beleg abgerechnet. Verpflegung gehört nicht hinein.</p>' +
+        num('w-bk', 'Kalkulatorischer Ansatz', 'bordkasse', '€') + chk('vorschuss', 'Als Vorschuss vorab erheben', 'Nicht verbrauchte Beträge werden nach der Überführung erstattet.') +
+        '<span class="label">Zusätze</span>' + chk('adminOn', 'Administrationspauschale', S.konto === 'agentur' ? 'Angebot, Koordination von Skipper und Crew, Dokumentation.' : 'Bei einzelnen Skippern unüblich. Für Angebot, Vorbereitung und Dokumentation.');
+      if (d.adminOn) h += '<div class="sub">' + num('w-admin', 'Administrationspauschale', 'admin', '€ netto') + '</div>';
+      h += '<span class="label">Mehrwertsteuer</span>';
+      if (ohneMwst()) h += '<div class="hint">In deinem Konto ist eingestellt, dass du keine Mehrwertsteuer ausweist. Das Angebot nennt nur Nettobeträge.</div>';
+      else {
+        h += '<p class="lead">Satz aus deinem Konto: ' + pz() + ' (' + land()[1] + '). Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.</p>' +
+          opt('mwst', 'alle', pz() + ' auf alles', 'Alle Tage und alle Pauschalen mit Mehrwertsteuer.') +
+          opt('mwst', 'teil', 'Ein Teil der Tage ohne Mehrwertsteuer', 'Zum Beispiel Tage außerhalb der EU. Die Pauschalen bleiben mit ' + pz() + '.') +
+          opt('mwst', 'keine', 'Ohne Mehrwertsteuer', 'Dieses Angebot weist nur Nettobeträge aus.');
+        if (d.mwst === 'teil') h += '<div class="sub">' + num('w-ohne', 'Tage ohne Mehrwertsteuer', 'tageOhne', 'von ' + c.basisTage) + '</div>';
+      }
+      h += '<span class="label">Crew</span>' + opt('crew', 'hgk', 'Hand gegen Koje', 'Keine zusätzlichen Personalkosten.') + opt('crew', 'bezahlt', 'Bezahlte Crew', 'Wird im Angebot als gesonderter Hinweis genannt.');
+    } else h += preview(c);
+    return h;
+  }
+  function tageText(c) {
+    var d = S.draft, t = 'Berechnet werden voraussichtlich <b>' + c.tage + ' Kalendertage</b>';
+    if (d.beginn === 'hafenplus') t += ' (' + d.dauer + ' ab Ankunft am Hafen plus ' + (d.anreise + d.rueck) + ' Reisetage)';
+    t += ', das sind ' + eur(c.honorar) + ' netto Honorar.';
+    if (c.unterMin) t += ' Die Mindesttage greifen.';
+    return t;
+  }
+  function blocks(c) {
+    var d = S.draft, u = cur(), b = [];
+    b.push({ head: 1 });
+    b.push({ title: 'Angebot: Überführung ' + u.von + ' → ' + u.nach });
+    b.push({ p: 'Guten Tag' + (u.eigner ? ' ' + u.eigner : '') + ',' });
+    b.push({ p: 'vielen Dank für Ihre Anfrage. Nachfolgend erhalten Sie unser Angebot zur Überführung Ihrer Yacht' + (u.typ ? ' (' + u.typ + ')' : '') + ' von ' + u.von + ' nach ' + u.nach + (u.start ? ', geplanter Start ' + datum(u.start) : '') + '.' });
+    b.push({ p: 'Geplante Dauer: ' + d.dauer + ' Kalendertage, inklusive möglicher Wetter- und Hafentage.' });
+    b.push({ h: 'Voraussichtliche Gesamtkosten' });
+    b.push({ total: eur(c.brutto) + (d.mwst !== 'keine' ? ' brutto' : ' netto') });
+    b.push({ p: 'zuzüglich Bordkasse nach tatsächlichem Aufwand' + (d.reise === 'einzeln' ? ' und Reisekosten gegen Beleg' : '') });
+    b.push({ h: 'Kostenaufschlüsselung' });
+    var rows = [];
+    if (c.tag) rows.push(['Skipperhonorar: ' + eur0(d.satz) + ' netto × ' + c.tage + ' Kalendertage', eur(c.honorar)]);
+    else rows.push(['Skipperhonorar als Festpreis', eur(c.honorar)]);
+    if (c.log) rows.push(['Logistikpauschale (Reise und Verpflegung)', eur(c.log)]);
+    if (c.verpf) rows.push(['Verpflegung: ' + eur0(d.verpfSatz) + ' pro Tag' + (d.verpf === 'person' ? ' und Person, ' + d.personen + ' Personen' : '') + ', ' + d.dauer + ' Tage', eur(c.verpf)]);
+    if (c.admin) rows.push(['Administrationspauschale', eur(c.admin)]);
+    rows.push(['Summe netto', eur(c.netto), 1]);
+    if (d.mwst !== 'keine') { rows.push([c.tageOhne ? pz() + ' Mehrwertsteuer auf ' + (c.basisTage - c.tageOhne) + ' von ' + c.basisTage + ' Kalendertagen und auf die Pauschalen' : pz() + ' Mehrwertsteuer', eur(c.ust)]); rows.push(['Summe brutto', eur(c.brutto), 1]); }
+    var steuerNote = c.tageOhne ? 'Die Kalkulation geht davon aus, dass ' + c.tageOhne + ' der ' + c.basisTage + ' Kalendertage ohne Mehrwertsteuer abgerechnet werden. Die endgültige umsatzsteuerliche Behandlung richtet sich nach den tatsächlichen Leistungsorten.' : '';
+    b.push({ rows: rows });
+    if (steuerNote) b.push({ p: steuerNote });
+    if (c.tag) {
+      var beg = { heim: 'Abgerechnet wird ab der Abreise des Skippers von seinem Heimatort bis zu seiner Rückkehr.', hafen: 'Abgerechnet wird ab der Ankunft des Skippers am Starthafen bis zur Übergabe im Zielhafen.',
+        hafenplus: 'Abgerechnet wird ab der Ankunft des Skippers am Starthafen bis zur Übergabe im Zielhafen, zuzüglich pauschal ' + (d.anreise + d.rueck) + ' Kalendertagen für An- und Rückreise.' }[d.beginn];
+      var lim = 'Es werden mindestens ' + d.min + ' Kalendertage berechnet.';
+      if (d.maxOn) lim += ' Höchstens werden ' + d.max + ' Kalendertage berechnet. Ausgenommen sind Verzögerungen, die auf die Yacht oder auf Dritte zurückgehen, etwa Defekte, Reparaturen oder behördliche Anordnungen.';
+      b.push({ h: 'Abrechnung' }); b.push({ p: beg + ' ' + lim });
+    }
+    b.push({ h: 'Bordkasse' });
+    b.push({ p: 'Hafen- und Liegegebühren, Diesel, Schleusen, Ersatzteile sowie kleinere notwendige Reparaturen werden nach tatsächlichem Aufwand gegen Beleg abgerechnet. Kalkulatorischer Ansatz: ' + eur0(d.bordkasse) + '.' + (d.vorschuss ? ' Der Betrag wird vorab als Bordkassen-Vorschuss erhoben, nicht verbrauchte Beträge werden erstattet.' : '') });
+    if (d.reise === 'einzeln') { b.push({ h: 'Reisekosten' }); b.push({ p: 'An- und Abreise werden nach tatsächlichem Aufwand gegen Beleg abgerechnet. Schätzung: ' + eur0(d.reiseSchaetz) + '.' }); }
+    b.push({ h: 'Crew' });
+    b.push({ p: d.crew === 'hgk' ? 'Die Crew wird auf Basis „Hand gegen Koje" gestellt. Zusätzliche Personalkosten entstehen nicht.' : 'Für diese Überführung wird bezahlte Crew eingesetzt. Die Kosten dafür nennen wir Ihnen gesondert.' });
+    b.push({ p: 'Wenn das Angebot Ihren Vorstellungen entspricht, genügt eine kurze schriftliche Bestätigung per E-Mail.' });
+    b.push({ p: 'Mit freundlichen Grüßen\nSeatribe Deliveries' });
+    if (!ohneMwst() && S.ustid) b.push({ foot: 'Umsatzsteuer-ID / Steuernummer: ' + S.ustid });
+    return b;
+  }
+  function preview(c) {
+    return '<div class="paper">' + blocks(c).map(function (x) {
+      if (x.head) return '<div class="letter"><img src="' + LOGO + '" alt=""><div><div class="who">Seatribe Deliveries</div><div class="adr">Seatribe GmbH · Kastanienallee 31 · 20359 Hamburg</div></div></div><div class="when">Hamburg, ' + new Date().toLocaleDateString('de-DE') + '</div>';
+      if (x.title) return '<div class="title">' + esc(x.title) + '</div>';
+      if (x.foot) return '<div class="when" style="border-top:1px solid var(--line);padding-top:10px">' + esc(x.foot) + '</div>';
+      if (x.h) return '<h3>' + esc(x.h) + '</h3>';
+      if (x.total) return '<div class="total">' + esc(x.total) + '</div>';
+      if (x.rows) return '<table>' + x.rows.map(function (r) { return '<tr' + (r[2] ? ' class="sumrow"' : '') + '><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</table>';
+      return '<p>' + esc(x.p).replace(/\n/g, '<br>') + '</p>';
+    }).join('') + '</div>' + (S.mail === 'postfach' ? '<button class="btn wide" data-act="mailen">Per E-Mail an den Eigner senden (Beispiel)</button>' : '') + '<button class="btn ' + (S.mail === 'postfach' ? 'ghost ' : '') + 'wide" data-act="kopieren">Text kopieren</button>' +
+      '<div class="hint"><b>Speichern</b> (unten) legt dieses Angebot bei dieser Überführung ab. <b>Angaben als Vorlage merken</b> übernimmt deine Preise und Einstellungen als Startwerte für alle künftigen Angebote.</div>' +
+      '<button class="btn ghost wide" data-act="standard">Angaben als Vorlage merken</button>';
+  }
+  function plain(c) {
+    return blocks(c).filter(function (x) { return !x.head; }).map(function (x) {
+      if (x.title) return x.title + '\n';
+      if (x.foot) return '\n' + x.foot;
+      if (x.h) return '\n' + x.h.toUpperCase();
+      if (x.total) return x.total;
+      if (x.rows) return x.rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n');
+      return x.p;
+    }).join('\n');
+  }
+  V.angebot = function () {
+    if (!S.draft) S.draft = defaults();
+    var u = cur();
+    return top() + back('fahrt', 'Überführung') + '<div class="stack"><span class="label">Angebot · ' + esc(u.von) + ' → ' + esc(u.nach) + '</span>' +
+      '<div class="steps" role="img" aria-label="Schritt ' + (S.step + 1) + ' von ' + STEPS.length + '">' + STEPS.map(function (_, i) { return '<i' + (i <= S.step ? ' class="on"' : '') + '></i>'; }).join('') + '</div>' +
+      '<h1>' + STEPS[S.step] + '</h1></div><div class="stack" id="w-body">' + stepBody() + '</div><div id="w-warn"></div>';
+  };
+  function bar() {
+    var el = document.getElementById('bar');
+    if (view !== 'angebot' || !S.draft) { el.innerHTML = ''; return; }
+    var c = calc(S.draft), last = S.step === STEPS.length - 1;
+    el.innerHTML = '<div class="bar"><div class="in"><div class="sum"><small>Gesamt' + (S.draft.mwst !== 'keine' ? ' brutto' : ' netto') + '</small><strong id="w-sum">' + eur(c.brutto) + '</strong></div>' +
+      (S.step > 0 ? '<button class="btn ghost" data-act="zurueck">Zurück</button>' : '') + '<button class="btn" data-act="' + (last ? 'speichern' : 'weiter') + '">' + (last ? 'Speichern' : 'Weiter') + '</button></div></div>';
+    live();
+  }
+  function live() {
+    if (view !== 'angebot' || !S.draft) return;
+    var c = calc(S.draft), s = document.getElementById('w-sum'), t = document.getElementById('w-tage'), w = document.getElementById('w-warn');
+    if (s) s.textContent = eur(c.brutto);
+    if (t) t.innerHTML = tageText(c);
+    if (w) w.innerHTML = c.minGroesserMax ? '<p class="note">Die Mindesttage liegen über den Höchsttagen. Bitte eine der beiden Zahlen anpassen.</p>' :
+      c.ueberMax ? '<p class="note">Die geplante Dauer liegt über den Höchsttagen. Du würdest ' + (c.billDays - S.draft.max) + ' Tage nicht berechnen.</p>' : '';
+  }
+
+  /* ---------- Steuerung ---------- */
+  var view = 'start', NAMES = Object.keys(V);
+  function render() {
+    document.getElementById('app').innerHTML = V[view]();
+    bar();
+    window.scrollTo(0, 0);
+  }
+  function go(v) {
+    if (NAMES.indexOf(v) < 0) v = 'start';
+    if (v !== 'neu') S.edit = false;
+    view = v;
+    try { if (location.hash !== '#' + v) { location.hash = v; return; } } catch (e) {}
+    render();
+  }
+  window.addEventListener('hashchange', function () {
+    var v = location.hash.replace('#', '');
+    view = NAMES.indexOf(v) >= 0 ? v : 'start';
+    render();
+  });
+  var toastT;
+  function toast(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 2600); }
+  function val(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+
+  document.addEventListener('click', function (ev) {
+    var el = ev.target.closest('[data-go],[data-open],[data-bau],[data-chip],[data-act]');
+    if (!el) return;
+    var u = cur();
+    if (el.dataset.go) { if (el.dataset.go === 'neu') S.edit = false; return go(el.dataset.go); }
+    if (el.dataset.open) { S.sel = +el.dataset.open; S.auswahl = false; return go('fahrt'); }
+    if (el.dataset.bau) {
+      var k = el.dataset.bau;
+      if (k === 'angebot') { S.draft = (u.angebot && u.angebot.draft) ? JSON.parse(JSON.stringify(u.angebot.draft)) : defaults(); S.step = 0; return go('angebot'); }
+      if (k === 'ausruestung') return go('ausruestung');
+      if (k === 'vollmacht') return go('vollmacht');
+      S.baustein = k; return go('baustein');
+    }
+    if (el.dataset.chip) { u.bau[el.dataset.chip] = !u.bau[el.dataset.chip]; return render(); }
+    var a = el.dataset.act;
+    if (a === 'edit') { S.edit = true; view = 'neu'; try { location.hash = 'neu'; } catch (e) { render(); } return; }
+    if (a === 'auswahl') { S.auswahl = !S.auswahl; var y = window.scrollY; render(); window.scrollTo(0, y); return; }
+    if (a === 'senden') { u.ausr = 'gesendet'; render(); return toast('Im Prototyp wird nichts verschickt.'); }
+    if (a === 'weiter') { S.step = Math.min(S.step + 1, STEPS.length - 1); return render(); }
+    if (a === 'zurueck') { S.step = Math.max(S.step - 1, 0); return render(); }
+    if (a === 'speichern') { var c = calc(S.draft); u.angebot = { brutto: c.brutto, art: S.draft.art, draft: JSON.parse(JSON.stringify(S.draft)) }; go('fahrt'); return toast('Angebot gespeichert (nur in diesem Prototyp).'); }
+    if (a === 'standard') { try { var std = JSON.parse(JSON.stringify(S.draft)); std.konto = S.konto; localStorage.setItem('skipperapp-standard', JSON.stringify(std)); toast('Als Vorlage für künftige Angebote gemerkt.'); } catch (e) { toast('Merken ist in diesem Browser nicht möglich.'); } return; }
+    if (a === 'mailen') return toast('Im Prototyp wird nichts verschickt.');
+    if (a === 'vm-senden') { u.vm = 'gesendet'; render(); return toast('Im Prototyp wird nichts verschickt.'); }
+    if (a === 'kopieren') {
+      var txt = plain(calc(S.draft));
+      try { navigator.clipboard.writeText(txt).then(function () { toast('Angebotstext kopiert.'); }, function () { toast('Kopieren nicht möglich. Bitte den Text markieren.'); }); }
+      catch (e) { toast('Kopieren nicht möglich. Bitte den Text markieren.'); }
+    }
+  });
+  document.addEventListener('input', function (ev) {
+    var pt = ev.target.dataset && ev.target.dataset.pt;
+    if (pt) { S[pt] = ev.target.value.trim(); return; }
+    var k = ev.target.dataset && ev.target.dataset.f;
+    if (!k || !S.draft) return;
+    var n = parseFloat(String(ev.target.value).replace(/\./g, '').replace(',', '.'));
+    S.draft[k] = isFinite(n) && n >= 0 ? n : 0;
+    live();
+  });
+  document.addEventListener('change', function (ev) {
+    var t = ev.target, d = t.dataset || {};
+    if (d.pc) { S[d.pc] = t.checked; S.draft = null; var y2 = window.scrollY; render(); window.scrollTo(0, y2); var pc = document.getElementById(t.id); if (pc) pc.focus({ preventScroll: true }); return toast('Einstellung übernommen.'); }
+    if (d.p) { S[d.p] = t.value; if (d.p === 'konto' || d.p === 'land') S.draft = null; var yy = window.scrollY, pid = t.id; render(); window.scrollTo(0, yy); var pe = document.getElementById(pid); if (pe) pe.focus({ preventScroll: true }); return toast(d.p === 'konto' ? 'Kontoart: ' + (t.value === 'agentur' ? 'Agentur' : 'Skipper') : 'Einstellung übernommen.'); }
+    if (t.id === 'vm-file') { var cu = cur(); if (t.files && t.files[0]) { cu.vm = 'hinterlegt'; cu.vmName = t.files[0].name; render(); toast('Vollmacht hinterlegt (nur in diesem Prototyp).'); } return; }
+    if (!S.draft) return;
+    if (d.r) { S.draft[d.r] = t.value; }
+    else if (d.c) { S.draft[d.c] = t.checked; }
+    else return;
+    var y = window.scrollY, id = t.id; render(); window.scrollTo(0, y);
+    var again = document.getElementById(id); if (again) again.focus({ preventScroll: true });
+  });
+  document.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (ev.target.id === 'f-neu') {
+      var von = val('n-von'), nach = val('n-nach');
+      if (!von || !nach) { document.getElementById('n-err').hidden = false; return; }
+      var data = { von: von, nach: nach, start: val('n-start'), typ: val('n-typ'), boot: val('n-boot'), mmsi: val('n-mmsi'), eigner: val('n-eigner'), mail: val('n-mail'), baujahr: val('n-baujahr'), flagge: val('n-flagge'), laenge: val('n-laenge'), breite: val('n-breite'), tiefgang: val('n-tiefgang') };
+      if (S.edit) { var u = cur(); for (var k in data) u[k] = data[k]; }
+      else { data.id = Math.max.apply(null, S.list.map(function (x) { return x.id; })) + 1; data.bau = alle(); data.angebot = null; data.ausr = 'offen'; data.status = {}; S.list.push(data); S.sel = data.id; }
+      S.edit = false; S.auswahl = false; go('fahrt'); toast('Überführung gespeichert (nur in diesem Prototyp).');
+    } else if (ev.target.id === 'f-eigner') {
+      cur().ausr = 'ausgefuellt'; go('ausruestung'); toast('Liste abgesendet. Zurück in der Skipper-Ansicht.');
+    }
+  });
+
+  var h0 = location.hash.replace('#', '');
+  if (NAMES.indexOf(h0) >= 0 && h0 !== 'angebot') view = h0;
+  render();
+})();
+</script>
