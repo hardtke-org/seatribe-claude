@@ -28,7 +28,7 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Thema | Entscheidung |
 |---|---|
 | Zielkunde | Zuerst einzelne Skipper (ein Konto = ein Skipper). Charterunternehmen später. |
-| Eigner | Tut zunächst nichts in der App. Der Skipper lädt Vollmacht, Versicherung, MwSt-Nachweis selbst zur Reise hoch. Eigner-Upload ist ein späterer Ausbau. |
+| Eigner | Bekommt kein Konto. Ausnahme: Der Skipper schickt ihm die Ausrüstungs- & Zustandsliste als Link, der Eigner füllt sie selbst aus (ohne Login). Vollmacht, Versicherung, MwSt-Nachweis lädt zunächst der Skipper hoch; Eigner-Upload ist ein späterer Ausbau. |
 | Branding | Standard: Seatribe Deliveries. Eigenes Branding gegen Aufpreis. |
 | Bedienung | Große Buttons, Fotos, Spracheingabe statt Tippen. |
 | Form | Web-App, die sich wie eine App installieren lässt (PWA), keine App-Stores. |
@@ -37,10 +37,15 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Baukasten | Pro Reise wird angehakt, welche Dokumente gebraucht werden; nur die entstehen als PDF. Geändert wird immer in der Bearbeitungsansicht, danach wird das PDF neu erzeugt (kein Bearbeiten im PDF). |
 | AGB | Grundlage ist die Fassung mit dem neuesten Datum (15.09.2026). AGB sind vom Vertrag getrennt. Zuerst wird ohne AGB- und Haftungsteil gebaut; der kommt später und wird juristisch geprüft. |
 | Begriffe | „Skipperhonorar" (nicht Heuer). Weitere Begriffe siehe Abschnitt Preisbaukasten. |
+| Konto | Ein „Seatribe-Konto" für alles (Skipper App, später Academy). Technik dafür: Supabase (Login, Datenbank, Dateiablage, EU-Region) – bestätigt am 2026-11-15; der Auftraggeber legt das Supabase-Konto auf Seatribe an. |
+| Academy | Später im selben Konto: Videos nur ansehen (kein Download), Handouts zum Download, Inhalte nur für Käufer. Videos brauchen einen eigenen Streaming-Dienst mit geschützter Wiedergabe; Supabase regelt nur, wer was sehen darf. |
+| Startseite | Große Kacheln („Briefmarken"): Törn anlegen, Meine Törns usw. Ein Törn kann mit fast leeren Bootsdaten angelegt werden. Auf der Törn-Seite stehen die Aktionen: Angebot erstellen, Vertrag erstellen, Checkliste an Kunden schicken … |
 | Reihenfolge | 1. Fundament (Login, Konto-Einstellungen, Reise) + Boat Check zieht um · 2. Schaden aufnehmen + Übergabe · 3. Angebots-Wizard · 4. Vertrag aus Angebot · 5. Unterlagen/Scheine, Branding, Bezahlung |
 
 Vorschläge, noch nicht bestätigt:
-- Technik: bestehender Stack (Vite, React, TypeScript, Tailwind, Vercel) + Supabase (Login, Datenbank, Dateiablage, EU-Region).
+- Vorgehen: zuerst ein klickbarer Prototyp der Bildschirme ohne echte Daten, am Handy durchgehen, dann erst richtig bauen.
+- MVP-Umfang und Reihenfolge neu festlegen (Angebot/Vertrag evtl. vor dem Umzug des Boat Check).
+- Wort in der Oberfläche: „Törn" oder „Überführung" (intern heißt es hier „Reise").
 - Offline-fähig (lokal speichern, später hochladen), weil das Netz im Hafen oft schlecht ist.
 - Sprache: Aufnahme + serverseitige Transkription statt Browser-Diktat.
 - Zeitstempel vom Server und PDF unveränderbar ablegen (Beweiswert).
@@ -115,7 +120,6 @@ Begriffe (bestätigt am 2026-11-15; die AGB werden an diese Begriffe angepasst, 
 - Vertragsvorlagen vor dem Verkauf anwaltlich prüfen lassen; Haftung beim Nutzer.
 - Datenschutz für fremde Skipper: AV-Vertrag, EU-Hosting, Löschkonzept.
 - Preismodell und Bezahlung (Stripe) noch nicht besprochen.
-- Technikvorschlag (Supabase) bestätigen.
 
 ## Bestehender Boat Check (`../boat-check`)
 
