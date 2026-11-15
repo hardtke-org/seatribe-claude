@@ -118,10 +118,11 @@ Begriffe (bestätigt am 2026-11-15; die AGB werden an diese Begriffe angepasst, 
 
 Eingebaut: Mehrwertsteuer in drei Varianten (alles / ein Teil der Tage ohne / keine), Angebotsvorschau mit Briefkopf und Logo, Knopf „Per E-Mail senden", „Mein Konto" oben rechts, Vollmacht ansehen → versenden → unterschrieben hochladen, ausführlichere Ausrüstungsliste mit Zurück-Knopf oben, klarere Trennung „Speichern" (dieses Angebot) und „Als Vorlage merken" (Startwerte für künftige Angebote).
 
-Noch nicht entschieden, nur überlegt:
-- **Kontoart „Skipper" oder „Agentur"** als Einstellung im Konto (nicht pro Angebot). Agentur: Administrationspauschale und Formulierungen wie „Koordination von Skipper und Crew" sind Standard; Skipper: beides aus. Seatribe GmbH wäre das erste Agentur-Konto. Skippervertrag und Skipper-Rechnung bleiben trotzdem draußen.
-- **Angebot direkt versenden:** Vorschlag ist Versand über den Maildienst der App mit dem Skipper als Absendername und Antwortadresse plus Kopie an ihn. Das eigene Postfach anbinden (Gmail) erst später.
-- **Mehrwertsteuer bei gemischten Tagen:** Der Prototyp nimmt an, dass nur das Honorar anteilig steuerfrei ist und Pauschalen voll mit 19 % laufen. Mit dem Steuerberater klären.
+Entschieden am 2026-11-15 (im Prototyp unter „Mein Konto" eingebaut):
+- **Kontoart „Skipper" oder „Agentur"** ist eine Einstellung im Konto, nicht pro Angebot. Agentur: Administrationspauschale und Formulierungen wie „Koordination von Skipper und Crew" sind voreingestellt; Skipper: aus, pro Angebot zuschaltbar. Seatribe GmbH ist das erste Agentur-Konto. Skippervertrag und Skipper-Rechnung bleiben draußen.
+- **E-Mail-Versand:** Jeder Nutzer hinterlegt in den Einstellungen sein eigenes Postfach, aus dem die App sendet. Alternative: nicht aus der App senden, Text kopieren bzw. PDF speichern und selbst verschicken.
+- **Mehrwertsteuer bei gemischten Tagen:** Nur das Honorar ist anteilig steuerfrei. Administrations- und Logistikpauschale laufen immer voll mit 19 %.
+- Die E-Mail des Eigners bleibt beim Anlegen freiwillig.
 
 ## Offene Punkte
 

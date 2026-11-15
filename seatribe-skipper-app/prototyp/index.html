@@ -233,13 +233,15 @@ textarea.inp { min-height: 96px; resize: vertical; }
       reise: 'pauschale', logistik: 1500, reiseSchaetz: 600, verpf: 'keine', verpfSatz: 25, personen: 3,
       bordkasse: 1500, vorschuss: true, adminOn: true, admin: 500, mwst: 'alle', tageOhne: 0, crew: 'hgk' };
     try { var s = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s) for (var k in s) if (k in d) d[k] = s[k]; } catch (e) {}
+    d.adminOn = S.konto === 'agentur';
+    try { var s2 = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s2 && s2.konto === S.konto && 'adminOn' in s2) d.adminOn = s2.adminOn; } catch (e) {}
     if (typeof d.mwst === 'boolean') d.mwst = d.mwst ? 'alle' : 'keine';
     return d;
   }
   function alle() { var o = {}; BAUSTEINE.forEach(function (b) { o[b.k] = b.k !== 'meilen'; }); return o; }
 
   var S = {
-    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false,
+    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach',
     list: [
       { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
       { id: 2, von: 'Lelystad', nach: 'Lissabon', start: '2027-06-03', typ: 'Hallberg-Rassy 40', boot: 'Aurelia', mmsi: '211234560', eigner: 'Erika Beispiel', mail: 'erika.beispiel@example.com', bau: alle(), angebot: { brutto: 9044, art: 'tag' }, ausr: 'ausgefuellt', status: { vertrag: 'Entwurf' } }
@@ -286,7 +288,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<div class="tiles">' +
       '<button class="tile main" data-go="neu">' + icon('plus') + '<span><span class="t">Überführung anlegen</span><br><span class="s">Start, Ziel, Boot</span></span></button>' +
       '<button class="tile" data-go="liste">' + icon('list') + '<span><span class="t">Meine Überführungen</span><br><span class="s">' + S.list.length + ' angelegt</span></span></button>' +
-      '<button class="tile" data-go="profil">' + icon('id') + '<span><span class="t">Profil und Scheine</span><br><span class="s">Daten, Lizenzen, Versicherung</span></span></button>' +
+      '<button class="tile" data-go="profil">' + icon('id') + '<span><span class="t">Mein Konto</span><br><span class="s">Kontoart, Scheine, Versand</span></span></button>' +
       '<button class="tile soon" data-go="academy">' + icon('play') + '<span><span class="t">Academy</span><br><span class="s">kommt später</span></span></button>' +
       '</div><div class="stack"><span class="label">Zuletzt bearbeitet</span>' + S.list.slice().reverse().slice(0, 2).map(fahrtRow).join('') + '</div>';
   };
@@ -336,9 +338,16 @@ textarea.inp { min-height: 96px; resize: vertical; }
       '<button class="btn ghost wide" data-go="fahrt">Zurück zur Überführung</button>';
   };
   V.profil = function () {
-    return top() + back('start', 'Start') + '<h1>Profil und Scheine</h1><div class="hint">Im Prototyp noch nicht ausgebaut.</div><div class="stack"><span class="label">So ist es gedacht</span>' +
-      '<p>Deine Daten trägst du einmal ein: Name, Anschrift, Passnummer, Scheinnummer, Notfallkontakt. Scheine und die Police der Skipper-Haftpflicht lädst du als Foto oder PDF hoch. Angebot, Vertrag, Vollmacht und Crewliste holen sich die Angaben von hier.</p>' +
-      '<p>Hier stellst du auch ein, an welche E-Mail-Adresse fertige PDFs gehen und welche Preise dein Standard für neue Angebote sind.</p></div>';
+    function o(grp, val, t, sub) { return '<label class="opt"><input type="radio" name="p-' + grp + '" id="p-' + grp + '-' + val + '" data-p="' + grp + '" value="' + val + '"' + (S[grp] === val ? ' checked' : '') + '><span><span class="ot">' + t + '</span><br><span class="os">' + sub + '</span></span></label>'; }
+    return top() + back('start', 'Start') + '<h1>Mein Konto</h1>' +
+      '<div class="stack"><span class="label">Kontoart</span>' +
+      o('konto', 'skipper', 'Skipper', 'Du fährst selbst. Angebote ohne Administrationspauschale, sie lässt sich pro Angebot zuschalten.') +
+      o('konto', 'agentur', 'Agentur', 'Du vermittelst und koordinierst Skipper und Crew. Die Administrationspauschale ist voreingestellt.') + '</div>' +
+      '<div class="stack"><span class="label">E-Mail-Versand</span>' +
+      o('mail', 'postfach', 'Aus meinem Postfach senden', 'Du hinterlegst hier dein Postfach. Angebot, Vollmacht und Ausrüstungsliste gehen dann direkt aus der App raus.') +
+      o('mail', 'kopieren', 'Nicht aus der App senden', 'Du kopierst den Text oder speicherst das PDF und verschickst es selbst.') +
+      (S.mail === 'postfach' ? '<label class="field"><span>Absenderadresse</span><input class="inp" id="p-absender" type="email" placeholder="name@beispiel.de"><small>Im Prototyp wird nichts verbunden.</small></label>' : '') + '</div>' +
+      '<div class="stack"><span class="label">Noch nicht ausgebaut</span><p>Deine Daten trägst du einmal ein: Name, Anschrift, Passnummer, Scheinnummer, Notfallkontakt. Scheine und die Police der Skipper-Haftpflicht lädst du als Foto oder PDF hoch. Angebot, Vertrag, Vollmacht und Crewliste holen sich die Angaben von hier.</p></div>';
   };
   V.academy = function () {
     return top() + back('start', 'Start') + '<h1>Academy</h1><div class="hint">Kommt später.</div><p>Mit demselben Seatribe-Konto siehst du hier deine gekauften Kurse: Videos zum Ansehen und Handouts zum Herunterladen.</p>';
@@ -435,7 +444,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     } else if (S.step === 3) {
       h += '<span class="label">Bordkasse</span><p class="lead">Hafen- und Liegegebühren, Diesel, Schleusen, Ersatzteile und kleine Reparaturen. Kommt immer dazu und wird gegen Beleg abgerechnet. Verpflegung gehört nicht hinein.</p>' +
         num('w-bk', 'Kalkulatorischer Ansatz', 'bordkasse', '€') + chk('vorschuss', 'Als Vorschuss vorab erheben', 'Nicht verbrauchte Beträge werden nach der Überführung erstattet.') +
-        '<span class="label">Zusätze</span>' + chk('adminOn', 'Administrationspauschale', 'Angebot, Koordination von Skipper und Crew, Dokumentation.');
+        '<span class="label">Zusätze</span>' + chk('adminOn', 'Administrationspauschale', S.konto === 'agentur' ? 'Angebot, Koordination von Skipper und Crew, Dokumentation.' : 'Bei einzelnen Skippern unüblich. Für Angebot, Vorbereitung und Dokumentation.');
       if (d.adminOn) h += '<div class="sub">' + num('w-admin', 'Administrationspauschale', 'admin', '€ netto') + '</div>';
       h += '<span class="label">Mehrwertsteuer</span><p class="lead">Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.</p>' +
         opt('mwst', 'alle', '19 % auf alles', 'Alle Tage und alle Pauschalen mit Mehrwertsteuer.') +
@@ -499,9 +508,9 @@ textarea.inp { min-height: 96px; resize: vertical; }
       if (x.total) return '<div class="total">' + esc(x.total) + '</div>';
       if (x.rows) return '<table>' + x.rows.map(function (r) { return '<tr' + (r[2] ? ' class="sumrow"' : '') + '><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</table>';
       return '<p>' + esc(x.p).replace(/\n/g, '<br>') + '</p>';
-    }).join('') + '</div><button class="btn wide" data-act="mailen">Per E-Mail an den Eigner senden (Beispiel)</button><button class="btn ghost wide" data-act="kopieren">Text kopieren</button>' +
-      '<div class="hint"><b>Speichern</b> (unten) legt dieses Angebot bei dieser Überführung ab. <b>Als Vorlage merken</b> übernimmt deine Preise und Einstellungen als Startwerte für alle künftigen Angebote.</div>' +
-      '<button class="btn ghost wide" data-act="standard">Als Vorlage für künftige Angebote merken</button>';
+    }).join('') + '</div>' + (S.mail === 'postfach' ? '<button class="btn wide" data-act="mailen">Per E-Mail an den Eigner senden (Beispiel)</button>' : '') + '<button class="btn ' + (S.mail === 'postfach' ? 'ghost ' : '') + 'wide" data-act="kopieren">Text kopieren</button>' +
+      '<div class="hint"><b>Speichern</b> (unten) legt dieses Angebot bei dieser Überführung ab. <b>Angaben als Vorlage merken</b> übernimmt deine Preise und Einstellungen als Startwerte für alle künftigen Angebote.</div>' +
+      '<button class="btn ghost wide" data-act="standard">Angaben als Vorlage merken</button>';
   }
   function plain(c) {
     return blocks(c).filter(function (x) { return !x.head; }).map(function (x) {
@@ -580,7 +589,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
     if (a === 'weiter') { S.step = Math.min(S.step + 1, STEPS.length - 1); return render(); }
     if (a === 'zurueck') { S.step = Math.max(S.step - 1, 0); return render(); }
     if (a === 'speichern') { var c = calc(S.draft); u.angebot = { brutto: c.brutto, art: S.draft.art, draft: JSON.parse(JSON.stringify(S.draft)) }; go('fahrt'); return toast('Angebot gespeichert (nur in diesem Prototyp).'); }
-    if (a === 'standard') { try { localStorage.setItem('skipperapp-standard', JSON.stringify(S.draft)); toast('Als Vorlage für künftige Angebote gemerkt.'); } catch (e) { toast('Merken ist in diesem Browser nicht möglich.'); } return; }
+    if (a === 'standard') { try { var std = JSON.parse(JSON.stringify(S.draft)); std.konto = S.konto; localStorage.setItem('skipperapp-standard', JSON.stringify(std)); toast('Als Vorlage für künftige Angebote gemerkt.'); } catch (e) { toast('Merken ist in diesem Browser nicht möglich.'); } return; }
     if (a === 'mailen') return toast('Im Prototyp wird nichts verschickt.');
     if (a === 'vm-senden') { u.vm = 'gesendet'; render(); return toast('Im Prototyp wird nichts verschickt.'); }
     if (a === 'kopieren') {
@@ -598,6 +607,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
   });
   document.addEventListener('change', function (ev) {
     var t = ev.target, d = t.dataset || {};
+    if (d.p) { S[d.p] = t.value; if (d.p === 'konto') S.draft = null; var yy = window.scrollY, pid = t.id; render(); window.scrollTo(0, yy); var pe = document.getElementById(pid); if (pe) pe.focus({ preventScroll: true }); return toast(d.p === 'konto' ? 'Kontoart: ' + (t.value === 'agentur' ? 'Agentur' : 'Skipper') : 'Einstellung übernommen.'); }
     if (t.id === 'vm-file') { var cu = cur(); if (t.files && t.files[0]) { cu.vm = 'hinterlegt'; cu.vmName = t.files[0].name; render(); toast('Vollmacht hinterlegt (nur in diesem Prototyp).'); } return; }
     if (!S.draft) return;
     if (d.r) { S.draft[d.r] = t.value; }
