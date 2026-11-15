@@ -233,7 +233,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
   function land() { return LAENDER.filter(function (l) { return l[0] === S.land; })[0] || LAENDER[0]; }
   function ustSatz() { return land()[2]; }
   function pz() { return String(ustSatz()).replace('.', ',') + ' %'; }
-  function ohneMwst() { return S.konto === 'skipper' && S.keineMwst; }
+  function ohneMwst() { return S.keineMwst; }
   function defaults() {
     var d = { art: 'tag', festpreis: 6000, satz: 300, dauer: 21, min: 16, maxOn: true, max: 24, beginn: 'heim', anreise: 1, rueck: 1,
       reise: 'pauschale', logistik: 1500, reiseSchaetz: 600, verpf: 'keine', verpfSatz: 25, personen: 3,
@@ -248,7 +248,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
   function alle() { var o = {}; BAUSTEINE.forEach(function (b) { o[b.k] = b.k !== 'meilen'; }); return o; }
 
   var S = {
-    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach', land: 'DE', keineMwst: false,
+    sel: 1, step: 0, edit: false, baustein: null, draft: null, auswahl: false, konto: 'agentur', mail: 'postfach', land: 'DE', keineMwst: false, ustid: '',
     list: [
       { id: 1, von: 'Flensburg', nach: 'Palma de Mallorca', start: '2027-04-12', typ: 'Bavaria 46 Cruiser', boot: 'Nordwind', mmsi: '', eigner: 'Max Mustermann', mail: 'max.mustermann@example.com', bau: alle(), angebot: null, ausr: 'offen', status: {} },
       { id: 2, von: 'Lelystad', nach: 'Lissabon', start: '2027-06-03', typ: 'Hallberg-Rassy 40', boot: 'Aurelia', mmsi: '211234560', eigner: 'Erika Beispiel', mail: 'erika.beispiel@example.com', bau: alle(), angebot: { brutto: 9044, art: 'tag' }, ausr: 'ausgefuellt', status: { vertrag: 'Entwurf' } }
@@ -352,8 +352,8 @@ textarea.inp { min-height: 96px; resize: vertical; }
       o('konto', 'agentur', 'Agentur', 'Du vermittelst und koordinierst Skipper und Crew. Die Administrationspauschale ist voreingestellt.') + '</div>' +
       '<div class="stack"><span class="label">Sitz und Mehrwertsteuer</span><label class="field"><span>Land, in dem du oder deine Firma sitzt</span><select class="inp" id="p-land" data-p="land">' +
       LAENDER.map(function (l) { return '<option value="' + l[0] + '"' + (l[0] === S.land ? ' selected' : '') + '>' + l[1] + '</option>'; }).join('') + '</select><small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: ' + pz() + '.</small></label>' +
-      (S.konto === 'skipper' ? '<label class="opt"><input type="checkbox" id="p-keine" data-pc="keineMwst"' + (S.keineMwst ? ' checked' : '') + '><span><span class="ot">Ich weise keine Mehrwertsteuer aus</span><br><span class="os">Zum Beispiel als Kleinunternehmer. Angebote nennen dann nur Nettobeträge.</span></span></label>'
-        : '<div class="hint">Als Agentur weist du immer Mehrwertsteuer aus.</div>') + '</div>' +
+      '<label class="opt"><input type="checkbox" id="p-keine" data-pc="keineMwst"' + (S.keineMwst ? ' checked' : '') + '><span><span class="ot">Ich weise keine Mehrwertsteuer aus</span><br><span class="os">Zum Beispiel als Kleinunternehmer. Angebote und Rechnungen nennen dann nur Nettobeträge.</span></span></label>' +
+      (S.keineMwst ? '' : '<label class="field"><span>Umsatzsteuer-ID oder Steuernummer</span><input class="inp" id="p-ustid" data-pt="ustid" value="' + esc(S.ustid) + '" placeholder="z. B. DE123456789" autocomplete="off"><small>Erscheint auf Angebot und Rechnung.</small></label>') + '</div>' +
       '<div class="stack"><span class="label">E-Mail-Versand</span>' +
       o('mail', 'postfach', 'Aus meinem Postfach senden', 'Du hinterlegst hier dein Postfach. Angebot, Vollmacht und Ausrüstungsliste gehen dann direkt aus der App raus.') +
       o('mail', 'kopieren', 'Nicht aus der App senden', 'Du kopierst den Text oder speicherst das PDF und verschickst es selbst.') +
@@ -513,12 +513,14 @@ textarea.inp { min-height: 96px; resize: vertical; }
     b.push({ p: d.crew === 'hgk' ? 'Die Crew wird auf Basis „Hand gegen Koje" gestellt. Zusätzliche Personalkosten entstehen nicht.' : 'Für diese Überführung wird bezahlte Crew eingesetzt. Die Kosten dafür nennen wir Ihnen gesondert.' });
     b.push({ p: 'Wenn das Angebot Ihren Vorstellungen entspricht, genügt eine kurze schriftliche Bestätigung per E-Mail.' });
     b.push({ p: 'Mit freundlichen Grüßen\nSeatribe Deliveries' });
+    if (!ohneMwst() && S.ustid) b.push({ foot: 'Umsatzsteuer-ID / Steuernummer: ' + S.ustid });
     return b;
   }
   function preview(c) {
     return '<div class="paper">' + blocks(c).map(function (x) {
       if (x.head) return '<div class="letter"><img src="' + LOGO + '" alt=""><div><div class="who">Seatribe Deliveries</div><div class="adr">Seatribe GmbH · Kastanienallee 31 · 20359 Hamburg</div></div></div><div class="when">Hamburg, ' + new Date().toLocaleDateString('de-DE') + '</div>';
       if (x.title) return '<div class="title">' + esc(x.title) + '</div>';
+      if (x.foot) return '<div class="when" style="border-top:1px solid var(--line);padding-top:10px">' + esc(x.foot) + '</div>';
       if (x.h) return '<h3>' + esc(x.h) + '</h3>';
       if (x.total) return '<div class="total">' + esc(x.total) + '</div>';
       if (x.rows) return '<table>' + x.rows.map(function (r) { return '<tr' + (r[2] ? ' class="sumrow"' : '') + '><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</table>';
@@ -530,6 +532,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
   function plain(c) {
     return blocks(c).filter(function (x) { return !x.head; }).map(function (x) {
       if (x.title) return x.title + '\n';
+      if (x.foot) return '\n' + x.foot;
       if (x.h) return '\n' + x.h.toUpperCase();
       if (x.total) return x.total;
       if (x.rows) return x.rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n');
@@ -614,6 +617,8 @@ textarea.inp { min-height: 96px; resize: vertical; }
     }
   });
   document.addEventListener('input', function (ev) {
+    var pt = ev.target.dataset && ev.target.dataset.pt;
+    if (pt) { S[pt] = ev.target.value.trim(); return; }
     var k = ev.target.dataset && ev.target.dataset.f;
     if (!k || !S.draft) return;
     var n = parseFloat(String(ev.target.value).replace(/\./g, '').replace(',', '.'));
