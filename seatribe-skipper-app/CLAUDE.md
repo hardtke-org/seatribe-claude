@@ -114,6 +114,15 @@ Begriffe (bestätigt am 2026-11-15; die AGB werden an diese Begriffe angepasst, 
 - Die Ausrüstungsliste (Selbstauskunft des Eigners) und die Übernahme-Checkliste decken dieselben Themen ab. Idee: Die Angaben des Eigners erscheinen beim Check als Soll, der Skipper bestätigt oder widerspricht.
 - Die Vorlagen im Drive sind ausgefüllte Echtfälle mit personenbezogenen Daten (Anschriften, Geburtsdaten, Passnummern). Nur dort belassen; für die App neutrale Fassungen ableiten.
 
+## Rückmeldung zum Prototyp (Runde 1, 2026-11-15)
+
+Eingebaut: Mehrwertsteuer in drei Varianten (alles / ein Teil der Tage ohne / keine), Angebotsvorschau mit Briefkopf und Logo, Knopf „Per E-Mail senden", „Mein Konto" oben rechts, Vollmacht ansehen → versenden → unterschrieben hochladen, ausführlichere Ausrüstungsliste mit Zurück-Knopf oben, klarere Trennung „Speichern" (dieses Angebot) und „Als Vorlage merken" (Startwerte für künftige Angebote).
+
+Noch nicht entschieden, nur überlegt:
+- **Kontoart „Skipper" oder „Agentur"** als Einstellung im Konto (nicht pro Angebot). Agentur: Administrationspauschale und Formulierungen wie „Koordination von Skipper und Crew" sind Standard; Skipper: beides aus. Seatribe GmbH wäre das erste Agentur-Konto. Skippervertrag und Skipper-Rechnung bleiben trotzdem draußen.
+- **Angebot direkt versenden:** Vorschlag ist Versand über den Maildienst der App mit dem Skipper als Absendername und Antwortadresse plus Kopie an ihn. Das eigene Postfach anbinden (Gmail) erst später.
+- **Mehrwertsteuer bei gemischten Tagen:** Der Prototyp nimmt an, dass nur das Honorar anteilig steuerfrei ist und Pauschalen voll mit 19 % laufen. Mit dem Steuerberater klären.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.

@@ -64,6 +64,18 @@ button { cursor: pointer; }
 .back { align-self: flex-start; background: none; border: 0; padding: 6px 0; color: var(--brand-ink); font-weight: 600;
   display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; max-width: 100%; }
 .back svg { width: 18px; height: 18px; flex: none; }
+.nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.letter { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--brand); padding-bottom: 14px; }
+.letter img { width: 58px; height: 58px; flex: none; background: #fff; border-radius: 50%; }
+.letter .who { font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; line-height: 1.15; }
+.letter .adr { color: var(--muted); font-size: .78rem; }
+.paper .title { font-family: var(--f-display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; }
+.paper .when { color: var(--muted); font-size: .84rem; }
+.paper ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+.paper dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; }
+.paper dt { color: var(--muted); } .paper dd { margin: 0; overflow-wrap: anywhere; }
+.miss { color: var(--warn); }
+textarea.inp { min-height: 96px; resize: vertical; }
 .lead { color: var(--muted); }
 .stack { display: flex; flex-direction: column; gap: 12px; }
 .label { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -219,8 +231,9 @@ button { cursor: pointer; }
   function defaults() {
     var d = { art: 'tag', festpreis: 6000, satz: 300, dauer: 21, min: 16, maxOn: true, max: 24, beginn: 'heim', anreise: 1, rueck: 1,
       reise: 'pauschale', logistik: 1500, reiseSchaetz: 600, verpf: 'keine', verpfSatz: 25, personen: 3,
-      bordkasse: 1500, vorschuss: true, adminOn: true, admin: 500, mwst: true, crew: 'hgk' };
+      bordkasse: 1500, vorschuss: true, adminOn: true, admin: 500, mwst: 'alle', tageOhne: 0, crew: 'hgk' };
     try { var s = JSON.parse(localStorage.getItem('skipperapp-standard') || 'null'); if (s) for (var k in s) if (k in d) d[k] = s[k]; } catch (e) {}
+    if (typeof d.mwst === 'boolean') d.mwst = d.mwst ? 'alle' : 'keine';
     return d;
   }
   function alle() { var o = {}; BAUSTEINE.forEach(function (b) { o[b.k] = b.k !== 'meilen'; }); return o; }
@@ -243,8 +256,11 @@ button { cursor: pointer; }
     var verpf = d.reise === 'einzeln' ? (d.verpf === 'tag' ? d.verpfSatz * d.dauer : d.verpf === 'person' ? d.verpfSatz * d.dauer * d.personen : 0) : 0;
     var admin = d.adminOn ? d.admin : 0;
     var netto = honorar + log + verpf + admin;
-    var ust = d.mwst ? netto * 0.19 : 0;
-    return { tag: tag, billDays: billDays, tage: tage, honorar: honorar, log: log, verpf: verpf, admin: admin, netto: netto, ust: ust, brutto: netto + ust,
+    var basisTage = tag ? tage : d.dauer;
+    var tageOhne = d.mwst === 'teil' ? Math.min(d.tageOhne || 0, basisTage) : 0;
+    var honSteuer = basisTage > 0 ? honorar * (1 - tageOhne / basisTage) : honorar;
+    var ust = d.mwst === 'keine' ? 0 : (honSteuer + log + verpf + admin) * 0.19;
+    return { basisTage: basisTage, tageOhne: tageOhne, honSteuer: honSteuer, tag: tag, billDays: billDays, tage: tage, honorar: honorar, log: log, verpf: verpf, admin: admin, netto: netto, ust: ust, brutto: netto + ust,
       unterMin: tag && billDays < (d.min || 0), ueberMax: tag && d.maxOn && billDays > d.max, minGroesserMax: tag && d.maxOn && d.min > d.max };
   }
 
@@ -253,7 +269,7 @@ button { cursor: pointer; }
     if (owner) return '';
     return '<header class="top"><img src="' + LOGO + '" alt="Seatribe Deliveries"><div><div class="name">Skipper App</div><div class="tag">Seatribe Deliveries</div></div><span class="pill">Prototyp</span></header>';
   }
-  function back(to, txt) { return '<button class="back" data-go="' + to + '">' + icon('left') + esc(txt) + '</button>'; }
+  function back(to, txt) { return '<div class="nav"><button class="back" data-go="' + to + '">' + icon('left') + esc(txt) + '</button>' + (view !== 'profil' ? '<button class="back" data-go="profil">Mein Konto</button>' : '') + '</div>'; }
   function rowStatus(u) {
     if (u.angebot && u.status.vertrag) return 'Vertrag im Entwurf';
     if (u.angebot) return 'Angebot erstellt';
@@ -306,6 +322,7 @@ button { cursor: pointer; }
       if (b.k === 'angebot') { if (u.angebot) { st = '<span class="state ok">' + eur0(u.angebot.brutto) + '</span>'; done = true; sub = 'Erstellt. Antippen zum Ändern.'; } else sub = 'Preisbaukasten, rechnet live mit'; }
       else if (b.k === 'vertrag') { sub = u.angebot ? 'Übernimmt die Angaben aus dem Angebot' : 'Braucht zuerst ein Angebot'; if (u.status.vertrag) st = '<span class="state wait">Entwurf</span>'; }
       else if (b.k === 'ausruestung') { if (u.ausr === 'ausgefuellt') { st = '<span class="state ok">ausgefüllt</span>'; done = true; sub = 'Vom Eigner beantwortet'; } else if (u.ausr === 'gesendet') { st = '<span class="state wait">gesendet</span>'; sub = 'Wartet auf den Eigner'; } else sub = 'Der Eigner füllt sie selbst aus'; }
+      else if (b.k === 'vollmacht') { if (u.vm === 'hinterlegt') { st = '<span class="state ok">hinterlegt</span>'; done = true; sub = 'Unterschrieben zurück'; } else if (u.vm === 'gesendet') { st = '<span class="state wait">versendet</span>'; sub = 'Wartet auf die Unterschrift'; } else sub = 'Ansehen, versenden, unterschrieben hochladen'; }
       html += '<button class="row' + (done ? ' done' : '') + '" data-bau="' + b.k + '"><span class="ic">' + icon(done ? 'check' : b.ic) + '</span><span class="tx"><span class="tt">' + b.t + '</span>' + (sub ? '<br><span class="ss">' + sub + '</span>' : '') + '</span>' + st + icon('chev', 'chev') + '</button>';
     });
     html += '<div class="stack"><button class="btn ghost" data-act="auswahl" aria-expanded="' + S.auswahl + '">' + (S.auswahl ? 'Auswahl schließen' : 'Bausteine auswählen') + '</button>';
@@ -327,6 +344,23 @@ button { cursor: pointer; }
     return top() + back('start', 'Start') + '<h1>Academy</h1><div class="hint">Kommt später.</div><p>Mit demselben Seatribe-Konto siehst du hier deine gekauften Kurse: Videos zum Ansehen und Handouts zum Herunterladen.</p>';
   };
 
+  V.vollmacht = function () {
+    var u = cur();
+    function v(x) { return x ? esc(x) : '<span class="miss">fehlt noch</span>'; }
+    var html = top() + back('fahrt', 'Überführung') + '<h1>Vollmacht</h1><p class="lead">Die Vollmacht füllt sich aus Eigner, Skipper, Boot und Route. Fehlende Angaben ergänzt du bei der Überführung oder in deinem Profil.</p>' +
+      '<div class="paper"><div class="title">Power of Attorney</div><div class="when">Vessel Command &amp; Delivery</div>' +
+      '<h3>1. Grantor (Owner)</h3><dl><dt>Name</dt><dd>' + v(u.eigner) + '</dd><dt>Address</dt><dd>' + v('') + '</dd></dl>' +
+      '<h3>2. Authorized Person (Skipper)</h3><dl><dt>Name</dt><dd>aus deinem Profil</dd><dt>Licence No.</dt><dd>aus deinem Profil</dd></dl>' +
+      '<h3>3. Vessel</h3><dl><dt>Name</dt><dd>' + v(u.boot) + '</dd><dt>Type</dt><dd>' + v(u.typ) + '</dd><dt>MMSI</dt><dd>' + v(u.mmsi) + '</dd></dl>' +
+      '<h3>4. Delivery Route</h3><dl><dt>Departure</dt><dd>' + esc(u.von) + '</dd><dt>Destination</dt><dd>' + esc(u.nach) + '</dd><dt>Planned</dt><dd>' + v(datum(u.start)) + '</dd></dl>' +
+      '<h3>5. Granted Authorities</h3><ul><li>Command the vessel along the stated route and at any intermediate stops</li><li>Check in and out of foreign ports and present crew lists</li><li>Arrange necessary repairs and provisioning in the course of normal voyage operations</li><li>Act as vessel master before authorities, port offices and customs</li></ul>' +
+      '<p>Excluded: sale, mortgaging, chartering or any other legal disposition of the vessel.</p><h3>6. Signatures</h3><p>Owner · Authorized Person (Skipper)</p></div>';
+    if (u.vm === 'hinterlegt') return html + '<p class="state ok" style="align-self:flex-start">Unterschriebene Vollmacht hinterlegt' + (u.vmName ? ': ' + esc(u.vmName) : '') + '</p>';
+    if (u.vm === 'gesendet') html += '<p class="state wait" style="align-self:flex-start">Vollmacht versendet (Beispiel)</p>';
+    else html += '<button class="btn wide" data-act="vm-senden">An den Eigner senden (Beispiel)</button>';
+    return html + '<label class="field"><span>Unterschriebene Vollmacht hochladen</span><input class="inp" type="file" id="vm-file" accept="image/*,application/pdf"><small>Foto oder PDF. Im Prototyp wird die Datei nicht gespeichert.</small></label>';
+  };
+
   /* ---------- Ausrüstungsliste ---------- */
   V.ausruestung = function () {
     var u = cur();
@@ -345,10 +379,16 @@ button { cursor: pointer; }
     function tx(id, lab, unit) { return '<label class="field"><span>' + lab + '</span>' + (unit ? '<span class="unit"><input id="' + id + '" inputmode="numeric"><b>' + unit + '</b></span>' : '<input class="inp" id="' + id + '">') + '</label>'; }
     return '<div class="owner" style="margin-top:14px">Ansicht des Eigners. So sieht die Seite aus, die er über den Link öffnet.</div>' +
       '<header class="top" style="padding-top:0"><img src="' + LOGO + '" alt="Seatribe Deliveries"><div><div class="name">Ausrüstungs- und Zustandsliste</div><div class="tag">' + esc(u.typ || 'Ihre Yacht') + ' · ' + esc(u.von) + ' → ' + esc(u.nach) + '</div></div></header>' +
-      '<form id="f-eigner" class="stack"><span class="label">Motor und Technik</span><div class="two">' + tx('e-std', 'Motorstunden', 'h') + tx('e-tank', 'Dieseltank', 'L') + '</div>' + tx('e-insp', 'Letzte Inspektion oder Ölwechsel') +
-      '<span class="label">Segel und Rigg</span>' + tx('e-segel', 'Vorhandene Segel') + jn('e-rigg', 'Rigg in den letzten zwei Jahren geprüft?') +
-      '<span class="label">Navigation und Sicherheit</span>' + jn('e-ais', 'AIS sendet und empfängt?') + jn('e-insel', 'Rettungsinsel mit gültigem Service?') + tx('e-westen', 'Rettungswesten an Bord', 'Stück') +
-      '<span class="label">Dokumente und Versicherung</span>' + jn('e-kasko', 'Deckt die Kaskoversicherung die Überführung durch einen fremden Skipper?') + jn('e-eu', 'Yacht in der EU versteuert?') +
+      '<button class="back" data-go="ausruestung">' + icon('left') + 'Zurück zur Skipper-Ansicht</button>' +
+      '<form id="f-eigner" class="stack"><span class="label">Motor und Technik</span>' + tx('e-masch', 'Maschinentyp') + '<div class="two">' + tx('e-std', 'Motorstunden', 'h') + tx('e-tank', 'Dieseltank', 'L') + '</div>' +
+      tx('e-insp', 'Letzte Inspektion oder Ölwechsel') + '<div class="two">' + tx('e-kan', 'Zusätzliche Kanister', 'L') + tx('e-teile', 'Ersatzteile an Bord') + '</div>' + jn('e-ap', 'Autopilot funktioniert?') +
+      '<span class="label">Segel und Rigg</span>' + tx('e-segel', 'Vorhandene Segel') + '<div class="two">' + tx('e-salter', 'Alter der Segel', 'Jahre') + tx('e-szust', 'Zustand der Segel') + '</div>' + tx('e-rigg', 'Rigg zuletzt geprüft') + jn('e-leinen', 'Ersatzleinen an Bord?') +
+      '<span class="label">Navigation und Kommunikation</span>' + jn('e-karten', 'Plotter mit Seekarten für das Fahrtgebiet?') + jn('e-ais', 'AIS sendet und empfängt?') + jn('e-radar', 'Radar funktioniert?') + jn('e-ukw', 'UKW-Funk mit DSC?') + jn('e-hand', 'Handfunkgerät an Bord?') +
+      '<span class="label">Energie und Wasser</span><div class="two">' + tx('e-batt', 'Servicebatterien', 'Ah') + tx('e-solar', 'Solarleistung', 'W') + '</div><div class="two">' + tx('e-wasser', 'Wassertank', 'L') + tx('e-lade', 'Ladequellen') + '</div>' + jn('e-wm', 'Wassermacher an Bord?') +
+      '<span class="label">Sicherheit und Seeventile</span>' + jn('e-insel', 'Rettungsinsel mit gültigem Service?') + '<div class="two">' + tx('e-westen', 'Rettungswesten', 'Stück') + tx('e-ventile', 'Zustand der Seeventile') + '</div>' +
+      jn('e-bilge', 'Elektrische und manuelle Bilgenpumpe funktionieren?') + jn('e-notp', 'Notpinne an Bord?') + jn('e-dicht', 'Luken und Fenster dicht?') +
+      '<span class="label">Dokumente und Versicherung</span>' + jn('e-kasko', 'Deckt die Kaskoversicherung die Überführung durch einen fremden Skipper?') + jn('e-papiere', 'Bootspapiere und Eigentumsnachweis an Bord?') + jn('e-eu', 'Yacht in der EU versteuert?') +
+      '<span class="label">Bekannte Mängel</span><label class="field"><span>Was sollten wir vor der Abfahrt wissen?</span><textarea class="inp" id="e-maengel"></textarea><small>Vorschäden, laufende Reparaturen, Dinge, die nicht funktionieren.</small></label>' +
       '<button class="btn wide" type="submit">Liste absenden</button></form>' +
       '<button class="btn ghost wide" data-go="ausruestung">Zurück zur Skipper-Ansicht</button>';
   };
@@ -397,8 +437,12 @@ button { cursor: pointer; }
         num('w-bk', 'Kalkulatorischer Ansatz', 'bordkasse', '€') + chk('vorschuss', 'Als Vorschuss vorab erheben', 'Nicht verbrauchte Beträge werden nach der Überführung erstattet.') +
         '<span class="label">Zusätze</span>' + chk('adminOn', 'Administrationspauschale', 'Angebot, Koordination von Skipper und Crew, Dokumentation.');
       if (d.adminOn) h += '<div class="sub">' + num('w-admin', 'Administrationspauschale', 'admin', '€ netto') + '</div>';
-      h += chk('mwst', '19 % Mehrwertsteuer ausweisen', 'Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.') +
-        '<span class="label">Crew</span>' + opt('crew', 'hgk', 'Hand gegen Koje', 'Keine zusätzlichen Personalkosten.') + opt('crew', 'bezahlt', 'Bezahlte Crew', 'Wird im Angebot als gesonderter Hinweis genannt.');
+      h += '<span class="label">Mehrwertsteuer</span><p class="lead">Ob und für welche Tage Mehrwertsteuer anfällt, entscheidest du. Die App rechnet nur.</p>' +
+        opt('mwst', 'alle', '19 % auf alles', 'Alle Tage und alle Pauschalen mit Mehrwertsteuer.') +
+        opt('mwst', 'teil', 'Ein Teil der Tage ohne Mehrwertsteuer', 'Zum Beispiel Tage außerhalb der EU. Die Pauschalen bleiben mit 19 %.') +
+        opt('mwst', 'keine', 'Ohne Mehrwertsteuer', 'Das Angebot weist nur Nettobeträge aus.');
+      if (d.mwst === 'teil') h += '<div class="sub">' + num('w-ohne', 'Tage ohne Mehrwertsteuer', 'tageOhne', 'von ' + c.basisTage) + '</div>';
+      h += '<span class="label">Crew</span>' + opt('crew', 'hgk', 'Hand gegen Koje', 'Keine zusätzlichen Personalkosten.') + opt('crew', 'bezahlt', 'Bezahlte Crew', 'Wird im Angebot als gesonderter Hinweis genannt.');
     } else h += preview(c);
     return h;
   }
@@ -411,11 +455,13 @@ button { cursor: pointer; }
   }
   function blocks(c) {
     var d = S.draft, u = cur(), b = [];
+    b.push({ head: 1 });
+    b.push({ title: 'Angebot: Überführung ' + u.von + ' → ' + u.nach });
     b.push({ p: 'Guten Tag' + (u.eigner ? ' ' + u.eigner : '') + ',' });
     b.push({ p: 'vielen Dank für Ihre Anfrage. Nachfolgend erhalten Sie unser Angebot zur Überführung Ihrer Yacht' + (u.typ ? ' (' + u.typ + ')' : '') + ' von ' + u.von + ' nach ' + u.nach + (u.start ? ', geplanter Start ' + datum(u.start) : '') + '.' });
     b.push({ p: 'Geplante Dauer: ' + d.dauer + ' Kalendertage, inklusive möglicher Wetter- und Hafentage.' });
     b.push({ h: 'Voraussichtliche Gesamtkosten' });
-    b.push({ total: eur(c.brutto) + (d.mwst ? ' brutto' : ' netto') });
+    b.push({ total: eur(c.brutto) + (d.mwst !== 'keine' ? ' brutto' : ' netto') });
     b.push({ p: 'zuzüglich Bordkasse nach tatsächlichem Aufwand' + (d.reise === 'einzeln' ? ' und Reisekosten gegen Beleg' : '') });
     b.push({ h: 'Kostenaufschlüsselung' });
     var rows = [];
@@ -425,8 +471,10 @@ button { cursor: pointer; }
     if (c.verpf) rows.push(['Verpflegung: ' + eur0(d.verpfSatz) + ' pro Tag' + (d.verpf === 'person' ? ' und Person, ' + d.personen + ' Personen' : '') + ', ' + d.dauer + ' Tage', eur(c.verpf)]);
     if (c.admin) rows.push(['Administrationspauschale', eur(c.admin)]);
     rows.push(['Summe netto', eur(c.netto), 1]);
-    if (d.mwst) { rows.push(['19 % Mehrwertsteuer', eur(c.ust)]); rows.push(['Summe brutto', eur(c.brutto), 1]); }
+    if (d.mwst !== 'keine') { rows.push([c.tageOhne ? '19 % Mehrwertsteuer auf ' + (c.basisTage - c.tageOhne) + ' von ' + c.basisTage + ' Kalendertagen und auf die Pauschalen' : '19 % Mehrwertsteuer', eur(c.ust)]); rows.push(['Summe brutto', eur(c.brutto), 1]); }
+    var steuerNote = c.tageOhne ? 'Die Kalkulation geht davon aus, dass ' + c.tageOhne + ' der ' + c.basisTage + ' Kalendertage ohne Mehrwertsteuer abgerechnet werden. Die endgültige umsatzsteuerliche Behandlung richtet sich nach den tatsächlichen Leistungsorten.' : '';
     b.push({ rows: rows });
+    if (steuerNote) b.push({ p: steuerNote });
     if (c.tag) {
       var beg = { heim: 'Abgerechnet wird ab der Abreise des Skippers von seinem Heimatort bis zu seiner Rückkehr.', hafen: 'Abgerechnet wird ab der Ankunft des Skippers am Starthafen bis zur Übergabe im Zielhafen.',
         hafenplus: 'Abgerechnet wird ab der Ankunft des Skippers am Starthafen bis zur Übergabe im Zielhafen, zuzüglich pauschal ' + (d.anreise + d.rueck) + ' Kalendertagen für An- und Rückreise.' }[d.beginn];
@@ -445,14 +493,19 @@ button { cursor: pointer; }
   }
   function preview(c) {
     return '<div class="paper">' + blocks(c).map(function (x) {
+      if (x.head) return '<div class="letter"><img src="' + LOGO + '" alt=""><div><div class="who">Seatribe Deliveries</div><div class="adr">Seatribe GmbH · Kastanienallee 31 · 20359 Hamburg</div></div></div><div class="when">Hamburg, ' + new Date().toLocaleDateString('de-DE') + '</div>';
+      if (x.title) return '<div class="title">' + esc(x.title) + '</div>';
       if (x.h) return '<h3>' + esc(x.h) + '</h3>';
       if (x.total) return '<div class="total">' + esc(x.total) + '</div>';
       if (x.rows) return '<table>' + x.rows.map(function (r) { return '<tr' + (r[2] ? ' class="sumrow"' : '') + '><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</table>';
       return '<p>' + esc(x.p).replace(/\n/g, '<br>') + '</p>';
-    }).join('') + '</div><button class="btn ghost wide" data-act="kopieren">Text kopieren</button><button class="btn ghost wide" data-act="standard">Diese Einstellungen als meinen Standard merken</button>';
+    }).join('') + '</div><button class="btn wide" data-act="mailen">Per E-Mail an den Eigner senden (Beispiel)</button><button class="btn ghost wide" data-act="kopieren">Text kopieren</button>' +
+      '<div class="hint"><b>Speichern</b> (unten) legt dieses Angebot bei dieser Überführung ab. <b>Als Vorlage merken</b> übernimmt deine Preise und Einstellungen als Startwerte für alle künftigen Angebote.</div>' +
+      '<button class="btn ghost wide" data-act="standard">Als Vorlage für künftige Angebote merken</button>';
   }
   function plain(c) {
-    return blocks(c).map(function (x) {
+    return blocks(c).filter(function (x) { return !x.head; }).map(function (x) {
+      if (x.title) return x.title + '\n';
       if (x.h) return '\n' + x.h.toUpperCase();
       if (x.total) return x.total;
       if (x.rows) return x.rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n');
@@ -470,7 +523,7 @@ button { cursor: pointer; }
     var el = document.getElementById('bar');
     if (view !== 'angebot' || !S.draft) { el.innerHTML = ''; return; }
     var c = calc(S.draft), last = S.step === STEPS.length - 1;
-    el.innerHTML = '<div class="bar"><div class="in"><div class="sum"><small>Gesamt' + (S.draft.mwst ? ' brutto' : ' netto') + '</small><strong id="w-sum">' + eur(c.brutto) + '</strong></div>' +
+    el.innerHTML = '<div class="bar"><div class="in"><div class="sum"><small>Gesamt' + (S.draft.mwst !== 'keine' ? ' brutto' : ' netto') + '</small><strong id="w-sum">' + eur(c.brutto) + '</strong></div>' +
       (S.step > 0 ? '<button class="btn ghost" data-act="zurueck">Zurück</button>' : '') + '<button class="btn" data-act="' + (last ? 'speichern' : 'weiter') + '">' + (last ? 'Speichern' : 'Weiter') + '</button></div></div>';
     live();
   }
@@ -516,6 +569,7 @@ button { cursor: pointer; }
       var k = el.dataset.bau;
       if (k === 'angebot') { S.draft = (u.angebot && u.angebot.draft) ? JSON.parse(JSON.stringify(u.angebot.draft)) : defaults(); S.step = 0; return go('angebot'); }
       if (k === 'ausruestung') return go('ausruestung');
+      if (k === 'vollmacht') return go('vollmacht');
       S.baustein = k; return go('baustein');
     }
     if (el.dataset.chip) { u.bau[el.dataset.chip] = !u.bau[el.dataset.chip]; return render(); }
@@ -526,7 +580,9 @@ button { cursor: pointer; }
     if (a === 'weiter') { S.step = Math.min(S.step + 1, STEPS.length - 1); return render(); }
     if (a === 'zurueck') { S.step = Math.max(S.step - 1, 0); return render(); }
     if (a === 'speichern') { var c = calc(S.draft); u.angebot = { brutto: c.brutto, art: S.draft.art, draft: JSON.parse(JSON.stringify(S.draft)) }; go('fahrt'); return toast('Angebot gespeichert (nur in diesem Prototyp).'); }
-    if (a === 'standard') { try { localStorage.setItem('skipperapp-standard', JSON.stringify(S.draft)); toast('Als Standard für neue Angebote gemerkt.'); } catch (e) { toast('Merken ist in diesem Browser nicht möglich.'); } return; }
+    if (a === 'standard') { try { localStorage.setItem('skipperapp-standard', JSON.stringify(S.draft)); toast('Als Vorlage für künftige Angebote gemerkt.'); } catch (e) { toast('Merken ist in diesem Browser nicht möglich.'); } return; }
+    if (a === 'mailen') return toast('Im Prototyp wird nichts verschickt.');
+    if (a === 'vm-senden') { u.vm = 'gesendet'; render(); return toast('Im Prototyp wird nichts verschickt.'); }
     if (a === 'kopieren') {
       var txt = plain(calc(S.draft));
       try { navigator.clipboard.writeText(txt).then(function () { toast('Angebotstext kopiert.'); }, function () { toast('Kopieren nicht möglich. Bitte den Text markieren.'); }); }
@@ -542,6 +598,7 @@ button { cursor: pointer; }
   });
   document.addEventListener('change', function (ev) {
     var t = ev.target, d = t.dataset || {};
+    if (t.id === 'vm-file') { var cu = cur(); if (t.files && t.files[0]) { cu.vm = 'hinterlegt'; cu.vmName = t.files[0].name; render(); toast('Vollmacht hinterlegt (nur in diesem Prototyp).'); } return; }
     if (!S.draft) return;
     if (d.r) { S.draft[d.r] = t.value; }
     else if (d.c) { S.draft[d.c] = t.checked; }
