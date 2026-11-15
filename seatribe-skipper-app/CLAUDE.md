@@ -33,6 +33,10 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 | Bedienung | Große Buttons, Fotos, Spracheingabe statt Tippen. |
 | Form | Web-App, die sich wie eine App installieren lässt (PWA), keine App-Stores. |
 | Ablage der Ergebnisse | Start: App speichert selbst, Empfänger-E-Mail pro Konto einstellbar (PDF + Link). Eigenes Google Drive pro Kunde erst später als Extra. |
+| Agentur-Ebene | Nur für Seatribe intern, nicht Teil des verkauften Produkts. Skippervertrag und Skipper-Rechnung werden vorerst nicht gebaut. |
+| Baukasten | Pro Reise wird angehakt, welche Dokumente gebraucht werden; nur die entstehen als PDF. Geändert wird immer in der Bearbeitungsansicht, danach wird das PDF neu erzeugt (kein Bearbeiten im PDF). |
+| AGB | Grundlage ist die Fassung mit dem neuesten Datum (15.09.2026). AGB sind vom Vertrag getrennt. Zuerst wird ohne AGB- und Haftungsteil gebaut; der kommt später und wird juristisch geprüft. |
+| Begriffe | „Skipperhonorar" (nicht Heuer). Weitere Begriffe siehe Abschnitt Preisbaukasten. |
 | Reihenfolge | 1. Fundament (Login, Konto-Einstellungen, Reise) + Boat Check zieht um · 2. Schaden aufnehmen + Übergabe · 3. Angebots-Wizard · 4. Vertrag aus Angebot · 5. Unterlagen/Scheine, Branding, Bezahlung |
 
 Vorschläge, noch nicht bestätigt:
@@ -58,7 +62,7 @@ Gesichtet am 2026-11-15 anhand der Vorlagen im Drive-Ordner „Vorlagen" (elf PD
 | Schlussabrechnung / Rechnung | Anbieter → Eigner | nach der Reise |
 | Skippervertrag + AGB, Skipper-Rechnung | Agentur ↔ beauftragter Skipper | nur Agentur-Fall |
 
-**Zwei Ebenen:** Seatribe arbeitet als Agentur (Vertrag mit dem Eigner *und* Vertrag mit einem beauftragten Skipper, inkl. Kundenschutz und Geheimhaltung). Ein einzelner Skipper als Käufer braucht nur die Ebene Skipper ↔ Eigner. Ob die Agentur-Ebene Teil des Produkts wird oder nur intern genutzt wird, ist offen.
+**Zwei Ebenen:** Seatribe arbeitet als Agentur (Vertrag mit dem Eigner *und* Vertrag mit einem beauftragten Skipper, inkl. Kundenschutz und Geheimhaltung). Ein einzelner Skipper als Käufer braucht nur die Ebene Skipper ↔ Eigner. Die Agentur-Ebene ist nur für Seatribe intern und wird vorerst nicht gebaut.
 
 ### Stammdaten (einmal erfassen, überall verwenden)
 
@@ -68,23 +72,32 @@ Gesichtet am 2026-11-15 anhand der Vorlagen im Drive-Ordner „Vorlagen" (elf PD
 - **Crew:** je Person dieselben Felder wie Skipper (ohne Schein), Funktion an Bord
 - **Reise:** Start- und Zielhafen (mit Marina), geplanter Start, kalkulierte Dauer, gesegelte Seemeilen, Gültigkeit der Vollmacht
 
-### Angebot und Vertrag – drei Preismodelle
+### Preisbaukasten für Angebot und Vertrag
 
-1. **Festpreis:** Heuer fix, Verpflegung fix, Bordkassenvorschuss; Zusatztagessatz nur bei Verzögerungen durch Yacht/Dritte.
-2. **Tagessatz + Logistikpauschale:** Tagessatz × Kalendertage, Pauschale deckt Reise und Verpflegung, voraussichtliche Nebenkosten.
-3. **Tagessatz + Reisekosten nach Aufwand:** Tagessatz × Kalendertage, Verpflegungspauschale, Sicherheitsrücklage, Reisekosten gegen Beleg.
+Entschieden am 2026-11-15. Es sind keine drei festen Modelle, sondern zwei Schalter plus Zusätze:
 
-Eingaben des Wizards:
+**1. Honorar** (eines von beiden)
+- Festpreis
+- Tagessatz × Abrechnungstage, mit Mindest- und Maximalabrechnungstagen (Beispiel: Reise dauert ca. 13 Tage, mindestens werden 10 berechnet)
 
-- Preismodell, Tagessatz bzw. Festpreis
-- kalkulierte Dauer (optional aufgeteilt in An-/Abreise, Seetage, Hafen-/Puffertage) und Mindestabrechnungsdauer; gewünscht außerdem Maximaltage und Sonderpreis für Hafentage (steht in keiner heutigen Vorlage)
-- Abrechnungsbeginn: ab Abreise vom Heimatort bis Rückkehr, oder ab Eintreffen an Bord bis Übergabe
-- Logistik-/Reisekosten: Pauschale oder nach Aufwand; Verpflegungspauschale
-- Administrations-/Bearbeitungspauschale
-- Bordkasse: Vorschuss oder kalkulatorischer Ansatz, Abrechnung gegen Beleg; Sicherheitsrücklage
-- Mehrwertsteuer: Netto/Brutto je Position; die Aufteilung der Tage innerhalb/außerhalb der EU entscheidet der Nutzer, die App rechnet nur
-- Zahlungsplan (heute: 50 % bei Abschluss, Rest 14 Tage vor Start) und Stornostaffel (30/50/80/100 %)
-- Crew: „Hand gegen Koje" oder bezahlt
+**2. Reise und Verpflegung** (eines von beiden)
+- Logistikpauschale: deckt Reisekosten und Verpflegung vollständig ab
+- Einzeln: Reisekosten nach Aufwand gegen Beleg (im Angebot als Schätzung) und Verpflegung wahlweise gar nicht, als Betrag pro Tag oder als Betrag pro Tag und Person
+
+**3. Abrechnungsbeginn** (nur bei Tagessatz)
+- ab Abreisetag vom Heimatort bis Rückkehr
+- ab Ankunft am Starthafen bis Übergabe
+- ab Ankunft an Bord bis Ankunft im Zielhafen, plus X pauschale Tage für An- und Abreise (Deutung von Claude, noch bestätigen)
+
+**4. Immer zusätzlich: Bordkasse**
+Hafen- und Liegegebühren, Diesel, Schleusen, kleine Reparaturen und Ersatzteile. Abrechnung gegen Beleg. Bei Motorbooten später evtl. eigener Posten Diesel – vorerst nicht.
+
+**5. Optional:** Administrationspauschale, Mehrwertsteuer je Position (die Aufteilung der Tage innerhalb/außerhalb der EU entscheidet der Nutzer, die App rechnet nur), Zahlungsplan, Crew „Hand gegen Koje" oder bezahlt.
+
+Vorschlag von Claude zu den Begriffen, noch nicht bestätigt:
+- Nur noch **ein** Topf namens „Bordkasse" = Betriebskosten der Yacht. „Sicherheitsrücklage" und „Nebenkosten" entfallen als eigene Begriffe; der vorab gezahlte Betrag heißt „Bordkassen-Vorschuss".
+- Verpflegung gehört ausdrücklich **nicht** in die Bordkasse, sondern läuft über Schalter 2.
+- „Kalendertage" statt „Einsatztage", „Administrationspauschale" statt „Bearbeitungs- & Koordinationspauschale" (so steht es in der neuesten AGB).
 
 ### Beobachtungen zu den Vorlagen
 
@@ -96,8 +109,9 @@ Eingaben des Wizards:
 
 ## Offene Punkte
 
-- Agentur-Ebene (Skippervertrag, Skipper-Rechnung, Kundenschutz): Teil des Produkts oder nur für Seatribe intern?
-- Eine AGB-Grundfassung und einheitliche Begriffe festlegen.
+- Begriffsvorschlag (ein Topf „Bordkasse") bestätigen.
+- Maximalabrechnungstage: Was gilt bei Überschreitung? Ein aktuelles Angebot mit Maximaltagen fehlt noch im Ordner „Vorlagen".
+- Dritte Variante des Abrechnungsbeginns bestätigen.
 - Vertragsvorlagen vor dem Verkauf anwaltlich prüfen lassen; Haftung beim Nutzer.
 - Datenschutz für fremde Skipper: AV-Vertrag, EU-Hosting, Löschkonzept.
 - Preismodell und Bezahlung (Stripe) noch nicht besprochen.
