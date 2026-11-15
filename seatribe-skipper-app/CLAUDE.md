@@ -78,7 +78,7 @@ Entschieden am 2026-11-15. Es sind keine drei festen Modelle, sondern zwei Schal
 
 **1. Honorar** (eines von beiden)
 - Festpreis
-- Tagessatz × Abrechnungstage, mit Mindest- und Maximalabrechnungstagen (Beispiel: Reise dauert ca. 13 Tage, mindestens werden 10 berechnet)
+- Tagessatz × Abrechnungstage, mit Mindest- und Maximalabrechnungstagen. Beispiel: kalkuliert 13 Tage, mindestens werden 10 berechnet, höchstens 15. Dauert es 18 Tage, trägt der Anbieter die Differenz. Der Deckel gilt nicht bei Verzögerungen durch die Yacht oder Dritte (Defekt, Reparatur, Behörde).
 
 **2. Reise und Verpflegung** (eines von beiden)
 - Logistikpauschale: deckt Reisekosten und Verpflegung vollständig ab
@@ -87,10 +87,12 @@ Entschieden am 2026-11-15. Es sind keine drei festen Modelle, sondern zwei Schal
 **3. Abrechnungsbeginn** (nur bei Tagessatz)
 - ab Abreisetag vom Heimatort bis Rückkehr
 - ab Ankunft am Starthafen bis Übergabe
-- ab Ankunft an Bord bis Ankunft im Zielhafen, plus X pauschale Tage für An- und Abreise (Deutung von Claude, noch bestätigen)
+- ab Ankunft am Hafen, plus eine fest eingegebene Zahl bezahlter Tage für Anreise und Rückreise (z. B. je 1 Tag). Dauert die Reise tatsächlich länger, trägt das der Anbieter.
 
 **4. Immer zusätzlich: Bordkasse**
 Hafen- und Liegegebühren, Diesel, Schleusen, kleine Reparaturen und Ersatzteile. Abrechnung gegen Beleg. Bei Motorbooten später evtl. eigener Posten Diesel – vorerst nicht.
+
+**Voreinstellungen:** Was ein Skipper einmal zusammengeklickt hat, merkt sich die App als seinen Standard für das nächste Angebot; pro Angebot bleibt alles änderbar. Später: mehrere benannte Vertragsarten je Skipper speichern.
 
 **5. Optional:** Administrationspauschale, Mehrwertsteuer je Position (die Aufteilung der Tage innerhalb/außerhalb der EU entscheidet der Nutzer, die App rechnet nur), Zahlungsplan, Crew „Hand gegen Koje" oder bezahlt.
 
@@ -110,8 +112,6 @@ Begriffe (bestätigt am 2026-11-15; die AGB werden an diese Begriffe angepasst, 
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
-- Maximalabrechnungstage: Was gilt bei Überschreitung? Ein aktuelles Angebot mit Maximaltagen fehlt noch im Ordner „Vorlagen".
-- Dritte Variante des Abrechnungsbeginns bestätigen.
 - Vertragsvorlagen vor dem Verkauf anwaltlich prüfen lassen; Haftung beim Nutzer.
 - Datenschutz für fremde Skipper: AV-Vertrag, EU-Hosting, Löschkonzept.
 - Preismodell und Bezahlung (Stripe) noch nicht besprochen.
