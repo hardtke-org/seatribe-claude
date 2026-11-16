@@ -190,4 +190,3 @@ a.btn.ghost { color: var(--brand-ink); }
 .facts > div:first-child { border-top: 0; }
 .facts dt { color: var(--muted); flex: none; max-width: 50%; }
 .facts dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; min-width: 0; }
-button.back { font: inherit; }
