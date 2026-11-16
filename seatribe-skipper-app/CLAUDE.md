@@ -167,6 +167,15 @@ Seatribe Deliveries führt Anfragen, Angebote und Aufträge bereits vollständig
 
 **Idee des Auftraggebers (zu besprechen):** In HubSpot „Auftrag anlegen" auslösen → die App legt die Überführung mit allen Daten an → daraus entstehen Vertrag, Vollmacht, Checklisten → der Auftrag wird mit dem beauftragten Skipper geteilt, der die App ebenfalls nutzt; dazu gehören dann auch die Skipperverträge. Das würde die Entscheidung „Agentur-Ebene vorerst nicht bauen" aufheben. Zu beachten: Der Skipper darf die Konditionen zwischen Seatribe und Eigner nicht sehen (so steht es im Skippervertrag).
 
+### Richtung für die eigene Nutzung (vom Auftraggeber am 2026-11-16 so beschrieben, Umsetzung noch nicht abgestimmt)
+
+- Es sind tatsächlich rund 10 eigene Überführungen im Jahr; Ziel des Auftraggebers sind 50. Die meiste Zeit pro Auftrag kosten die **Verträge**.
+- **Agentur-Seite:** nur für Seatribe. Sie holt Aufträge aus HubSpot, sieht Preise, erzeugt die Verträge mit Eigner und Skipper und legt sie ab. Das ersetzt die frühere Entscheidung „Agentur-Ebene vorerst nicht bauen".
+- **Skipper** loggen sich mit eigenem Konto ein und haben zwei Wege: einen **Seatribe-Auftrag übernehmen** oder eine **eigene Überführung eingeben** (wie bisher). Die App bleibt damit allgemein nutzbar.
+- Bei einem Seatribe-Auftrag sieht der Skipper **keine Preise und keine Verträge zwischen Seatribe und Eigner**, nur seine eigenen Verträge und Vereinbarungen sowie die Daten für die Fahrt.
+- Technisch soll das klein bleiben.
+- Vorschlag von Claude, noch nicht bestätigt: Der Skipper importiert nicht selbst aus HubSpot, sondern die Agentur gibt den Auftrag per Code oder Link frei; Preise und Eigner-Vertrag liegen in einer eigenen, nur für die Agentur lesbaren Tabelle. Für eigene Verträge zunächst den bestehenden AGB-Text vom 15.09.2026 unverändert verwenden.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
