@@ -154,6 +154,19 @@ Ergebnis einer kurzen Webrecherche am 2026-11-16:
 
 Folgerung: Verkauf an Skipper ist ein Nebenverdienst. Der Hauptnutzen muss sein, **mehr Aufträge zu gewinnen**: (1) schnelle, professionelle Angebote erhöhen die Abschlussquote bei bestehenden Anfragen; (2) der Preisbaukasten als öffentlicher Preisrechner „Was kostet meine Überführung?" auf der Website, der Anfragen ins CRM bringt – passt zu Google Ads; (3) Skipper in der App können Anfragen, die sie nicht selbst fahren, an Seatribe weitergeben. Idee (2) und (3) sind Vorschläge, noch nicht besprochen.
 
+## HubSpot als Quelle für die eigene Nutzung (gesichtet am 2026-11-16, noch nichts gebaut)
+
+Seatribe Deliveries führt Anfragen, Angebote und Aufträge bereits vollständig in HubSpot (Portal 27171859). Für die eigene Nutzung ist HubSpot die führende Quelle; die App soll Angebote **nicht** noch einmal rechnen.
+
+- **Pipelines der Deals:** Yachtüberführung (`default`), Portal LKW Transport (`255783906`), Transport per Frachtschiff (`563897532`), Bootskauf/-Verkauf, Triage. Insgesamt rund 3.750 Deals, davon rund 710 in „Yachtüberführung".
+- **Stufen in „Yachtüberführung"** decken den ganzen Ablauf ab: Anfrage → Preisindikation (teils automatisch) → Angebot an den Kunden → Auftrag erhalten → Vertrag an Kunden → Rechnung Anzahlung → Zustand der Yacht an Kunden → Anzahlung eingegangen → Finale Rechnung → Ist unterwegs → Endabrechnung → Überführung abgeschlossen.
+- **Angebotsdaten liegen als Deal-Felder vor**, u. a. `starthafen`, `zielhafen`, `wann`, `bootstyp`, `bootsname`, `bootskennzeichen`, `baujahr`, `lange`, `breite`, `tiefgang`, `maschinentyp`, `motorstunden`, `entfernung`, `etmal`, `segeltage`, `tage_hafentage`, `ein__ausklarieren`, `tage_gesamt`, `min_einsatztage`, `max_einsatztage`, `keine_mwst` (Tage ohne MwSt), `tagessatz_skipper` (Kunde → Seatribe), `skipper_bekommt__netto__pro_tag` (Seatribe → Skipper), `heuer_netto`, `heuer_brutto`, `logistikpauschale_netto`, `bearbeitungspauschale`, `bordkasse`, `reisekosten`, `verpflegungskosten`, `angebot_netto`, `angebot_uberfuhrung_brutto`, `anzahlung`, `restzahlung`, `auftrags_id`. Eigner-Daten hängen am verknüpften Kontakt.
+- **Schon vorhanden:** das Feld `dokumente__uberfurhung` als Abhakliste (Vertrag Eigner, Vertrag Skipper, Verträge Crew, Ausrüstungs-/Zustandsliste, Rechnung Anzahlung, Rechnung Final, Vollmacht) und `skipper_gestrafft`.
+- **Größenordnung:** In „Yachtüberführung" stehen rund 40 Deals in Stufen ab „Auftrag erhalten" (seit Mitte 2023), also grob 10–15 eigene Überführungen im Jahr. Zahl hängt davon ab, wie sauber die Stufen gepflegt sind.
+- **Abweichungen zu den App-Begriffen:** HubSpot sagt „Heuer", „Bearbeitungspauschale", „Einsatztage"; die App sagt „Skipperhonorar", „Administrationspauschale", „Kalendertage". Beim Verknüpfen übersetzen oder angleichen.
+
+**Idee des Auftraggebers (zu besprechen):** In HubSpot „Auftrag anlegen" auslösen → die App legt die Überführung mit allen Daten an → daraus entstehen Vertrag, Vollmacht, Checklisten → der Auftrag wird mit dem beauftragten Skipper geteilt, der die App ebenfalls nutzt; dazu gehören dann auch die Skipperverträge. Das würde die Entscheidung „Agentur-Ebene vorerst nicht bauen" aufheben. Zu beachten: Der Skipper darf die Konditionen zwischen Seatribe und Eigner nicht sehen (so steht es im Skippervertrag).
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
