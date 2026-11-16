@@ -29,7 +29,7 @@ Eine Reise (z. B. „Flensburg → Mallorca") trägt Boot, Unterlagen und alle S
 |---|---|
 | Zielkunde | Zuerst einzelne Skipper (ein Konto = ein Skipper). Charterunternehmen später. |
 | Eigner | Bekommt kein Konto. Die Ausrüstungs- & Zustandsliste füllt er heute über ein HubSpot-Formular aus; das bleibt vorerst so. Später: E-Mail mit Link, über den er sie ohne Login ausfüllt, die Angaben landen im Törn. Vollmacht, Versicherung, MwSt-Nachweis lädt zunächst der Skipper hoch; Eigner-Upload ist ein späterer Ausbau. |
-| Branding | Standard: Seatribe Deliveries. Eigenes Branding gegen Aufpreis. |
+| Branding | Zwei Ebenen (entschieden am 2026-11-16). **Die App selbst** (Knöpfe, Kacheln, Kopfzeile) erscheint immer in den Farben von Seatribe Deliveries, auch bei fremden Skippern; das Dunkelblau soll stärker eingesetzt werden als bisher. **Dokumente** (Angebot, Vertrag, PDFs) tragen standardmäßig die Marke Seatribe Deliveries; gegen Bezahlung kann ein Nutzer sie durch seine eigene ersetzen. Dann darf das Dokument nicht aussehen, als käme es von Seatribe Deliveries, trägt aber unten den Hinweis „Erstellt mit der Seatribe Skipper App" (genauer Wortlaut offen). Quelle der Marke: Canva-Kit „Markenkit Seatribe Deliveries"; für die Academy gibt es ein eigenes Kit („Seatribe Academy"), das erst später dran ist. Der Canva-Connector zeigt nur Namen und Vorschaubild der Kits, nicht Farben und Schriften – die genauen Werte muss der Auftraggeber liefern. |
 | Bedienung | Große Buttons, Fotos, Spracheingabe statt Tippen. |
 | Form | Web-App, die sich wie eine App installieren lässt (PWA), keine App-Stores. |
 | Ablage der Ergebnisse | Start: App speichert selbst, Empfänger-E-Mail pro Konto einstellbar (PDF + Link). Eigenes Google Drive pro Kunde erst später als Extra. |
