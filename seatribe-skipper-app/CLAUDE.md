@@ -138,7 +138,9 @@ Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernomm
 - **Als Nächstes (Schritt 3):** Angebots-Wizard aus dem Prototyp in die App übernehmen, Angebot speichern, PDF mit Briefkopf. Danach Vertrag ohne AGB.
 - **Getestet am 2026-11-15** mit zwei Testkonten im Browser gegen die echte Datenbank: Anmeldung, falsches Passwort, Konto speichern, Überführung anlegen/ändern/löschen, Bausteine, und dass Konto B die Daten von Konto A weder in der Liste noch über die direkte Adresse sieht. Testkonten danach gelöscht. Nicht getestet: Registrierung und Passwort-Reset per E-Mail (brauchen die veröffentlichte Adresse).
 - Der Sicherheitshinweis von Supabase zu `public.rls_auto_enable()` betrifft eine von Supabase selbst angelegte Funktion, nicht unseren Code.
-- Steuernummer bzw. Umsatzsteuer-ID ist immer einzutragen, auch ohne Mehrwertsteuer (Rechnung mit Hinweis auf die Kleinunternehmerregelung).
+- **Mein Konto (entschieden am 2026-11-16):** Nach dem ersten Speichern zeigt die Seite nur die gespeicherten Angaben; oben rechts „Bearbeiten" öffnet die Auswahlfelder. Bei „Ich weise keine Mehrwertsteuer aus" ist das Feld für Umsatzsteuer-ID/Steuernummer ausgeblendet, bei beiden Kontoarten; der Hinweis auf die Kleinunternehmerregelung entfällt. (Das ersetzt die Abrede vom Vortag, die Nummer immer abzufragen. Für den Rechnungsbaustein neu klären: Auch Kleinunternehmer müssen in Deutschland eine Steuernummer auf der Rechnung nennen.)
+- **Ablauf für Änderungen:** auf dem Arbeitszweig bauen → Vercel erzeugt automatisch eine Vorschau-Adresse (nur mit Vercel-Anmeldung sichtbar, nutzt dieselbe Datenbank wie live) → Pull Request → der Auftraggeber bestätigt → live. Feinschliff direkt in der echten App; der Prototyp nur noch für ganz neue, unklare Bausteine.
+- **Erstes Werkzeug zum Launchen:** das Angebot. Übrige Bausteine für den Start ausblenden statt „kommt bald" zu zeigen (Vorschlag, noch nicht bestätigt). Vor dem Launch an Fremde: Impressum/Datenschutz, eigener Mail-Absender für Bestätigungs-Mails, eigenes Logo und Firmenname im Angebot, Steuersätze prüfen, Preis und Bezahlung.
 
 ## Offene Punkte
 

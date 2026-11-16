@@ -41,11 +41,11 @@ export function Top() {
   );
 }
 
-export function Nav({ to, label, konto = true }: { to: string; label: string; konto?: boolean }) {
+export function Nav({ to, label, konto = true, right }: { to: string; label: string; konto?: boolean; right?: ReactNode }) {
   return (
     <div className="nav">
       <Link className="back" to={to}><Icon n="left" />{label}</Link>
-      {konto && <Link className="back" to="/konto">Mein Konto</Link>}
+      {right ?? (konto && <Link className="back" to="/konto">Mein Konto</Link>)}
     </div>
   );
 }
