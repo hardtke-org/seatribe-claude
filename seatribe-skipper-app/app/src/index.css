@@ -184,3 +184,9 @@ a.btn.ghost { color: var(--brand-ink); }
 .center { min-height: 40vh; display: grid; place-items: center; color: var(--muted); }
 .linkbtn { background: none; border: 0; padding: 0; color: var(--brand-ink); font-weight: 600; text-decoration: underline; }
 .danger { color: #A1281C; border-color: #E7B7B1 !important; }
+
+.facts { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 16px; }
+.facts > div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.facts > div:first-child { border-top: 0; }
+.facts dt { color: var(--muted); flex: none; max-width: 50%; }
+.facts dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; min-width: 0; }

@@ -17,8 +17,10 @@ export default function Konto() {
   const [sender, setSender] = useState('');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  // Solange das Konto noch nie gespeichert wurde, öffnet es direkt zum Ausfüllen.
+  const [editing, setEditing] = useState<boolean | null>(null);
 
-  useEffect(() => {
+  function fill() {
     if (!profile) return;
     setName(profile.display_name ?? '');
     setCompany(profile.company ?? '');
@@ -28,6 +30,13 @@ export default function Konto() {
     setTaxNumber(profile.tax_number ?? '');
     setMailMode(profile.mail_mode);
     setSender(profile.sender_email ?? '');
+  }
+
+  useEffect(() => {
+    if (!profile) return;
+    fill();
+    setEditing((e) => e ?? profile.created_at === profile.updated_at);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
   async function save(e: FormEvent) {
@@ -48,16 +57,48 @@ export default function Konto() {
     if (error) { setMsg({ ok: false, text: 'Speichern hat nicht geklappt: ' + error.message }); return; }
     await reloadProfile();
     setMsg({ ok: true, text: 'Gespeichert.' });
+    setEditing(false);
+    window.scrollTo(0, 0);
   }
 
-  if (!profile) return (<><Top /><Nav to="/" label="Start" konto={false} /><p className="lead">Lädt …</p></>);
+  function cancel() { fill(); setMsg(null); setEditing(false); window.scrollTo(0, 0); }
+
+  if (!profile || editing == null) return (<><Top /><Nav to="/" label="Start" konto={false} /><p className="lead">Lädt …</p></>);
+
+  if (!editing) {
+    const land = LAENDER.find((l) => l[0] === profile.country)?.[1] ?? profile.country;
+    const rows: [string, string][] = [
+      ['Kontoart', profile.account_type === 'agentur' ? 'Agentur' : 'Skipper'],
+      ['Name', profile.display_name || '–'],
+      ['Firma', profile.company || '–'],
+      ['Sitz', land],
+      ['Mehrwertsteuer', profile.charges_vat ? vatLabel(profile.country) : 'wird nicht ausgewiesen'],
+      ...(profile.charges_vat ? [['Umsatzsteuer-ID oder Steuernummer', profile.tax_number || '–'] as [string, string]] : []),
+      ['E-Mail-Versand', profile.mail_mode === 'postfach' ? `Aus meinem Postfach${profile.sender_email ? ' (' + profile.sender_email + ')' : ''}` : 'Nicht aus der App senden'],
+    ];
+    return (
+      <>
+        <Top />
+        <Nav to="/" label="Start" right={<button className="back" onClick={() => { setMsg(null); setEditing(true); }}>Bearbeiten</button>} />
+        <div className="stack">
+          <h1>Mein Konto</h1>
+          <p className="lead">Angemeldet als {session?.user.email}</p>
+        </div>
+        {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}
+        <dl className="facts">
+          {rows.map(([k, v]) => (<div key={k}><dt>{k}</dt><dd>{v}</dd></div>))}
+        </dl>
+        <button className="btn ghost wide" onClick={() => supabase.auth.signOut()}>Abmelden</button>
+      </>
+    );
+  }
 
   return (
     <>
       <Top />
       <Nav to="/" label="Start" konto={false} />
       <div className="stack">
-        <h1>Mein Konto</h1>
+        <h1>Mein Konto bearbeiten</h1>
         <p className="lead">Angemeldet als {session?.user.email}</p>
       </div>
       <form className="stack" onSubmit={save} noValidate>
@@ -80,9 +121,11 @@ export default function Konto() {
           <small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: {vatLabel(country)}.</small>
         </label>
         <Opt type="checkbox" name="k-keine" value="mwst" checked={noVat} onChange={() => setNoVat(!noVat)} title="Ich weise keine Mehrwertsteuer aus"
-          sub="Zum Beispiel als Kleinunternehmer. Angebote und Rechnungen nennen dann nur Nettobeträge." />
-        <Field id="k-steuer" label="Umsatzsteuer-ID oder Steuernummer" value={taxNumber} onChange={setTaxNumber} placeholder="z. B. DE123456789 oder 22/123/45678" autoComplete="off"
-          hint={noVat ? 'Erscheint auf der Rechnung, zusammen mit dem Hinweis auf die Kleinunternehmerregelung.' : 'Erscheint auf Angebot und Rechnung.'} />
+          sub="Angebote und Rechnungen nennen dann nur Nettobeträge." />
+        {!noVat && (
+          <Field id="k-steuer" label="Umsatzsteuer-ID oder Steuernummer" value={taxNumber} onChange={setTaxNumber} placeholder="z. B. DE123456789 oder 22/123/45678" autoComplete="off"
+            hint="Erscheint auf Angebot und Rechnung." />
+        )}
 
         <span className="label">E-Mail-Versand</span>
         <Opt name="k-mail" value="kopieren" checked={mailMode === 'kopieren'} onChange={() => setMailMode('kopieren')} title="Nicht aus der App senden"
@@ -93,8 +136,8 @@ export default function Konto() {
 
         {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}
         <button className="btn wide" type="submit" disabled={busy}>{busy ? 'Speichert …' : 'Speichern'}</button>
+        {profile.created_at !== profile.updated_at && <button className="btn ghost wide" type="button" onClick={cancel}>Abbrechen</button>}
       </form>
-      <button className="btn ghost wide" onClick={() => supabase.auth.signOut()}>Abmelden</button>
     </>
   );
 }

@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Noch nicht im Netz veröffentlicht. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
+Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
 
 ## Worum es geht
 
@@ -130,6 +130,7 @@ Entschieden am 2026-11-15 (im Prototyp unter „Mein Konto" eingebaut):
 
 Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernommen (kein Tailwind). Befehle im Ordner `app/`: `npm install`, `npm run dev`, `npm run build`.
 
+- **Veröffentlichung:** Vercel-Projekt `seatribe-skipper-app` (Team „hardtke-org's projects", Root Directory `seatribe-skipper-app/app`), Adresse https://seatribe-skipper-app.vercel.app. Vercel baut bei jeder Änderung der Hauptversion (`main`) automatisch neu; Änderungen kommen also erst nach dem Mergen eines Pull Requests live. Neue Vercel-Projekte kann Claude über den Connector nicht anlegen (keine Berechtigung), nur lesen.
 - **Supabase:** Adresse und Publishable Key stehen in `app/.env` (öffentlich, kein Geheimnis). Schema in `supabase/migrations/`; Änderungen immer als neue Migration anwenden und dort ablegen.
 - **Tabellen:** `profiles` (Kontoart, Sitzland, Mehrwertsteuer, Steuernummer, Versand), `boats`, `owners`, `deliveries` (mit `modules` = angehakte Bausteine). Überall gilt: Jeder sieht und ändert nur eigene Zeilen (RLS). Das Profil entsteht automatisch bei der Registrierung.
 - **Anmeldung:** E-Mail + Passwort, Konto anlegen, Passwort zurücksetzen. Bestätigungs- und Reset-Links führen auf die Adresse der App; diese muss in Supabase unter Authentication → URL Configuration als Site URL eingetragen sein, sobald die App veröffentlicht ist.
@@ -137,7 +138,9 @@ Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernomm
 - **Als Nächstes (Schritt 3):** Angebots-Wizard aus dem Prototyp in die App übernehmen, Angebot speichern, PDF mit Briefkopf. Danach Vertrag ohne AGB.
 - **Getestet am 2026-11-15** mit zwei Testkonten im Browser gegen die echte Datenbank: Anmeldung, falsches Passwort, Konto speichern, Überführung anlegen/ändern/löschen, Bausteine, und dass Konto B die Daten von Konto A weder in der Liste noch über die direkte Adresse sieht. Testkonten danach gelöscht. Nicht getestet: Registrierung und Passwort-Reset per E-Mail (brauchen die veröffentlichte Adresse).
 - Der Sicherheitshinweis von Supabase zu `public.rls_auto_enable()` betrifft eine von Supabase selbst angelegte Funktion, nicht unseren Code.
-- Steuernummer bzw. Umsatzsteuer-ID ist immer einzutragen, auch ohne Mehrwertsteuer (Rechnung mit Hinweis auf die Kleinunternehmerregelung).
+- **Mein Konto (entschieden am 2026-11-16):** Nach dem ersten Speichern zeigt die Seite nur die gespeicherten Angaben; oben rechts „Bearbeiten" öffnet die Auswahlfelder. Bei „Ich weise keine Mehrwertsteuer aus" ist das Feld für Umsatzsteuer-ID/Steuernummer ausgeblendet, bei beiden Kontoarten; der Hinweis auf die Kleinunternehmerregelung entfällt. Vom Auftraggeber nach Hinweis ausdrücklich so bestätigt. (Das ersetzt die Abrede vom Vortag, die Nummer immer abzufragen. Für den Rechnungsbaustein neu klären: Auch Kleinunternehmer müssen in Deutschland eine Steuernummer auf der Rechnung nennen.)
+- **Ablauf für Änderungen:** auf dem Arbeitszweig bauen → Vercel erzeugt automatisch eine Vorschau-Adresse (nur mit Vercel-Anmeldung sichtbar, nutzt dieselbe Datenbank wie live) → Pull Request → der Auftraggeber bestätigt → live. Feinschliff direkt in der echten App; der Prototyp nur noch für ganz neue, unklare Bausteine.
+- **Erstes Werkzeug zum Launchen:** das Angebot. Übrige Bausteine für den Start ausblenden statt „kommt bald" zu zeigen (Vorschlag, noch nicht bestätigt). Vor dem Launch an Fremde: Impressum/Datenschutz, eigener Mail-Absender für Bestätigungs-Mails, eigenes Logo und Firmenname im Angebot, Steuersätze prüfen, Preis und Bezahlung.
 
 ## Offene Punkte
 
@@ -178,3 +181,4 @@ Drive-Ordner werden über ihre ID angesprochen, nicht über den Pfad. Verschiebe
 - **Ideen-Eingang:** Der Auftraggeber notiert Ideen im Google Doc. Auf „lies den Ideen-Eingang" die neuen Punkte lesen, hier einarbeiten und im Doc als übernommen markieren.
 - **Echte Kundendaten** (Namen, Adressen, Preise aus Verträgen und Berichten) nicht ins Repository legen. Aus Originalen nur neutrale Vorlagen ableiten.
 - Erst besprechen, dann bauen: größere Schritte vorher abstimmen.
+- **Einwände vor dem Bauen nennen** (Wunsch des Auftraggebers vom 2026-11-16): Jede Anweisung zuerst prüfen, ob sie sinnvoll ist. Wenn etwas dagegen spricht – etwa ein Widerspruch zu einer früheren Entscheidung oder ein rechtlicher bzw. fachlicher Haken –, das zuerst sagen und kurz besprechen. Gebaut wird erst die abgestimmte Fassung. Anlass: Die Steuernummer wurde auf Anweisung ausgeblendet, der Einwand dazu kam erst nach dem Bau.

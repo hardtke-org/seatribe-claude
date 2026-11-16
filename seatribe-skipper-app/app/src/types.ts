@@ -11,6 +11,8 @@ export interface Profile {
   tax_number: string | null;
   mail_mode: MailMode;
   sender_email: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Boat {
