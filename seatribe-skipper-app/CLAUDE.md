@@ -144,7 +144,15 @@ Vite + React + TypeScript + react-router, eigenes CSS aus dem Prototyp übernomm
 
 ## Geschäftliche Einschätzung (Claude, 2026-11-16, auf Wunsch des Auftraggebers)
 
-Schätzung ohne Marktrecherche. Als reines Abo für Überführungsskipper ist der Markt klein; tragfähig wird es als Werkzeug, das das Kerngeschäft stärkt. Hebel in dieser Reihenfolge: (1) Eigennutzung bei Seatribe Deliveries, (2) Academy als Vertriebskanal und die App als Pool geprüfter Skipper für die Agentur, (3) Nachbarmärkte für Übernahme- und Schadensprotokolle (Charterbasen, Eigner, Werften, Gutachter, Segelschulen). Preisidee: pro Überführung statt Monatsabo, weil Skipper nur wenige Überführungen im Jahr fahren; kostenlose Stufe mit Seatribe-Hinweis im Dokument als Werbung. Für Wachstum über DACH hinaus braucht es Englisch. Vorgehen: Angebot fertigstellen, selbst nutzen, 5–10 Pilot-Skipper aus dem Academy-Umfeld, erst dann weitere Bausteine und Preis festlegen. Zu prüfen: Der kostenlose Vercel-Tarif ist laut Vercel nicht für kommerzielle Nutzung gedacht.
+**Wichtig:** Der Engpass von Seatribe Deliveries sind **Aufträge, nicht Skipper** (Klarstellung des Auftraggebers; Claude hatte zuerst das Gegenteil angenommen).
+
+Ergebnis einer kurzen Webrecherche am 2026-11-16:
+- Es gibt keine veröffentlichte Zahl der Überführungsskipper. Anhaltspunkt: Der große britische Anbieter PYD arbeitet laut Fachpresse mit rund 30 Skippern und über 500 Crewmitgliedern und überführt etwa 180–200 Yachten im Jahr; Halcyon nannte 2017 über 150 im Jahr. Der Beruf ist also klein; „einige Hundert bis wenige Tausend in Europa" bleibt Claudes Schätzung.
+- Ein Werkzeug speziell für selbstständige Überführungsskipper (Angebot, Vertrag, Protokolle) wurde nicht gefunden. Das ist eine Lücke, aber auch ein Zeichen für einen kleinen Markt.
+- Für Charter-Check-in/-out gibt es bereits Apps, teils kostenlos für Charterfirmen. Dieser Nachbarmarkt ist besetzt und preislich schwierig.
+- Vercel: Der kostenlose Tarif ist laut Vercel nur für nicht-kommerzielle Nutzung; kommerziell braucht es den Pro-Tarif (laut Drittquellen ca. 20 USD pro Nutzer und Monat, vor dem Wechsel auf der Vercel-Seite prüfen).
+
+Folgerung: Verkauf an Skipper ist ein Nebenverdienst. Der Hauptnutzen muss sein, **mehr Aufträge zu gewinnen**: (1) schnelle, professionelle Angebote erhöhen die Abschlussquote bei bestehenden Anfragen; (2) der Preisbaukasten als öffentlicher Preisrechner „Was kostet meine Überführung?" auf der Website, der Anfragen ins CRM bringt – passt zu Google Ads; (3) Skipper in der App können Anfragen, die sie nicht selbst fahren, an Seatribe weitergeben. Idee (2) und (3) sind Vorschläge, noch nicht besprochen.
 
 ## Offene Punkte
 
