@@ -46,7 +46,7 @@ body {
 }
 #root { max-width: 34rem; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; line-height: 1.15; }
-h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.01em; color: var(--brand-ink); }
+h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
 h2 { font-size: 1.15rem; font-weight: 700; }
 p { margin: 0; }
 button, input, select { font: inherit; color: inherit; }
@@ -60,7 +60,8 @@ button { cursor: pointer; }
 .top .tag { color: var(--deep-soft); font-size: .8rem; }
 .pill { margin-left: auto; font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
   color: var(--warn); background: var(--warn-bg); padding: 4px 9px; border-radius: 99px; white-space: nowrap; }
-.back { align-self: flex-start; background: none; border: 0; padding: 6px 0; color: var(--brand-ink); font-weight: 600;
+.back { align-self: flex-start; background: none; border: 0; padding: 6px 0; color: var(--ink); font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px;
   display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; max-width: 100%; }
 .back svg { width: 18px; height: 18px; flex: none; }
 .nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
@@ -139,7 +140,7 @@ textarea.inp { min-height: 96px; resize: vertical; }
 .hint { background: var(--sunken); border-radius: 11px; padding: 11px 13px; font-size: .88rem; color: var(--muted); }
 
 .btn { background: var(--btn); color: var(--btn-ink); border: 0; border-radius: 12px; padding: 14px 18px; font-weight: 700; min-height: 50px; }
-.btn.ghost { background: transparent; color: var(--brand-ink); border: 1.5px solid var(--line-strong); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--deep); }
 .btn.wide { width: 100%; }
 .steps { display: flex; gap: 5px; }
 .steps i { flex: 1; height: 5px; border-radius: 3px; background: var(--line); }
@@ -174,18 +175,18 @@ textarea.inp { min-height: 96px; resize: vertical; }
 
 /* Ergänzungen der echten App */
 html { -webkit-text-size-adjust: 100%; }
-a { color: var(--brand-ink); }
-a.tile, a.row, a.btn, a.back { text-decoration: none; color: inherit; }
-a.back { color: var(--brand-ink); }
+a { color: var(--ink); }
+a.tile, a.row, a.btn { text-decoration: none; color: inherit; }
+a.back { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 a.btn { display: inline-flex; align-items: center; justify-content: center; color: var(--btn-ink); }
-a.btn.ghost { color: var(--brand-ink); }
+a.btn.ghost { color: var(--ink); }
 .btn[disabled] { opacity: .55; cursor: default; }
 .err { background: #FDE8E6; color: #A1281C; border-radius: 11px; padding: 10px 12px; font-size: .9rem; }
 @media (prefers-color-scheme: dark) { .err { background: #47201C; color: #FFB4AA; } }
 .okmsg { background: var(--ok-bg); color: var(--ok); border-radius: 11px; padding: 10px 12px; font-size: .9rem; }
 .row.soon { opacity: .7; }
 .center { min-height: 40vh; display: grid; place-items: center; color: var(--muted); }
-.linkbtn { background: none; border: 0; padding: 0; color: var(--brand-ink); font-weight: 600; text-decoration: underline; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .danger { color: #A1281C; border-color: #E7B7B1 !important; }
 
 .facts { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 16px; }
@@ -193,3 +194,11 @@ a.btn.ghost { color: var(--brand-ink); }
 .facts > div:first-child { border-top: 0; }
 .facts dt { color: var(--muted); flex: none; max-width: 50%; }
 .facts dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; min-width: 0; }
+
+/* Nachweise und Agentur */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+.row.doc { align-items: flex-start; }
+.row .acts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 8px; }
+.linkbtn.del { color: #A1281C; }
+@media (prefers-color-scheme: dark) { .linkbtn.del { color: #FFB4AA; } }
+input[type="file"].inp { padding: 9px 10px; }

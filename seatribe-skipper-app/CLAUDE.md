@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-15 – Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
+Stand: 2026-11-17 – Rollen (Agentur/Skipper), Skipper-Profil und Nachweise sind gebaut, siehe „Erste Version für Seatribe und seine Skipper". Zuvor, 2026-11-15: Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
 
 ## Worum es geht
 
@@ -193,6 +193,20 @@ Die App wird zuerst für **Seatribe und die Skipper, die für Seatribe fahren,**
 - **Dokumentenordner:** Der Vertrag zwischen Seatribe und Skipper liegt bei beiden im Dokumentenordner. Verträge mit dem Eigner liegen nur bei der Agentur. Verträge entstehen immer aus den PDF-Vorlagen von Seatribe.
 - Vorschläge von Claude dazu, noch nicht bestätigt: (a) den Angebots-Wizard jetzt **nicht** bauen, nur den Platz dafür vorsehen; eigene Überführungen (schon vorhanden) für Skipper vorerst ausblenden; (b) statt Haken eine Bestätigung durch die Agentur („als Seatribe-Skipper bestätigen"), damit nicht jeder, der sich registriert, automatisch zur Auswahl steht.
 - Die Frage, warum aus Anfragen keine Aufträge werden, gehörte nicht in diesen Chat (Klarstellung des Auftraggebers); hier nicht weiterverfolgen, außer er bittet darum.
+
+### Erste Version für Seatribe und seine Skipper (abgestimmt am 2026-11-17)
+
+Entschieden vom Auftraggeber: Angebots-Wizard jetzt nicht bauen; Skipper werden von der Agentur bestätigt (kein Haken); die bezahlte Variante für freie Skipper kann bald danach kommen. Nachweise (Reisepass, Personalausweis, Scheine, Skipper-Haftpflicht) sollen Skipper, Agentur und Eigner sehen können – an den Eigner gehen sie nur über eine Freigabe des Skippers pro Auftrag (noch nicht gebaut, rechtliche Prüfung offen). Verträge mit dem Eigner sollen später auch beim Eigner liegen. Idee: Kopplung an ein „Skipper-Portal" – dafür bräuchte es eine ausdrückliche Zustimmung des Skippers; nur notiert.
+
+Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" mit Hinweistext · (2) Skipper-Profil mit Stammdaten, Nachweisen und Dokumentenordner · (3) Auftrag aus HubSpot über die Auftrags-ID holen und Skipper zuweisen · (4) Vertrag mit Eigner samt AGB und Skippervertrag als PDF, unterschriebene Fassung hochladen · (5) Ansicht des Skippers auf seinen Auftrag ohne Preise. Danach Übernahme/Schaden/Übergabe, Eigner-Link, Rechnungen, freie Skipper.
+
+**Schritt 1 und 2 sind gebaut (2026-11-17):**
+- Datenbank (Migration `20261117_roles_skipper_profile_documents.sql`, angewendet): `profiles.role` (`skipper`/`agentur`) und `profiles.seatribe_status` (`neu`/`bestaetigt`/`abgelehnt`) kann niemand an sich selbst ändern; die Agentur setzt den Status über die Funktion `set_skipper_status`. Neue Profilfelder: Anschrift, Telefon, Geburtsdatum, Nationalität, höchster Schein, Scheinnummer, Notfallkontakt, E-Mail. Tabelle `skipper_documents` und privater Speicher `skipper-docs` (10 MB, PDF und Fotos): Jeder Skipper sieht nur den eigenen Ordner, die Agentur darf alles lesen, aber nichts ändern oder löschen.
+- Die Agentur-Rolle wird von Hand in der Datenbank gesetzt; das Konto des Auftraggebers ist als Agentur freigeschaltet.
+- Seiten: Start je Rolle (Skipper: Meine Aufträge, Meine Dokumente, Mein Konto, Agentur; Agentur: Skipper, Überführungen, Überführung anlegen, Mein Konto), `/dokumente` (Nachweise hochladen, ansehen, löschen; Platz für Verträge), `/auftraege` (noch leer), `/agentur` (Skipper: Hinweistext; Agentur: Skipper-Liste), `/agentur/skipper/:id` (Angaben, Nachweise, bestätigen / nicht freigeben / zurücknehmen). Eigene Überführungen sind für Skipper ausgeblendet. „Mein Konto" fragt keine Kontoart und keinen E-Mail-Versand mehr ab (Spalten bleiben in der Datenbank).
+- Schrift überall `#0f2534`; Links sind unterstrichen; Nebenknöpfe haben einen dunkelblauen Rand. Damit ist der Nachtrag zur Farbverteilung umgesetzt.
+- Getestet im Browser gegen die echte Datenbank mit zwei Skipper- und einem Agentur-Testkonto: Skipper kann Rolle und Status nicht ändern und die Bestätigungs-Funktion nicht aufrufen, sieht nur das eigene Profil; ein zweiter Skipper kommt weder an Einträge noch an Dateien des ersten; Agentur sieht Liste, Angaben und Dateien, kann bestätigen und zurücknehmen, aber nichts löschen oder ändern.
+- Für Schritt 3 nötig: ein HubSpot-Zugang (privater App-Schlüssel, nur Lesen von Deals und Kontakten), der als Geheimnis in Supabase liegt – nie im Chat oder Repository.
 
 ## Offene Punkte
 
