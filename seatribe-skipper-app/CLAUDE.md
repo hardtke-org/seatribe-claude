@@ -222,6 +222,13 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - HubSpot führt Vor- und Nachname getrennt; beim Abruf zu einem Namen zusammenführen.
 - Ideen, noch nichts bauen: (a) beim Skipper in der Agentur-Ansicht seine Überführungen zeigen, mit „aktiv" und „abgeschlossen"; (b) **Login für Crew** mit eigener Ansicht: Crewvereinbarung, eigene Nachweise (Scheine, Ausweis, Haftpflicht), Meilenbestätigung, evtl. Meilenbuch – als Hebel für Verbreitung, Preisidee 4,99 pro Nutzer; beim Konto-Anlegen Wahl Skipper oder Crew (Agentur bleibt von Hand freigeschaltet – Hinweis von Claude); (c) **Unterschrift in der App**. Einschätzung von Claude dazu, keine Rechtsberatung: Diese Verträge brauchen keine besondere Form, eine einfache elektronische Unterschrift ist wirksam, aber im Streit schwächer zu beweisen. Vorschlag: für Skipper und Crew (haben ein Konto) Unterschrift in der App mit Protokoll (wer, wann, unveränderte Fassung des PDFs); für den Eigner später ein Signaturdienst oder der Eigner-Link. Vor dem Bau mit dem Anwalt klären, zusammen mit den AGB.
 
+**Crew und Rollen – Richtung des Auftraggebers vom 2026-11-17 (Idee, noch nichts bauen):**
+- Der Status einer Überführung (aktiv, abgeschlossen) kommt aus der HubSpot-Stufe.
+- Beim Konto-Anlegen nur Skipper oder Crew; man kann auch beides sein. Die Agentur wird nicht gewählt, sondern bekommt einen besonderen Einladungslink.
+- Der Skipper hat eine eigene Crew-Liste („aktive Crew") und fügt daraus Leute einer Überführung hinzu. Deren Daten und Nachweise (Ausweis usw.) sind einmal hinterlegt und müssen nicht neu hochgeladen werden.
+- Könnte später auch für Charter interessant sein (Crewlisten), als lohnenderes Geschäft.
+- Vorschläge von Claude dazu, noch nicht bestätigt: (a) kein fester Entweder-oder-Typ, sondern ein Personen-Konto; ob jemand Skipper oder Crew ist, ergibt sich je Überführung aus der Zuweisung; (b) Crew wird per E-Mail eingeladen und muss die Verbindung zum Skipper annehmen; ihre Nachweise sieht ein Skipper oder die Agentur nur für die Überführung, für die die Crew sie freigibt (heikle Daten, gleiche Regel wie bei den Skipper-Nachweisen gegenüber dem Eigner); (c) bei Seatribe-Aufträgen schlägt der Skipper die Crew vor, die Agentur sieht sie, weil die Crewvereinbarung zwischen Seatribe und dem Crewmitglied geschlossen wird; (d) Crew kostenlos, Skipper zahlen; (e) Reihenfolge: nach den Verträgen (Schritt 4), zusammen mit Crewvereinbarung, Crewliste und Meilenbestätigung.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
