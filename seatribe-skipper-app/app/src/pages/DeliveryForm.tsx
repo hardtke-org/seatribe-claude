@@ -9,7 +9,7 @@ import { Field, Nav, Top } from '../ui';
 const EMPTY = {
   from: '', to: '', start: '',
   type: '', name: '', year: '', flag: '', length: '', beam: '', draft: '', mmsi: '', callsign: '',
-  owner: '', email: '',
+  owner: '', email: '', phone: '',
 };
 type Form = typeof EMPTY;
 
@@ -19,7 +19,7 @@ function fromDelivery(d: Delivery): Form {
     type: d.boat?.type ?? '', name: d.boat?.name ?? '', year: d.boat?.year_built ? String(d.boat.year_built) : '', flag: d.boat?.flag ?? '',
     length: komma(d.boat?.length_m ?? null), beam: komma(d.boat?.beam_m ?? null), draft: komma(d.boat?.draft_m ?? null),
     mmsi: d.boat?.mmsi ?? '', callsign: d.boat?.callsign ?? '',
-    owner: d.owner?.name ?? '', email: d.owner?.email ?? '',
+    owner: d.owner?.name ?? '', email: d.owner?.email ?? '', phone: d.owner?.phone ?? '',
   };
 }
 
@@ -53,7 +53,7 @@ export default function DeliveryForm() {
     if (f.mmsi.trim() && !/^\d{9}$/.test(f.mmsi.trim())) { setError('Die MMSI hat genau neun Ziffern.'); return; }
 
     const boat = { type: t(f.type), name: t(f.name), year_built: year, flag: t(f.flag), length_m: zahl(f.length), beam_m: zahl(f.beam), draft_m: zahl(f.draft), mmsi: t(f.mmsi), callsign: t(f.callsign) };
-    const owner = { name: t(f.owner), email: t(f.email) };
+    const owner = { name: t(f.owner), email: t(f.email), phone: t(f.phone) };
     const hasBoat = Object.values(boat).some((v) => v != null);
     const hasOwner = Object.values(owner).some((v) => v != null);
 
@@ -124,6 +124,7 @@ export default function DeliveryForm() {
 
         <span className="label">Eigner</span>
         <Field id="d-eigner" label="Name" value={f.owner} onChange={set('owner')} />
+        <Field id="d-eigner-tel" label="Telefon" type="tel" value={f.phone} onChange={set('phone')} hint="Sieht auch der Skipper, dem du die Überführung zuweist." />
         <Field id="d-mail" label="E-Mail" type="email" inputMode="email" value={f.email} onChange={set('email')} />
 
         {error && <p className="err" role="alert">{error}</p>}

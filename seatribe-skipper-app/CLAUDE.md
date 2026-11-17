@@ -208,6 +208,15 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Getestet im Browser gegen die echte Datenbank mit zwei Skipper- und einem Agentur-Testkonto: Skipper kann Rolle und Status nicht ändern und die Bestätigungs-Funktion nicht aufrufen, sieht nur das eigene Profil; ein zweiter Skipper kommt weder an Einträge noch an Dateien des ersten; Agentur sieht Liste, Angaben und Dateien, kann bestätigen und zurücknehmen, aber nichts löschen oder ändern.
 - Für Schritt 3 nötig: ein HubSpot-Zugang (privater App-Schlüssel, nur Lesen von Deals und Kontakten), der als Geheimnis in Supabase liegt – nie im Chat oder Repository.
 
+**Schritt 3a ist gebaut (2026-11-17): Skipper zuweisen, noch ohne HubSpot.**
+- Migration `20261118_assign_skipper.sql` (angewendet): `deliveries.assigned_skipper_id` und `assigned_at`. Ein Trigger lässt die Zuweisung nur zu, wenn die Überführung einer Agentur gehört und der Skipper bestätigt ist.
+- Der Skipper liest seine Aufträge nur über die Funktion `my_assignments()`. Sie gibt Route, Termin, Bootsdaten, Name der Agentur und vom Eigner **Name, Telefon, E-Mail** heraus (so entschieden am 2026-11-17: Der Skipper braucht den Kontakt; die Anschrift bekommt er nicht). Auf die Tabellen selbst hat er keinen Zugriff. Verliert er die Bestätigung, sieht er die Aufträge nicht mehr. Preise müssen später in einer eigenen Tabelle liegen und dürfen nie in diese Funktion.
+- Seiten: Auswahlfeld „Skipper" auf der Überführungs-Seite der Agentur; `/auftraege` und `/auftraege/:id` für den Skipper mit dem Kennzeichen „Auftrag von Seatribe Deliveries"; Telefonfeld für den Eigner im Formular.
+- Getestet mit Agentur- und zwei Skipper-Testkonten: zuweisen, aufheben, Ansicht des Skippers; ein anderer Skipper sieht nichts; ein Skipper kann sich nicht selbst zuweisen; ein unbestätigter Skipper lässt sich nicht zuweisen.
+- Der Auftraggeber erwähnte am 2026-11-17, Skipper könnten auch eigene Aufträge anlegen. Das bleibt wie abgestimmt vorerst ausgeblendet (später bezahlte Variante); das Kennzeichen „Auftrag von …" unterscheidet dann Seatribe-Aufträge von eigenen.
+- HubSpot-Schlüssel: Es gibt in HubSpot bereits eine private App (dort jetzt „Veraltete Apps"). Claudes Connector kann deren Schlüssel nicht auslesen; der Auftraggeber muss ihn am Rechner kopieren und in Supabase als Secret `HUBSPOT_TOKEN` ablegen. Empfehlung: eigene App nur mit Leserechten für Deals und Kontakte.
+- Drei Testkonten (`testlauf-a/b/c@example.com`, alle Rolle Skipper) liegen noch in der Datenbank; löschen, sobald der Auftraggeber die Rückfrage von Supabase am Rechner bestätigen kann.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
