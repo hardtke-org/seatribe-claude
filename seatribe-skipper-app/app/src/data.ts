@@ -1,3 +1,5 @@
+import type { DocKind } from './types';
+
 // Steuersätze nach Sitzland. Stand der Werte vor dem Verkauf prüfen.
 export const LAENDER: [code: string, name: string, vat: number][] = [
   ['DE', 'Deutschland', 19], ['AT', 'Österreich', 20], ['CH', 'Schweiz', 8.1], ['NL', 'Niederlande', 21],
@@ -45,4 +47,25 @@ export function zahl(s: string): number | null {
 
 export function komma(n: number | null): string {
   return n == null ? '' : String(n).replace('.', ',');
+}
+
+
+/** Nachweise, die ein Skipper hinterlegt. Reihenfolge = Anzeige. */
+export const DOC_KINDS: { k: DocKind; t: string; hint: string }[] = [
+  { k: 'segelschein', t: 'Höchster Segelschein', hint: 'z. B. SSS, SHS, Yachtmaster' },
+  { k: 'funkschein', t: 'Funkschein', hint: 'SRC oder LRC' },
+  { k: 'pyroschein', t: 'Pyro-Schein', hint: 'Fachkundenachweis für Seenotsignalmittel' },
+  { k: 'haftpflicht', t: 'Skipper-Haftpflicht', hint: 'Nachweis der gewerblichen Versicherung' },
+  { k: 'reisepass', t: 'Reisepass', hint: 'Datenseite' },
+  { k: 'personalausweis', t: 'Personalausweis', hint: 'Vorder- und Rückseite' },
+  { k: 'sonstiges', t: 'Sonstiges', hint: 'Weitere Nachweise' },
+];
+
+export function docLabel(k: string): string {
+  return DOC_KINDS.find((d) => d.k === k)?.t ?? k;
+}
+
+export function groesse(bytes: number | null): string {
+  if (!bytes) return '';
+  return bytes < 1024 * 1024 ? Math.max(1, Math.round(bytes / 1024)) + ' KB' : (bytes / 1024 / 1024).toFixed(1).replace('.', ',') + ' MB';
 }

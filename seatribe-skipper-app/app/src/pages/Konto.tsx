@@ -1,20 +1,18 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { supabase } from '../supabase';
 import { useAuth } from '../auth';
-import { LAENDER, vatLabel } from '../data';
-import type { AccountType, MailMode } from '../types';
+import { LAENDER, datum, vatLabel } from '../data';
 import { Field, Nav, Opt, Top } from '../ui';
+
+const EMPTY = {
+  name: '', company: '', street: '', postal: '', city: '', phone: '', nationality: '', birth: '',
+  licence: '', licenceNo: '', emergency: '', country: 'DE', noVat: false, tax: '',
+};
+type Form = typeof EMPTY;
 
 export default function Konto() {
   const { session, profile, reloadProfile } = useAuth();
-  const [name, setName] = useState('');
-  const [company, setCompany] = useState('');
-  const [type, setType] = useState<AccountType>('skipper');
-  const [country, setCountry] = useState('DE');
-  const [noVat, setNoVat] = useState(false);
-  const [taxNumber, setTaxNumber] = useState('');
-  const [mailMode, setMailMode] = useState<MailMode>('kopieren');
-  const [sender, setSender] = useState('');
+  const [f, setF] = useState<Form>(EMPTY);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   // Solange das Konto noch nie gespeichert wurde, öffnet es direkt zum Ausfüllen.
@@ -22,14 +20,12 @@ export default function Konto() {
 
   function fill() {
     if (!profile) return;
-    setName(profile.display_name ?? '');
-    setCompany(profile.company ?? '');
-    setType(profile.account_type);
-    setCountry(profile.country);
-    setNoVat(!profile.charges_vat);
-    setTaxNumber(profile.tax_number ?? '');
-    setMailMode(profile.mail_mode);
-    setSender(profile.sender_email ?? '');
+    setF({
+      name: profile.display_name ?? '', company: profile.company ?? '', street: profile.street ?? '', postal: profile.postal_code ?? '',
+      city: profile.city ?? '', phone: profile.phone ?? '', nationality: profile.nationality ?? '', birth: profile.birth_date ?? '',
+      licence: profile.highest_licence ?? '', licenceNo: profile.licence_number ?? '', emergency: profile.emergency_contact ?? '',
+      country: profile.country, noVat: !profile.charges_vat, tax: profile.tax_number ?? '',
+    });
   }
 
   useEffect(() => {
@@ -39,19 +35,18 @@ export default function Konto() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
 
+  const set = <K extends keyof Form>(k: K) => (v: Form[K]) => setF((p) => ({ ...p, [k]: v }));
+  const t = (s: string) => s.trim() || null;
+
   async function save(e: FormEvent) {
     e.preventDefault();
     if (!session) return;
     setBusy(true); setMsg(null);
     const { error } = await supabase.from('profiles').update({
-      display_name: name.trim() || null,
-      company: company.trim() || null,
-      account_type: type,
-      country,
-      charges_vat: !noVat,
-      tax_number: taxNumber.trim() || null,
-      mail_mode: mailMode,
-      sender_email: sender.trim() || null,
+      display_name: t(f.name), company: t(f.company), street: t(f.street), postal_code: t(f.postal), city: t(f.city),
+      phone: t(f.phone), nationality: t(f.nationality), birth_date: f.birth || null,
+      highest_licence: t(f.licence), licence_number: t(f.licenceNo), emergency_contact: t(f.emergency),
+      country: f.country, charges_vat: !f.noVat, tax_number: t(f.tax),
     }).eq('id', session.user.id);
     setBusy(false);
     if (error) { setMsg({ ok: false, text: 'Speichern hat nicht geklappt: ' + error.message }); return; }
@@ -64,17 +59,27 @@ export default function Konto() {
   function cancel() { fill(); setMsg(null); setEditing(false); window.scrollTo(0, 0); }
 
   if (!profile || editing == null) return (<><Top /><Nav to="/" label="Start" konto={false} /><p className="lead">Lädt …</p></>);
+  const agency = profile.role === 'agentur';
 
   if (!editing) {
     const land = LAENDER.find((l) => l[0] === profile.country)?.[1] ?? profile.country;
+    const adresse = [profile.street, [profile.postal_code, profile.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
     const rows: [string, string][] = [
-      ['Kontoart', profile.account_type === 'agentur' ? 'Agentur' : 'Skipper'],
+      ['Rolle', agency ? 'Agentur' : 'Skipper'],
       ['Name', profile.display_name || '–'],
       ['Firma', profile.company || '–'],
+      ['Anschrift', adresse || '–'],
+      ['Telefon', profile.phone || '–'],
+      ...(agency ? [] : [
+        ['Geburtsdatum', datum(profile.birth_date) || '–'],
+        ['Nationalität', profile.nationality || '–'],
+        ['Höchster Schein', profile.highest_licence || '–'],
+        ['Scheinnummer', profile.licence_number || '–'],
+        ['Notfallkontakt', profile.emergency_contact || '–'],
+      ] as [string, string][]),
       ['Sitz', land],
       ['Mehrwertsteuer', profile.charges_vat ? vatLabel(profile.country) : 'wird nicht ausgewiesen'],
       ...(profile.charges_vat ? [['Umsatzsteuer-ID oder Steuernummer', profile.tax_number || '–'] as [string, string]] : []),
-      ['E-Mail-Versand', profile.mail_mode === 'postfach' ? `Aus meinem Postfach${profile.sender_email ? ' (' + profile.sender_email + ')' : ''}` : 'Nicht aus der App senden'],
     ];
     return (
       <>
@@ -99,40 +104,46 @@ export default function Konto() {
       <Nav to="/" label="Start" konto={false} />
       <div className="stack">
         <h1>Mein Konto bearbeiten</h1>
-        <p className="lead">Angemeldet als {session?.user.email}</p>
+        <p className="lead">Diese Angaben stehen später in Verträgen, Vollmacht und Crewliste. Du trägst sie nur einmal ein.</p>
       </div>
       <form className="stack" onSubmit={save} noValidate>
-        <span className="label">Kontoart</span>
-        <Opt name="k-art" value="skipper" checked={type === 'skipper'} onChange={() => setType('skipper')} title="Skipper"
-          sub="Du fährst selbst. Angebote ohne Administrationspauschale, sie lässt sich pro Angebot zuschalten." />
-        <Opt name="k-art" value="agentur" checked={type === 'agentur'} onChange={() => setType('agentur')} title="Agentur"
-          sub="Du vermittelst und koordinierst Skipper und Crew. Die Administrationspauschale ist voreingestellt." />
+        <span className="label">Person</span>
+        <Field id="k-name" label="Vor- und Nachname" value={f.name} onChange={set('name')} autoComplete="name" />
+        <Field id="k-firma" label={agency ? 'Firma' : 'Firma (falls vorhanden)'} value={f.company} onChange={set('company')} autoComplete="organization" />
+        <Field id="k-strasse" label="Straße und Hausnummer" value={f.street} onChange={set('street')} autoComplete="street-address" />
+        <div className="two">
+          <Field id="k-plz" label="PLZ" value={f.postal} onChange={set('postal')} autoComplete="postal-code" />
+          <Field id="k-ort" label="Ort" value={f.city} onChange={set('city')} autoComplete="address-level2" />
+        </div>
+        <Field id="k-telefon" label="Telefon" type="tel" value={f.phone} onChange={set('phone')} autoComplete="tel" />
 
-        <span className="label">Name</span>
-        <Field id="k-name" label="Dein Name" value={name} onChange={setName} autoComplete="name" />
-        <Field id="k-firma" label={type === 'agentur' ? 'Firma' : 'Firma (falls vorhanden)'} value={company} onChange={setCompany} autoComplete="organization" />
+        {!agency && (
+          <>
+            <div className="two">
+              <Field id="k-geburt" label="Geburtsdatum" type="date" value={f.birth} onChange={set('birth')} />
+              <Field id="k-nation" label="Nationalität" value={f.nationality} onChange={set('nationality')} />
+            </div>
+            <span className="label">Befähigung</span>
+            <Field id="k-schein" label="Höchster Segelschein" value={f.licence} onChange={set('licence')} placeholder="z. B. SSS, Yachtmaster Offshore" />
+            <Field id="k-scheinnr" label="Scheinnummer" value={f.licenceNo} onChange={set('licenceNo')} autoComplete="off" />
+            <span className="label">Notfall</span>
+            <Field id="k-notfall" label="Notfallkontakt" value={f.emergency} onChange={set('emergency')} placeholder="Name und Telefon" />
+          </>
+        )}
 
         <span className="label">Sitz und Mehrwertsteuer</span>
         <label className="field" htmlFor="k-land">
           <span>Land, in dem du oder deine Firma sitzt</span>
-          <select className="inp" id="k-land" value={country} onChange={(e) => setCountry(e.target.value)}>
+          <select className="inp" id="k-land" value={f.country} onChange={(e) => set('country')(e.target.value)}>
             {LAENDER.map((l) => <option key={l[0]} value={l[0]}>{l[1]}</option>)}
           </select>
-          <small>Daraus ergibt sich der Mehrwertsteuersatz für deine Angebote: {vatLabel(country)}.</small>
+          <small>Mehrwertsteuersatz für deine Rechnungen: {vatLabel(f.country)}.</small>
         </label>
-        <Opt type="checkbox" name="k-keine" value="mwst" checked={noVat} onChange={() => setNoVat(!noVat)} title="Ich weise keine Mehrwertsteuer aus"
-          sub="Angebote und Rechnungen nennen dann nur Nettobeträge." />
-        {!noVat && (
-          <Field id="k-steuer" label="Umsatzsteuer-ID oder Steuernummer" value={taxNumber} onChange={setTaxNumber} placeholder="z. B. DE123456789 oder 22/123/45678" autoComplete="off"
-            hint="Erscheint auf Angebot und Rechnung." />
+        <Opt type="checkbox" name="k-keine" value="mwst" checked={f.noVat} onChange={() => set('noVat')(!f.noVat)} title="Ich weise keine Mehrwertsteuer aus"
+          sub="Rechnungen nennen dann nur Nettobeträge." />
+        {!f.noVat && (
+          <Field id="k-steuer" label="Umsatzsteuer-ID oder Steuernummer" value={f.tax} onChange={set('tax')} placeholder="z. B. DE123456789 oder 22/123/45678" autoComplete="off" />
         )}
-
-        <span className="label">E-Mail-Versand</span>
-        <Opt name="k-mail" value="kopieren" checked={mailMode === 'kopieren'} onChange={() => setMailMode('kopieren')} title="Nicht aus der App senden"
-          sub="Du kopierst den Text oder speicherst das PDF und verschickst es selbst." />
-        <Opt name="k-mail" value="postfach" checked={mailMode === 'postfach'} onChange={() => setMailMode('postfach')} title="Aus meinem Postfach senden"
-          sub="Kommt in einem späteren Schritt. Du kannst die Absenderadresse schon hinterlegen." />
-        {mailMode === 'postfach' && <Field id="k-absender" label="Absenderadresse" type="email" inputMode="email" value={sender} onChange={setSender} placeholder="name@beispiel.de" />}
 
         {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}
         <button className="btn wide" type="submit" disabled={busy}>{busy ? 'Speichert …' : 'Speichern'}</button>

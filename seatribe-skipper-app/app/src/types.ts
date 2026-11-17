@@ -11,8 +11,34 @@ export interface Profile {
   tax_number: string | null;
   mail_mode: MailMode;
   sender_email: string | null;
+  role: 'skipper' | 'agentur';
+  seatribe_status: 'neu' | 'bestaetigt' | 'abgelehnt';
+  email: string | null;
+  phone: string | null;
+  street: string | null;
+  postal_code: string | null;
+  city: string | null;
+  nationality: string | null;
+  birth_date: string | null;
+  highest_licence: string | null;
+  licence_number: string | null;
+  emergency_contact: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export type DocKind = 'personalausweis' | 'reisepass' | 'segelschein' | 'funkschein' | 'pyroschein' | 'haftpflicht' | 'sonstiges';
+
+export interface SkipperDocument {
+  id: string;
+  user_id: string;
+  kind: DocKind;
+  file_path: string;
+  file_name: string;
+  mime_type: string | null;
+  size_bytes: number | null;
+  valid_until: string | null;
+  created_at: string;
 }
 
 export interface Boat {
