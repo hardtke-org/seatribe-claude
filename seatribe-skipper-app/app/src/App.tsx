@@ -7,7 +7,7 @@ import Konto from './pages/Konto';
 import Liste from './pages/Liste';
 import DeliveryForm from './pages/DeliveryForm';
 import DeliveryPage from './pages/DeliveryPage';
-import Auftraege from './pages/Auftraege';
+import Auftraege, { Auftrag } from './pages/Auftraege';
 import Dokumente from './pages/Dokumente';
 import Agentur from './pages/Agentur';
 import AgenturSkipper from './pages/AgenturSkipper';
@@ -35,6 +35,7 @@ export default function App() {
       ) : (
         <>
           <Route path="/auftraege" element={<Auftraege />} />
+          <Route path="/auftraege/:id" element={<Auftrag />} />
           <Route path="/dokumente" element={<Dokumente />} />
         </>
       )}

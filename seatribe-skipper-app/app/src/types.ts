@@ -68,6 +68,30 @@ export interface Delivery {
   to_port: string;
   planned_start: string | null;
   modules: Record<string, boolean>;
+  assigned_skipper_id: string | null;
   boat: Boat | null;
   owner: Owner | null;
+}
+
+/** Ein Auftrag, wie ihn der zugewiesene Skipper sieht: ohne Preise, ohne Anschrift des Eigners. */
+export interface Assignment {
+  id: string;
+  from_port: string;
+  to_port: string;
+  planned_start: string | null;
+  assigned_at: string | null;
+  agency_name: string | null;
+  boat_name: string | null;
+  boat_type: string | null;
+  year_built: number | null;
+  flag: string | null;
+  callsign: string | null;
+  mmsi: string | null;
+  registration_no: string | null;
+  length_m: number | null;
+  beam_m: number | null;
+  draft_m: number | null;
+  owner_name: string | null;
+  owner_phone: string | null;
+  owner_email: string | null;
 }
