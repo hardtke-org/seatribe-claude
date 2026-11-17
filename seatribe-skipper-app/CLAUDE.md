@@ -176,6 +176,21 @@ Seatribe Deliveries führt Anfragen, Angebote und Aufträge bereits vollständig
 - Technisch soll das klein bleiben.
 - Vorschlag von Claude, noch nicht bestätigt: Der Skipper importiert nicht selbst aus HubSpot, sondern die Agentur gibt den Auftrag per Code oder Link frei; Preise und Eigner-Vertrag liegen in einer eigenen, nur für die Agentur lesbaren Tabelle. Für eigene Verträge zunächst den bestehenden AGB-Text vom 15.09.2026 unverändert verwenden.
 
+### Neuer Zuschnitt (vom Auftraggeber am 2026-11-17 beschrieben; Umfang der ersten Version noch abzustimmen)
+
+Die App wird zuerst für **Seatribe und die Skipper, die für Seatribe fahren,** gebaut. Der Verkauf an freie Skipper wird zurückgestellt.
+
+- **Rollen:** Wer ein Konto anlegt, ist Skipper. Die Agentur-Seite gibt es nur für Seatribe und wird von Hand freigeschaltet. Klickt ein Skipper auf „Agentur", steht dort sinngemäß: „Wenn du eine Agentur bist, melde dich bei Seatribe."
+- **Agentur:** spricht als einziges Konto mit HubSpot. Angebote, Tage und Preise werden weiter dort gepflegt. In der App: Auftrag aus HubSpot holen, Skipper zuweisen, Verträge erzeugen. Die AGB sind im Agentur-Konto hinterlegt und hängen am Vertrag.
+- **Skipper zuweisen:** Jeder Skipper hat ein Profil und setzt einen Haken, dass er für Seatribe fährt. Die Agentur wählt in ihrer Ansicht aus diesen Skippern aus. Das ersetzt den Vorschlag „Teilen per Code".
+- **Skipper-Profil mit Dokumenten:** Personalausweis, Reisepass, Funkschein, höchster Segelschein, Pyro-Schein – einmal hinterlegt, bei jedem Auftrag verfügbar. Die Agentur soll darauf zugreifen können, weil der Eigner die Nachweise oft sehen will.
+- **Seatribe-Skipper** schreiben keine Angebote und keine Verträge mit Eignern; Seatribe schließt den Vertrag mit ihnen. Rechnungen des Skippers an Seatribe könnten später über die App laufen.
+- **Versand:** nicht aus der App, sondern weiter über das eigene Postfach (IONOS). Die App erzeugt das PDF; unterschriebene Fassungen werden wieder hochgeladen.
+- **Später:** freie Skipper mit eigenen Angeboten als bezahlte Variante; ein Link für den Eigner, über den er Unterlagen hochlädt (Mehrwertsteuernachweis, Flaggenzertifikat, Bootsschein) – „Königsklasse", könnte Folgeaufträge fördern.
+- **Damit zurückgestellt:** Angebots-Wizard in der echten App, Kontoart-Wahl im Konto, Zielkunde „einzelne Skipper zuerst".
+- **Hinweis von Claude, zu klären:** Ausweis- und Passkopien sind besonders heikle Daten. Nach deutschem Recht darf eine Ausweiskopie nach Claudes Kenntnis nur der Inhaber selbst an Dritte weitergeben. Vorschlag: Der Skipper gibt seine Nachweise pro Auftrag selbst für den Eigner frei; Ablage in geschütztem Speicher, Zugriff nur für ihn und die Agentur. Vor dem Bau rechtlich bestätigen lassen.
+- Kernfrage des Auftraggebers außerhalb der App: Warum werden aus Anfragen keine Aufträge?
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
