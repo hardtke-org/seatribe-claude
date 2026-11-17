@@ -3,13 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { getDelivery } from '../deliveries';
 import { defaultModules, komma, zahl } from '../data';
-import type { Delivery } from '../types';
+import type { Delivery, Profile } from '../types';
 import { Field, Nav, Top } from '../ui';
 
 const EMPTY = {
   from: '', to: '', start: '',
   type: '', name: '', year: '', flag: '', length: '', beam: '', draft: '', mmsi: '', callsign: '',
-  owner: '', email: '', phone: '',
+  owner: '', email: '', phone: '', skipper: '',
 };
 type Form = typeof EMPTY;
 
@@ -19,7 +19,7 @@ function fromDelivery(d: Delivery): Form {
     type: d.boat?.type ?? '', name: d.boat?.name ?? '', year: d.boat?.year_built ? String(d.boat.year_built) : '', flag: d.boat?.flag ?? '',
     length: komma(d.boat?.length_m ?? null), beam: komma(d.boat?.beam_m ?? null), draft: komma(d.boat?.draft_m ?? null),
     mmsi: d.boat?.mmsi ?? '', callsign: d.boat?.callsign ?? '',
-    owner: d.owner?.name ?? '', email: d.owner?.email ?? '', phone: d.owner?.phone ?? '',
+    owner: d.owner?.name ?? '', email: d.owner?.email ?? '', phone: d.owner?.phone ?? '', skipper: d.assigned_skipper_id ?? '',
   };
 }
 
@@ -28,6 +28,11 @@ const t = (s: string) => s.trim() || null;
 export default function DeliveryForm() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [skippers, setSkippers] = useState<Pick<Profile, 'id' | 'display_name' | 'email'>[]>([]);
+  useEffect(() => {
+    supabase.from('profiles').select('id, display_name, email').eq('role', 'skipper').eq('seatribe_status', 'bestaetigt').order('display_name')
+      .then(({ data }) => setSkippers(data ?? []));
+  }, []);
   const [f, setF] = useState<Form>(EMPTY);
   const [existing, setExisting] = useState<Delivery | null>(null);
   const [loading, setLoading] = useState(!!id);
@@ -67,7 +72,7 @@ export default function DeliveryForm() {
       if (ownerId) { const r = await supabase.from('owners').update(owner).eq('id', ownerId); if (r.error) throw r.error; }
       else if (hasOwner) { const r = await supabase.from('owners').insert(owner).select('id').single(); if (r.error) throw r.error; ownerId = r.data.id; }
 
-      const delivery = { from_port: f.from.trim(), to_port: f.to.trim(), planned_start: f.start || null, boat_id: boatId, owner_id: ownerId };
+      const delivery = { from_port: f.from.trim(), to_port: f.to.trim(), planned_start: f.start || null, boat_id: boatId, owner_id: ownerId, assigned_skipper_id: f.skipper || null };
       if (existing) {
         const r = await supabase.from('deliveries').update(delivery).eq('id', existing.id);
         if (r.error) throw r.error;
@@ -126,6 +131,17 @@ export default function DeliveryForm() {
         <Field id="d-eigner" label="Name" value={f.owner} onChange={set('owner')} />
         <Field id="d-eigner-tel" label="Telefon" type="tel" value={f.phone} onChange={set('phone')} hint="Sieht auch der Skipper, dem du die Überführung zuweist." />
         <Field id="d-mail" label="E-Mail" type="email" inputMode="email" value={f.email} onChange={set('email')} />
+
+        <span className="label">Skipper</span>
+        <label className="field" htmlFor="d-skipper">
+          <span>Wer fährt die Überführung?</span>
+          <select className="inp" id="d-skipper" value={f.skipper} onChange={(e) => set('skipper')(e.target.value)}>
+            <option value="">Noch niemand zugewiesen</option>
+            {f.skipper && !skippers.some((s) => s.id === f.skipper) && <option value={f.skipper}>Zugewiesener Skipper (nicht mehr bestätigt)</option>}
+            {skippers.map((s) => <option key={s.id} value={s.id}>{s.display_name || s.email}</option>)}
+          </select>
+          <small>{skippers.length === 0 ? 'Noch kein Skipper bestätigt. Bestätigen kannst du unter „Skipper".' : 'Zur Auswahl stehen alle bestätigten Skipper. Er sieht Route, Termin, Boot und den Kontakt zum Eigner – keine Preise.'}</small>
+        </label>
 
         {error && <p className="err" role="alert">{error}</p>}
         <button className="btn wide" type="submit" disabled={busy}>{busy ? 'Speichert …' : id ? 'Speichern' : 'Überführung anlegen'}</button>

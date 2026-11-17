@@ -217,6 +217,11 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - HubSpot-Schlüssel: Es gibt in HubSpot bereits eine private App (dort jetzt „Veraltete Apps"). Claudes Connector kann deren Schlüssel nicht auslesen; der Auftraggeber muss ihn am Rechner kopieren und in Supabase als Secret `HUBSPOT_TOKEN` ablegen. Empfehlung: eigene App nur mit Leserechten für Deals und Kontakte.
 - Drei Testkonten (`testlauf-a/b/c@example.com`, alle Rolle Skipper) liegen noch in der Datenbank; löschen, sobald der Auftraggeber die Rückfrage von Supabase am Rechner bestätigen kann.
 
+**Nachtrag 2026-11-17 (Rückmeldung des Auftraggebers nach dem ersten Ausprobieren):**
+- Die Skipper-Auswahl steht jetzt im Bearbeiten-Formular ganz unten (nach dem Eigner), damit sie nicht versehentlich verstellt wird; die Überführungs-Seite zeigt den Skipper nur noch an.
+- HubSpot führt Vor- und Nachname getrennt; beim Abruf zu einem Namen zusammenführen.
+- Ideen, noch nichts bauen: (a) beim Skipper in der Agentur-Ansicht seine Überführungen zeigen, mit „aktiv" und „abgeschlossen"; (b) **Login für Crew** mit eigener Ansicht: Crewvereinbarung, eigene Nachweise (Scheine, Ausweis, Haftpflicht), Meilenbestätigung, evtl. Meilenbuch – als Hebel für Verbreitung, Preisidee 4,99 pro Nutzer; beim Konto-Anlegen Wahl Skipper oder Crew (Agentur bleibt von Hand freigeschaltet – Hinweis von Claude); (c) **Unterschrift in der App**. Einschätzung von Claude dazu, keine Rechtsberatung: Diese Verträge brauchen keine besondere Form, eine einfache elektronische Unterschrift ist wirksam, aber im Streit schwächer zu beweisen. Vorschlag: für Skipper und Crew (haben ein Konto) Unterschrift in der App mit Protokoll (wer, wann, unveränderte Fassung des PDFs); für den Eigner später ein Signaturdienst oder der Eigner-Link. Vor dem Bau mit dem Anwalt klären, zusammen mit den AGB.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.

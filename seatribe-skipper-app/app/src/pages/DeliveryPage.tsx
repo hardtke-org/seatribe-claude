@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { getDelivery } from '../deliveries';
 import { BAUSTEINE, datum, komma } from '../data';
-import type { Delivery, Profile } from '../types';
+import type { Delivery } from '../types';
 import { Icon, Nav, Top } from '../ui';
 
 export default function DeliveryPage() {
@@ -14,23 +14,13 @@ export default function DeliveryPage() {
   const [choosing, setChoosing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState('');
-  const [skippers, setSkippers] = useState<Pick<Profile, 'id' | 'display_name' | 'email'>[]>([]);
-  const [assignMsg, setAssignMsg] = useState('');
-
+  const [skipper, setSkipper] = useState<string | null>(null);
+  const skipperId = d?.assigned_skipper_id ?? null;
   useEffect(() => {
-    supabase.from('profiles').select('id, display_name, email').eq('role', 'skipper').eq('seatribe_status', 'bestaetigt').order('display_name')
-      .then(({ data }) => setSkippers(data ?? []));
-  }, []);
-
-  async function assign(skipperId: string) {
-    if (!d) return;
-    setAssignMsg(''); setError('');
-    const assigned_skipper_id = skipperId || null;
-    const { error } = await supabase.from('deliveries').update({ assigned_skipper_id }).eq('id', d.id);
-    if (error) { setError('Die Zuweisung hat nicht geklappt: ' + error.message); return; }
-    setD({ ...d, assigned_skipper_id });
-    setAssignMsg(assigned_skipper_id ? 'Zugewiesen. Der Skipper sieht die Überführung jetzt unter „Meine Aufträge".' : 'Zuweisung aufgehoben.');
-  }
+    if (!skipperId) { setSkipper(null); return; }
+    supabase.from('profiles').select('display_name, email').eq('id', skipperId).maybeSingle()
+      .then(({ data }) => setSkipper(data?.display_name || data?.email || 'zugewiesen'));
+  }, [skipperId]);
 
   useEffect(() => {
     if (!id) return;
@@ -91,18 +81,9 @@ export default function DeliveryPage() {
 
       {error && <p className="err" role="alert">{error}</p>}
 
-      <div className="stack card">
-        <label className="field" htmlFor="u-skipper">
-          <span>Skipper</span>
-          <select className="inp" id="u-skipper" value={d.assigned_skipper_id ?? ''} onChange={(e) => assign(e.target.value)}>
-            <option value="">Noch niemand zugewiesen</option>
-            {d.assigned_skipper_id && !skippers.some((s) => s.id === d.assigned_skipper_id) && <option value={d.assigned_skipper_id}>Zugewiesener Skipper (nicht mehr bestätigt)</option>}
-            {skippers.map((s) => <option key={s.id} value={s.id}>{s.display_name || s.email}</option>)}
-          </select>
-          <small>{skippers.length === 0 ? 'Noch kein Skipper bestätigt. Bestätigen kannst du unter „Skipper".' : 'Zur Auswahl stehen alle bestätigten Skipper. Er sieht Route, Termin, Boot und den Kontakt zum Eigner – keine Preise.'}</small>
-        </label>
-        {assignMsg && <p className="okmsg" role="status">{assignMsg}</p>}
-      </div>
+      <dl className="facts">
+        <div><dt>Skipper</dt><dd>{skipperId ? (skipper ?? '…') : 'noch niemand zugewiesen'}</dd></div>
+      </dl>
 
       {BAUSTEINE.filter((x) => d.modules[x.k]).map((x) => {
         const head = x.phase !== phase ? <span className="label" key={'p-' + x.phase}>{x.phase}</span> : null;
