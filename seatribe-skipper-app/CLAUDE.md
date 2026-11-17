@@ -229,6 +229,13 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Könnte später auch für Charter interessant sein (Crewlisten), als lohnenderes Geschäft.
 - Vorschläge von Claude dazu, noch nicht bestätigt: (a) kein fester Entweder-oder-Typ, sondern ein Personen-Konto; ob jemand Skipper oder Crew ist, ergibt sich je Überführung aus der Zuweisung; (b) Crew wird per E-Mail eingeladen und muss die Verbindung zum Skipper annehmen; ihre Nachweise sieht ein Skipper oder die Agentur nur für die Überführung, für die die Crew sie freigibt (heikle Daten, gleiche Regel wie bei den Skipper-Nachweisen gegenüber dem Eigner); (c) bei Seatribe-Aufträgen schlägt der Skipper die Crew vor, die Agentur sieht sie, weil die Crewvereinbarung zwischen Seatribe und dem Crewmitglied geschlossen wird; (d) Crew kostenlos, Skipper zahlen; (e) Reihenfolge: nach den Verträgen (Schritt 4), zusammen mit Crewvereinbarung, Crewliste und Meilenbestätigung.
 
+**Nachtrag Crew und Rollen (2026-11-17, weiter nur Idee):**
+- Der Auftraggeber will „Skipper" und „Crew" als sichtbar verschiedene Rollen behalten (Crew freut sich, später Skipper zu werden; Funktionen wie „Crew zuordnen" hängen an der Rolle). Claudes Vorschlag (a) „kein Unterschied" ist damit nicht bestätigt. Kompromiss, noch zu besprechen: ein Konto mit sichtbarer Rolle; beim Wechsel von Crew zu Skipper bleiben Konto und Nachweise erhalten.
+- Crew legt ein eigenes Konto an, wird vom Skipper eingeladen oder fragt an; der Skipper nimmt an und kann jederzeit wieder ausschließen.
+- Die Crewvereinbarung schließt je nach Fall die Agentur oder der Skipper (Skipper mit eigener Crew). Die Funktion haben also beide Rollen; pro Überführung wird festgelegt, wer sie schließt.
+- Die Agentur-Ansicht bleibt vorerst nur beim Auftraggeber. Er muss die Ansichten Skipper und Crew selbst testen können (einfachster Weg: zweites Konto mit anderer E-Mail-Adresse).
+- Charter-Idee: Ausweis fotografieren oder hochladen, die App liest die Daten aus und trägt sie ein. Einschätzung von Claude: Bei Pass und Personalausweis zuverlässig machbar über die maschinenlesbaren Zeilen; möglichst direkt auf dem Handy auslesen statt über einen fremden Dienst, und der Nutzer bestätigt die Werte. Scheine haben keine solche Zeile. Jedes Charterunternehmen hat ein eigenes Formular; zunächst eine Crewliste als PDF/Tabelle ausgeben.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
