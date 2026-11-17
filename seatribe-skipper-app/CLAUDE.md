@@ -189,7 +189,10 @@ Die App wird zuerst für **Seatribe und die Skipper, die für Seatribe fahren,**
 - **Später:** freie Skipper mit eigenen Angeboten als bezahlte Variante; ein Link für den Eigner, über den er Unterlagen hochlädt (Mehrwertsteuernachweis, Flaggenzertifikat, Bootsschein) – „Königsklasse", könnte Folgeaufträge fördern.
 - **Damit zurückgestellt:** Angebots-Wizard in der echten App, Kontoart-Wahl im Konto, Zielkunde „einzelne Skipper zuerst".
 - **Hinweis von Claude, zu klären:** Ausweis- und Passkopien sind besonders heikle Daten. Nach deutschem Recht darf eine Ausweiskopie nach Claudes Kenntnis nur der Inhaber selbst an Dritte weitergeben. Vorschlag: Der Skipper gibt seine Nachweise pro Auftrag selbst für den Eigner frei; Ablage in geschütztem Speicher, Zugriff nur für ihn und die Agentur. Vor dem Bau rechtlich bestätigen lassen.
-- Kernfrage des Auftraggebers außerhalb der App: Warum werden aus Anfragen keine Aufträge?
+- Ergänzt am 2026-11-17: Erstnutzer sind die Seatribe-Skipper, aber die App wird so angelegt, dass ein Skipper sie später auch **ohne Seatribe für eigene Aufträge** nutzen kann (eigene Überführungen, Angebote). Diese Funktionen bleiben für Skipper zunächst unsichtbar bzw. hinter einer Bezahlschranke. Den Haken „Ich fahre für Seatribe" braucht es nicht bzw. er ist vorausgewählt, weil zunächst alle Nutzer Seatribe-Skipper sind.
+- **Dokumentenordner:** Der Vertrag zwischen Seatribe und Skipper liegt bei beiden im Dokumentenordner. Verträge mit dem Eigner liegen nur bei der Agentur. Verträge entstehen immer aus den PDF-Vorlagen von Seatribe.
+- Vorschläge von Claude dazu, noch nicht bestätigt: (a) den Angebots-Wizard jetzt **nicht** bauen, nur den Platz dafür vorsehen; eigene Überführungen (schon vorhanden) für Skipper vorerst ausblenden; (b) statt Haken eine Bestätigung durch die Agentur („als Seatribe-Skipper bestätigen"), damit nicht jeder, der sich registriert, automatisch zur Auswahl steht.
+- Die Frage, warum aus Anfragen keine Aufträge werden, gehörte nicht in diesen Chat (Klarstellung des Auftraggebers); hier nicht weiterverfolgen, außer er bittet darum.
 
 ## Offene Punkte
 
