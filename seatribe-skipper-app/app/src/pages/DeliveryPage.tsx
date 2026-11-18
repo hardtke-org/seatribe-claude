@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { getDelivery } from '../deliveries';
-import { BAUSTEINE, TERMS, datum, komma, stufe, termText } from '../data';
+import { BAUSTEINE, datum, komma, stufe } from '../data';
+import { TermsList } from '../TermsList';
 import type { Delivery, Terms } from '../types';
 import { Icon, Nav, Top } from '../ui';
 
@@ -101,9 +102,7 @@ export default function DeliveryPage() {
           {showTerms && (
             <>
               <p className="lead">Stand aus HubSpot. Diese Zahlen sieht nur die Agentur, nicht der Skipper.</p>
-              <dl className="facts">
-                {TERMS.filter((x) => terms[x.k] != null).map((x) => (<div key={x.k}><dt>{x.t}</dt><dd>{termText(x.art, terms[x.k])}</dd></div>))}
-              </dl>
+              <TermsList terms={terms} />
             </>
           )}
         </div>

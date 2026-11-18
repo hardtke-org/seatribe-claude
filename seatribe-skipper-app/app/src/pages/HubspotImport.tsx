@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabase';
-import { TERMS, defaultModules, isoDatum, komma, stufe, termText } from '../data';
+import { TERMS, defaultModules, isoDatum, komma, stufe } from '../data';
+import { TermsList } from '../TermsList';
 import type { HubspotOrder } from '../types';
 import { Field, Nav, Opt, Top } from '../ui';
 
@@ -73,7 +74,10 @@ export default function HubspotImport() {
       if (id) { const r = await supabase.from('deliveries').update(delivery).eq('id', id); if (r.error) throw r.error; }
       else { const r = await supabase.from('deliveries').insert({ ...delivery, modules: defaultModules() }).select('id').single(); if (r.error) throw r.error; id = r.data.id; }
 
-      const t = await supabase.from('delivery_terms').upsert({ delivery_id: id, data: order.terms });
+      // Was Seatribe dem Skipper zahlt, wird in der App nicht gespeichert (Entscheidung vom 2026-11-18).
+      const { tagessatz_skipper: _weg, ...terms } = order.terms;
+      void _weg;
+      const t = await supabase.from('delivery_terms').upsert({ delivery_id: id, data: terms });
       if (t.error) throw t.error;
       navigate(`/ueberfuehrungen/${id}`, { replace: true });
     } catch (err) {
@@ -133,12 +137,7 @@ export default function HubspotImport() {
           ))}
 
           <span className="label">Konditionen (sieht nur die Agentur)</span>
-          <dl className="facts">
-            {TERMS.map((x) => {
-              const v = termText(x.art, order.terms[x.k]);
-              return (<div key={x.k}><dt>{x.t}</dt><dd className={v || !x.wichtig ? undefined : 'miss'}>{v || (x.wichtig ? 'fehlt' : '–')}</dd></div>);
-            })}
-          </dl>
+          <TermsList terms={order.terms} luecken />
 
           <button className="btn wide" onClick={save} disabled={busy}>{busy ? 'Speichert …' : existing ? 'Überführung aktualisieren' : 'Überführung anlegen'}</button>
         </>

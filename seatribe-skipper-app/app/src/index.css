@@ -207,3 +207,4 @@ input[type="file"].inp { padding: 9px 10px; }
 .from { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px 4px 4px; font-size: .84rem; font-weight: 600; }
 .from img { width: 26px; height: 26px; border-radius: 50%; background: #fff; }
 .facts dd a { color: var(--ink); }
+.facts > div.off dt, .facts > div.off dd { color: var(--muted); opacity: .7; font-weight: 400; }

@@ -215,7 +215,7 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Getestet mit Agentur- und zwei Skipper-Testkonten: zuweisen, aufheben, Ansicht des Skippers; ein anderer Skipper sieht nichts; ein Skipper kann sich nicht selbst zuweisen; ein unbestätigter Skipper lässt sich nicht zuweisen.
 - Der Auftraggeber erwähnte am 2026-11-17, Skipper könnten auch eigene Aufträge anlegen. Das bleibt wie abgestimmt vorerst ausgeblendet (später bezahlte Variante); das Kennzeichen „Auftrag von …" unterscheidet dann Seatribe-Aufträge von eigenen.
 - HubSpot-Schlüssel: Es gibt in HubSpot bereits eine private App (dort jetzt „Veraltete Apps"). Claudes Connector kann deren Schlüssel nicht auslesen; der Auftraggeber muss ihn am Rechner kopieren und in Supabase als Secret `HUBSPOT_TOKEN` ablegen. Empfehlung: eigene App nur mit Leserechten für Deals und Kontakte.
-- Drei Testkonten (`testlauf-a/b/c@example.com`, alle Rolle Skipper) liegen noch in der Datenbank; löschen, sobald der Auftraggeber die Rückfrage von Supabase am Rechner bestätigen kann.
+- Die drei Testkonten hat der Auftraggeber am 2026-11-18 selbst gelöscht. Für künftige Tests gilt: Löschen von Konten verlangt eine Rückfrage von Supabase, die der Auftraggeber nur am Rechner bestätigen kann.
 
 **Nachtrag 2026-11-17 (Rückmeldung des Auftraggebers nach dem ersten Ausprobieren):**
 - Die Skipper-Auswahl steht jetzt im Bearbeiten-Formular ganz unten (nach dem Eigner), damit sie nicht versehentlich verstellt wird; die Überführungs-Seite zeigt den Skipper nur noch an.
@@ -246,6 +246,15 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Getestet gegen echte Deals mit Testkonten: ohne Anmeldung und als Skipper abgelehnt; unbekannte ID; anlegen, aktualisieren ohne Doppel; Skipper sieht Auftrag ohne Preise und kann `delivery_terms` weder lesen noch schreiben. Testdaten danach entfernt.
 - Beobachtung: `min_einsatztage`/`max_einsatztage` und der Tagessatz an den Skipper sind in den geprüften Deals oft leer; Bootsmaße fehlen teils. Für die Verträge (Schritt 4) müssen sie in HubSpot gepflegt sein.
 - Nächster Schritt: Schritt 4, Verträge als PDF. Davor klären: welche Vorlage zuerst, und welche Angaben des Eigners (Anschrift) und des Skippers in den Vertrag gehören.
+
+**Rückmeldung des Auftraggebers zu HubSpot (2026-11-18):**
+- Die Kontakte am Deal tragen die Kennzeichnungen „Eigner", „Skipper" und „Crew". Den Skipper soll die App genauso vorschlagen wie den Eigner (noch nicht gebaut: Kontakt mit Kennzeichnung „Skipper" über die E-Mail-Adresse mit einem bestätigten Skipper-Konto abgleichen und in der Vorschau vorauswählen; mit „Crew" später die Crewliste vorbefüllen).
+- „Wann" bleibt in HubSpot vorerst Freitext; der Auftraggeber überlegt, beim gewonnenen Deal ein echtes Datum einzutragen. Vorschlag von Claude: dafür ein eigenes Datumsfeld am Deal, das die App bevorzugt liest.
+- Mindest- und Höchsttage werden künftig in HubSpot gepflegt. Es geht nur um die Pipeline „Yachtüberführung".
+
+**Konditionen-Anzeige, Rückmeldung vom 2026-11-18 (umgesetzt):** „Tagessatz Skipperhonorar" statt „Kunde an Seatribe"; „Reisekosten (Schätzung, nach Aufwand)"; „Bordkassen-Vorschuss (Abrechnung nach Aufwand)"; ist die Logistikpauschale größer als 0, erscheinen Reisekosten und Verpflegung ausgegraut („in der Logistikpauschale"). **Der Tagessatz, den Seatribe dem Skipper zahlt, wird in der App weder angezeigt noch gespeichert** (Wunsch des Auftraggebers; die Abruf-Funktion liefert ihn noch, die App verwirft ihn). Hinweis von Claude: Für den Skippervertrag wird dieser Betrag wieder gebraucht – dann neu klären, woher er kommt. Mindest- und Höchsttage gelten als Pflichtangaben und werden als fehlend markiert. Offen: Für Skipper sollen die Tage später evtl. anders dargestellt werden.
+
+**Test-Skipper (wieder angelegt am 2026-11-18, bewusst dauerhaft):** `testlauf-a@example.com` (Anna Testskipper, bestätigt), `testlauf-b@example.com` (Ben Testskipper), `testlauf-c@example.com` (Carla Testskipper). Alle haben die Rolle Skipper. Für Agentur-Tests setzt Claude `testlauf-c` vorübergehend auf Agentur und danach zurück. Nicht löschen, außer der Auftraggeber bittet darum.
 
 ## Offene Punkte
 
