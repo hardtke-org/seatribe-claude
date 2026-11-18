@@ -15,7 +15,7 @@ export function TermsList({ terms, luecken = false }: { terms: Terms; luecken?: 
     <dl className="facts">
       {TERMS.map((x) => {
         if (pauschal && (x.k === 'reisekosten' || x.k === 'verpflegung')) {
-          return (<div key={x.k} className="off"><dt>{x.t}</dt><dd>in der Logistikpauschale</dd></div>);
+          return (<div key={x.k} className="off"><dt>{x.t}</dt><dd>in der Logistikpauschale enthalten</dd></div>);
         }
         const v = termText(x.art, terms[x.k]);
         if (!v && !luecken) return null;
