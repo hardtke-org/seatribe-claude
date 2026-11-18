@@ -8,6 +8,7 @@ import Liste from './pages/Liste';
 import DeliveryForm from './pages/DeliveryForm';
 import DeliveryPage from './pages/DeliveryPage';
 import HubspotImport from './pages/HubspotImport';
+import Vertrag from './pages/Vertrag';
 import Auftraege, { Auftrag } from './pages/Auftraege';
 import Dokumente from './pages/Dokumente';
 import Agentur from './pages/Agentur';
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/ueberfuehrungen/hubspot" element={<HubspotImport />} />
           <Route path="/ueberfuehrungen/neu" element={<DeliveryForm />} />
           <Route path="/ueberfuehrungen/:id" element={<DeliveryPage />} />
+          <Route path="/ueberfuehrungen/:id/vertrag" element={<Vertrag />} />
           <Route path="/ueberfuehrungen/:id/bearbeiten" element={<DeliveryForm />} />
         </>
       ) : (
