@@ -294,6 +294,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Rückmeldung vom 2026-11-18 (umgesetzt):** Kein großer Knopf für den Vertrag. Stattdessen ist in der Bausteinliste der Überführung die Zeile „Vertrag mit Eigner" anklickbar: orange „erstellen", grün „erstellt", grün „unterschrieben". Darunter steht neu „Vertrag mit Skipper" (noch „kommt bald"). So sollen auch künftige Bausteine aktiviert werden: die Zeile in der Liste wird zum Einstieg, mit Zustand in Orange (offen) und Grün (erledigt).
 
+**Formatierung des Eigner-Vertrags, Rückmeldung vom 2026-11-18 (umgesetzt):** In § 2 stehen zwei Zeilen „Reisekosten – in der Logistikpauschale enthalten" und „Verpflegung – in der Logistikpauschale enthalten" (statt einer Zeile „Verpflegungskosten … inbegriffen"). Weitere Wünsche zur Gestaltung des PDFs nimmt Claude am liebsten als Screenshot mit Anmerkungen entgegen.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
