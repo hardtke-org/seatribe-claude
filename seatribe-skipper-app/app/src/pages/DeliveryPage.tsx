@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { getDelivery } from '../deliveries';
-import { BAUSTEINE, datum, komma, stufe } from '../data';
+import { BAUSTEINE, bausteinAn, datum, komma, stufe } from '../data';
 import { TermsList } from '../TermsList';
 import type { Delivery, Terms } from '../types';
 import { Icon, Nav, Top } from '../ui';
@@ -21,6 +21,12 @@ export default function DeliveryPage() {
     supabase.from('delivery_terms').select('data').eq('delivery_id', id).maybeSingle().then(({ data }) => setTerms((data?.data as Terms | undefined) ?? null));
   }, [id]);
   const [showTerms, setShowTerms] = useState(false);
+  const [vertrag, setVertrag] = useState<'offen' | 'erstellt' | 'unterschrieben'>('offen');
+  useEffect(() => {
+    if (!id) return;
+    supabase.from('contracts').select('signed_path').eq('delivery_id', id).eq('kind', 'eigner')
+      .then(({ data }) => setVertrag(!data?.length ? 'offen' : data.some((c) => c.signed_path) ? 'unterschrieben' : 'erstellt'));
+  }, [id]);
   const [skipper, setSkipper] = useState<string | null>(null);
   const skipperId = d?.assigned_skipper_id ?? null;
   useEffect(() => {
@@ -36,7 +42,7 @@ export default function DeliveryPage() {
 
   async function toggle(k: string) {
     if (!d) return;
-    const modules = { ...d.modules, [k]: !d.modules[k] };
+    const modules = { ...d.modules, [k]: !bausteinAn(d.modules, k) };
     const before = d;
     setD({ ...d, modules });
     const { error } = await supabase.from('deliveries').update({ modules }).eq('id', d.id);
@@ -100,8 +106,6 @@ export default function DeliveryPage() {
       </dl>
       {d.order_no && <Link className="btn ghost" to={`/ueberfuehrungen/hubspot?id=${d.order_no}`}>Aus HubSpot aktualisieren</Link>}
 
-      {terms && <Link className="btn wide" to={`/ueberfuehrungen/${d.id}/vertrag`}>Vertrag mit dem Eigner</Link>}
-
       {terms && (
         <div className="stack">
           <button className="btn ghost" aria-expanded={showTerms} onClick={() => setShowTerms(!showTerms)}>{showTerms ? 'Konditionen ausblenden' : 'Konditionen anzeigen'}</button>
@@ -114,17 +118,26 @@ export default function DeliveryPage() {
         </div>
       )}
 
-      {BAUSTEINE.filter((x) => d.modules[x.k]).map((x) => {
+      {BAUSTEINE.filter((x) => bausteinAn(d.modules, x.k)).map((x) => {
         const head = x.phase !== phase ? <span className="label" key={'p-' + x.phase}>{x.phase}</span> : null;
         phase = x.phase;
         return (
           <div key={x.k} style={{ display: 'contents' }}>
             {head}
-            <div className="row soon">
-              <span className="ic"><Icon n={x.ic} /></span>
-              <span className="tx"><span className="tt">{x.t}</span><br /><span className="ss">{x.sub}</span></span>
-              <span className="state">kommt bald</span>
-            </div>
+            {x.k === 'vertrag' ? (
+              <Link className={'row' + (vertrag !== 'offen' ? ' done' : '')} to={`/ueberfuehrungen/${d.id}/vertrag`}>
+                <span className="ic"><Icon n={vertrag === 'offen' ? x.ic : 'check'} /></span>
+                <span className="tx"><span className="tt">{x.t}</span><br /><span className="ss">{x.sub}</span></span>
+                <span className={'state ' + (vertrag === 'offen' ? 'todo' : 'ok')}>{vertrag === 'offen' ? 'erstellen' : vertrag}</span>
+                <Icon n="chev" className="chev" />
+              </Link>
+            ) : (
+              <div className="row soon">
+                <span className="ic"><Icon n={x.ic} /></span>
+                <span className="tx"><span className="tt">{x.t}</span><br /><span className="ss">{x.sub}</span></span>
+                <span className="state">kommt bald</span>
+              </div>
+            )}
           </div>
         );
       })}
@@ -136,8 +149,8 @@ export default function DeliveryPage() {
             <p className="lead">Nur was angehakt ist, erscheint oben und wird später zum PDF.</p>
             <div className="chips">
               {BAUSTEINE.map((x) => (
-                <button key={x.k} className="chip" aria-pressed={!!d.modules[x.k]} onClick={() => toggle(x.k)}>
-                  {d.modules[x.k] && <Icon n="check" />}{x.t}
+                <button key={x.k} className="chip" aria-pressed={bausteinAn(d.modules, x.k)} onClick={() => toggle(x.k)}>
+                  {bausteinAn(d.modules, x.k) && <Icon n="check" />}{x.t}
                 </button>
               ))}
             </div>
