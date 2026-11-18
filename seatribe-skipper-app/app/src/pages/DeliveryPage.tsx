@@ -45,6 +45,10 @@ export default function DeliveryPage() {
 
   async function remove() {
     if (!d) return;
+    // Vertragsdateien liegen im Speicher und verschwinden nicht von selbst mit der Überführung.
+    const files = await supabase.from('contracts').select('file_path, signed_path').eq('delivery_id', d.id);
+    const paths = (files.data ?? []).flatMap((c) => [c.file_path, c.signed_path]).filter((x): x is string => !!x);
+    if (paths.length) await supabase.storage.from('contracts').remove(paths);
     const { error } = await supabase.from('deliveries').delete().eq('id', d.id);
     if (error) { setError('Löschen hat nicht geklappt: ' + error.message); return; }
     navigate('/ueberfuehrungen', { replace: true });
@@ -95,6 +99,8 @@ export default function DeliveryPage() {
         {d.hubspot_synced_at && <div><dt>Zuletzt abgerufen</dt><dd>{datum(d.hubspot_synced_at.slice(0, 10))}</dd></div>}
       </dl>
       {d.order_no && <Link className="btn ghost" to={`/ueberfuehrungen/hubspot?id=${d.order_no}`}>Aus HubSpot aktualisieren</Link>}
+
+      {terms && <Link className="btn wide" to={`/ueberfuehrungen/${d.id}/vertrag`}>Vertrag mit dem Eigner</Link>}
 
       {terms && (
         <div className="stack">

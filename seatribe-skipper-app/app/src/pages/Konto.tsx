@@ -1,12 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { supabase } from '../supabase';
 import { useAuth } from '../auth';
+import { ruleOf } from '../contract';
 import { LAENDER, datum, vatLabel } from '../data';
 import { Field, Nav, Opt, Top } from '../ui';
 
 const EMPTY = {
   name: '', company: '', street: '', postal: '', city: '', phone: '', nationality: '', birth: '',
   licence: '', licenceNo: '', emergency: '', country: 'DE', noVat: false, tax: '',
+  rAdmin: '100', rHonorar: '50', rLogistik: '50', sign: '',
 };
 type Form = typeof EMPTY;
 
@@ -25,6 +27,7 @@ export default function Konto() {
       city: profile.city ?? '', phone: profile.phone ?? '', nationality: profile.nationality ?? '', birth: profile.birth_date ?? '',
       licence: profile.highest_licence ?? '', licenceNo: profile.licence_number ?? '', emergency: profile.emergency_contact ?? '',
       country: profile.country, noVat: !profile.charges_vat, tax: profile.tax_number ?? '',
+      rAdmin: String(ruleOf(profile).admin), rHonorar: String(ruleOf(profile).honorar), rLogistik: String(ruleOf(profile).logistik), sign: profile.signature_data ?? '',
     });
   }
 
@@ -41,12 +44,16 @@ export default function Konto() {
   async function save(e: FormEvent) {
     e.preventDefault();
     if (!session) return;
+    const pz = (s: string) => { const n = Number(s.replace(',', '.')); return s.trim() !== '' && Number.isFinite(n) && n >= 0 && n <= 100 ? n : null; };
+    const rule = { admin: pz(f.rAdmin), honorar: pz(f.rHonorar), logistik: pz(f.rLogistik) };
+    if (profile?.role === 'agentur' && Object.values(rule).some((v) => v == null)) { setMsg({ ok: false, text: 'Bitte bei der Anzahlung Prozentwerte zwischen 0 und 100 eintragen.' }); return; }
     setBusy(true); setMsg(null);
     const { error } = await supabase.from('profiles').update({
       display_name: t(f.name), company: t(f.company), street: t(f.street), postal_code: t(f.postal), city: t(f.city),
       phone: t(f.phone), nationality: t(f.nationality), birth_date: f.birth || null,
       highest_licence: t(f.licence), licence_number: t(f.licenceNo), emergency_contact: t(f.emergency),
       country: f.country, charges_vat: !f.noVat, tax_number: t(f.tax),
+      ...(profile?.role === 'agentur' ? { deposit_rule: rule, signature_data: f.sign || null } : {}),
     }).eq('id', session.user.id);
     setBusy(false);
     if (error) { setMsg({ ok: false, text: 'Speichern hat nicht geklappt: ' + error.message }); return; }
@@ -54,6 +61,20 @@ export default function Konto() {
     setMsg({ ok: true, text: 'Gespeichert.' });
     setEditing(false);
     window.scrollTo(0, 0);
+  }
+
+  /** Verkleinert das Bild, damit es schnell lädt und in jedes PDF passt. */
+  async function pickSign(file: File | undefined) {
+    if (!file) return;
+    try {
+      const img = await createImageBitmap(file);
+      const k = Math.min(1, 700 / img.width);
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const ctx = c.getContext('2d')!;
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+      set('sign')(c.toDataURL('image/jpeg', 0.85));
+    } catch { setMsg({ ok: false, text: 'Dieses Bild konnte nicht gelesen werden. Bitte ein JPG oder PNG wählen.' }); }
   }
 
   function cancel() { fill(); setMsg(null); setEditing(false); window.scrollTo(0, 0); }
@@ -80,6 +101,10 @@ export default function Konto() {
       ['Sitz', land],
       ['Mehrwertsteuer', profile.charges_vat ? vatLabel(profile.country) : 'wird nicht ausgewiesen'],
       ...(profile.charges_vat ? [['Umsatzsteuer-ID oder Steuernummer', profile.tax_number || '–'] as [string, string]] : []),
+      ...(agency ? [
+        ['Anzahlung', `${ruleOf(profile).admin} % Administrationspauschale, ${ruleOf(profile).honorar} % Skipperhonorar, ${ruleOf(profile).logistik} % Logistikpauschale`],
+        ['Unterschrift', profile.signature_data ? 'hinterlegt' : 'nicht hinterlegt'],
+      ] as [string, string][] : []),
     ];
     return (
       <>
@@ -143,6 +168,25 @@ export default function Konto() {
           sub="Rechnungen nennen dann nur Nettobeträge." />
         {!f.noVat && (
           <Field id="k-steuer" label="Umsatzsteuer-ID oder Steuernummer" value={f.tax} onChange={set('tax')} placeholder="z. B. DE123456789 oder 22/123/45678" autoComplete="off" />
+        )}
+
+        {agency && (
+          <>
+            <span className="label">Anzahlung bei Vertragsabschluss</span>
+            <p className="lead">Wie viel von jedem Posten sofort fällig wird. Der Rest folgt mit der Restzahlung. Der Bordkassen-Vorschuss gehört nicht dazu.</p>
+            <Field id="k-r-admin" label="Administrationspauschale" unit="%" inputMode="numeric" value={f.rAdmin} onChange={set('rAdmin')} />
+            <Field id="k-r-honorar" label="Skipperhonorar" unit="%" inputMode="numeric" value={f.rHonorar} onChange={set('rHonorar')} />
+            <Field id="k-r-logistik" label="Logistikpauschale" unit="%" inputMode="numeric" value={f.rLogistik} onChange={set('rLogistik')} />
+
+            <span className="label">Unterschrift</span>
+            <p className="lead">Ein Foto oder Scan deiner Unterschrift auf weißem Papier. Die App setzt sie in deine Verträge ein.</p>
+            {f.sign && <img className="sign" src={f.sign} alt="Deine hinterlegte Unterschrift" />}
+            <label className="field" htmlFor="k-sign">
+              <span>{f.sign ? 'Andere Unterschrift wählen' : 'Bild auswählen'}</span>
+              <input className="inp" id="k-sign" type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => { void pickSign(e.target.files?.[0]); e.target.value = ''; }} />
+            </label>
+            {f.sign && <button className="btn ghost" type="button" onClick={() => set('sign')('')}>Unterschrift entfernen</button>}
+          </>
         )}
 
         {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}

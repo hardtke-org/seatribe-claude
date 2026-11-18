@@ -116,8 +116,6 @@ export const TERMS: { k: string; t: string; art: 'tage' | 'euro' | 'sm'; wichtig
   { k: 'bordkasse', t: 'Bordkassen-Vorschuss (Abrechnung nach Aufwand)', art: 'euro' },
   { k: 'angebot_netto', t: 'Angebot netto (zzgl. Bordkasse)', art: 'euro', wichtig: true },
   { k: 'angebot_brutto', t: 'Angebot brutto (zzgl. Bordkasse)', art: 'euro', wichtig: true },
-  { k: 'anzahlung', t: 'Anzahlung', art: 'euro' },
-  { k: 'restzahlung', t: 'Restzahlung', art: 'euro' },
 ];
 export function termText(art: 'tage' | 'euro' | 'sm', n: number | null | undefined): string {
   if (n == null) return '';
@@ -131,4 +129,11 @@ export function isoDatum(s: string | null): string | null {
   const [d, mo, y] = [Number(m[1]), Number(m[2]), Number(m[3])];
   if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
   return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
+const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+/** „2026-09-21" → „21. September 2026", so wie es im Vertrag steht. */
+export function datumLang(iso: string | null): string {
+  const m = iso?.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${Number(m[3])}. ${MONATE[Number(m[2]) - 1]} ${m[1]}` : '';
 }

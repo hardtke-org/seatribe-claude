@@ -1,4 +1,6 @@
-import { TERMS, termText } from './data';
+import { useAuth } from './auth';
+import { ruleOf, zahlung } from './contract';
+import { TERMS, euro, termText } from './data';
 import type { Terms } from './types';
 
 /**
@@ -7,6 +9,8 @@ import type { Terms } from './types';
  */
 export function TermsList({ terms, luecken = false }: { terms: Terms; luecken?: boolean }) {
   const pauschal = (terms.logistikpauschale ?? 0) > 0;
+  const { profile } = useAuth();
+  const z = zahlung(terms, ruleOf(profile), profile);
   return (
     <dl className="facts">
       {TERMS.map((x) => {
@@ -18,6 +22,12 @@ export function TermsList({ terms, luecken = false }: { terms: Terms; luecken?: 
         const fehlt = !v && !!x.wichtig;
         return (<div key={x.k}><dt>{x.t}</dt><dd className={fehlt ? 'miss' : undefined}>{v || (fehlt ? 'fehlt' : '–')}</dd></div>);
       })}
+      {z.gesamt > 0 && (
+        <>
+          <div><dt>Anzahlung bei Vertragsabschluss (brutto)</dt><dd>{euro(z.anzahlung)}</dd></div>
+          <div><dt>Restzahlung (brutto)</dt><dd>{euro(z.rest)}</dd></div>
+        </>
+      )}
     </dl>
   );
 }

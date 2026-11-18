@@ -23,6 +23,8 @@ export interface Profile {
   highest_licence: string | null;
   licence_number: string | null;
   emergency_contact: string | null;
+  deposit_rule: { admin?: number; honorar?: number; logistik?: number } | null;
+  signature_data: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -117,4 +119,17 @@ export interface HubspotOrder {
   contacts: HubspotContact[];
   contacts_note: string | null;
   terms: Terms;
+}
+
+export interface Contract {
+  id: string;
+  delivery_id: string;
+  kind: 'eigner' | 'skipper';
+  file_path: string;
+  file_name: string;
+  signed_path: string | null;
+  signed_name: string | null;
+  signed_at: string | null;
+  data: { entwurf?: boolean } & Record<string, unknown>;
+  created_at: string;
 }

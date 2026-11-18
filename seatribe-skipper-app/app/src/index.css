@@ -49,7 +49,7 @@ h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; line-
 h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
 h2 { font-size: 1.15rem; font-weight: 700; }
 p { margin: 0; }
-button, input, select { font: inherit; color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
 
@@ -208,3 +208,10 @@ input[type="file"].inp { padding: 9px 10px; }
 .from img { width: 26px; height: 26px; border-radius: 50%; background: #fff; }
 .facts dd a { color: var(--ink); }
 .facts > div.off dt, .facts > div.off dd { color: var(--muted); opacity: .7; font-weight: 400; }
+
+/* Vertrag */
+.paper.vertrag { font-size: .88rem; }
+.paper.vertrag .neu { background: var(--warn-bg); border-radius: 6px; padding: 4px 6px; margin-inline: -6px; }
+img.sign { max-height: 70px; max-width: 100%; align-self: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+.signline { height: 52px; border-bottom: 1px solid var(--ink); margin-bottom: 4px; display: flex; align-items: flex-end; }
+.signline img { max-height: 46px; max-width: 100%; }
