@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { getDelivery } from '../deliveries';
-import { BAUSTEINE, datum, komma } from '../data';
-import type { Delivery } from '../types';
+import { BAUSTEINE, TERMS, datum, komma, stufe, termText } from '../data';
+import type { Delivery, Terms } from '../types';
 import { Icon, Nav, Top } from '../ui';
 
 export default function DeliveryPage() {
@@ -14,6 +14,12 @@ export default function DeliveryPage() {
   const [choosing, setChoosing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState('');
+  const [terms, setTerms] = useState<Terms | null>(null);
+  useEffect(() => {
+    if (!id) return;
+    supabase.from('delivery_terms').select('data').eq('delivery_id', id).maybeSingle().then(({ data }) => setTerms((data?.data as Terms | undefined) ?? null));
+  }, [id]);
+  const [showTerms, setShowTerms] = useState(false);
   const [skipper, setSkipper] = useState<string | null>(null);
   const skipperId = d?.assigned_skipper_id ?? null;
   useEffect(() => {
@@ -58,7 +64,7 @@ export default function DeliveryPage() {
   const b = d.boat;
   const missing = [d.planned_start, b?.type, b?.name, b?.length_m, b?.mmsi, d.owner?.name, d.owner?.email].filter((x) => x == null || x === '').length;
   const meta = [
-    d.planned_start ? 'Start ' + datum(d.planned_start) : 'Starttermin offen',
+    d.planned_start ? 'Start ' + datum(d.planned_start) : d.when_text ? 'Wann: ' + d.when_text : 'Starttermin offen',
     b?.type || 'Bootstyp offen',
     b?.name ? `„${b.name}"` : '',
     b?.length_m ? `${komma(b.length_m)} m${b.beam_m ? ' × ' + komma(b.beam_m) + ' m' : ''}` : '',
@@ -71,7 +77,7 @@ export default function DeliveryPage() {
   return (
     <>
       <Top />
-      <Nav to="/ueberfuehrungen" label="Meine Überführungen" />
+      <Nav to="/ueberfuehrungen" label="Überführungen" />
       <section className="route">
         <div className="ports">{d.from_port}<span>→</span>{d.to_port}</div>
         <div className="meta">{meta.map((m) => <span key={m}>{m}</span>)}</div>
@@ -83,7 +89,25 @@ export default function DeliveryPage() {
 
       <dl className="facts">
         <div><dt>Skipper</dt><dd>{skipperId ? (skipper ?? '…') : 'noch niemand zugewiesen'}</dd></div>
+        {d.order_no && <div><dt>Auftrags-ID</dt><dd>{d.order_no}</dd></div>}
+        {d.hubspot_deal_id && <div><dt>Stand in HubSpot</dt><dd>{stufe(d.hubspot_stage)}</dd></div>}
+        {d.hubspot_synced_at && <div><dt>Zuletzt abgerufen</dt><dd>{datum(d.hubspot_synced_at.slice(0, 10))}</dd></div>}
       </dl>
+      {d.order_no && <Link className="btn ghost" to={`/ueberfuehrungen/hubspot?id=${d.order_no}`}>Aus HubSpot aktualisieren</Link>}
+
+      {terms && (
+        <div className="stack">
+          <button className="btn ghost" aria-expanded={showTerms} onClick={() => setShowTerms(!showTerms)}>{showTerms ? 'Konditionen ausblenden' : 'Konditionen anzeigen'}</button>
+          {showTerms && (
+            <>
+              <p className="lead">Stand aus HubSpot. Diese Zahlen sieht nur die Agentur, nicht der Skipper.</p>
+              <dl className="facts">
+                {TERMS.filter((x) => terms[x.k] != null).map((x) => (<div key={x.k}><dt>{x.t}</dt><dd>{termText(x.art, terms[x.k])}</dd></div>))}
+              </dl>
+            </>
+          )}
+        </div>
+      )}
 
       {BAUSTEINE.filter((x) => d.modules[x.k]).map((x) => {
         const head = x.phase !== phase ? <span className="label" key={'p-' + x.phase}>{x.phase}</span> : null;

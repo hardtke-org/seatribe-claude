@@ -6,7 +6,7 @@ import type { Delivery } from '../types';
 import { Icon, Nav, Top } from '../ui';
 
 export function DeliveryRow({ d }: { d: Delivery }) {
-  const sub = [d.boat?.type, d.boat?.name ? `„${d.boat.name}"` : '', d.planned_start ? 'ab ' + datum(d.planned_start) : ''].filter(Boolean).join(' · ');
+  const sub = [d.boat?.type, d.boat?.name ? `„${d.boat.name}"` : '', d.planned_start ? 'ab ' + datum(d.planned_start) : d.when_text ?? '', d.order_no ? 'Auftrag ' + d.order_no : ''].filter(Boolean).join(' · ');
   return (
     <Link className="row" to={`/ueberfuehrungen/${d.id}`}>
       <span className="ic"><Icon n="compass" /></span>
@@ -28,12 +28,13 @@ export default function Liste() {
     <>
       <Top />
       <Nav to="/" label="Start" />
-      <h1>Meine Überführungen</h1>
+      <h1>Überführungen</h1>
       {error && <p className="err" role="alert">Die Liste konnte nicht geladen werden: {error}</p>}
       {items == null && !error && <p className="lead">Lädt …</p>}
       {items && items.length === 0 && <p className="hint">Noch keine Überführung angelegt. Leg die erste an, Start- und Zielhafen reichen.</p>}
       {items && items.length > 0 && <div className="stack">{items.map((d) => <DeliveryRow key={d.id} d={d} />)}</div>}
-      <Link className="btn wide" to="/ueberfuehrungen/neu">Überführung anlegen</Link>
+      <Link className="btn wide" to="/ueberfuehrungen/hubspot">Auftrag aus HubSpot holen</Link>
+      <Link className="btn ghost wide" to="/ueberfuehrungen/neu">Überführung von Hand anlegen</Link>
     </>
   );
 }

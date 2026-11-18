@@ -69,6 +69,11 @@ export interface Delivery {
   planned_start: string | null;
   modules: Record<string, boolean>;
   assigned_skipper_id: string | null;
+  hubspot_deal_id: string | null;
+  order_no: string | null;
+  hubspot_stage: string | null;
+  when_text: string | null;
+  hubspot_synced_at: string | null;
   boat: Boat | null;
   owner: Owner | null;
 }
@@ -79,6 +84,9 @@ export interface Assignment {
   from_port: string;
   to_port: string;
   planned_start: string | null;
+  when_text: string | null;
+  order_no: string | null;
+  status: 'geplant' | 'unterwegs' | 'abgeschlossen';
   assigned_at: string | null;
   agency_name: string | null;
   boat_name: string | null;
@@ -94,4 +102,19 @@ export interface Assignment {
   owner_name: string | null;
   owner_phone: string | null;
   owner_email: string | null;
+}
+
+/** Antwort der Abruf-Funktion: ein Auftrag, wie er in HubSpot steht. */
+export interface HubspotContact { id: string; label: string | null; name: string | null; email: string | null; phone: string | null; address: string | null }
+export type Terms = Record<string, number | null>;
+export interface HubspotOrder {
+  deal_id: string;
+  order_no: string;
+  stage: string | null;
+  pipeline: string | null;
+  route: { from: string | null; to: string | null; when: string | null };
+  boat: { type: string | null; name: string | null; registration_no: string | null; year_built: number | null; length_m: number | null; beam_m: number | null; draft_m: number | null };
+  contacts: HubspotContact[];
+  contacts_note: string | null;
+  terms: Terms;
 }

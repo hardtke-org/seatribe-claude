@@ -71,9 +71,9 @@ function AgenturStart() {
           <Icon n="list" />
           <span><span className="t">Überführungen</span><br /><span className="s">{items == null ? ' ' : items.length + ' angelegt'}</span></span>
         </Link>
-        <Link className="tile" to="/ueberfuehrungen/neu">
+        <Link className="tile" to="/ueberfuehrungen/hubspot">
           <Icon n="plus" />
-          <span><span className="t">Überführung anlegen</span><br /><span className="s">Start, Ziel, Boot</span></span>
+          <span><span className="t">Auftrag holen</span><br /><span className="s">aus HubSpot, per Auftrags-ID</span></span>
         </Link>
         <Link className="tile" to="/konto">
           <Icon n="id" />

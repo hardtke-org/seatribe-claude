@@ -33,8 +33,9 @@ export default function Auftraege() {
               <span className="ic"><Icon n="compass" /></span>
               <span className="tx">
                 <span className="tt">{a.from_port} → {a.to_port}</span><br />
-                <span className="ss">{[a.boat_type, a.boat_name ? `„${a.boat_name}"` : '', a.planned_start ? 'ab ' + datum(a.planned_start) : 'Termin offen'].filter(Boolean).join(' · ')}</span>
+                <span className="ss">{[a.boat_type, a.boat_name ? `„${a.boat_name}"` : '', a.planned_start ? 'ab ' + datum(a.planned_start) : a.when_text ?? 'Termin offen'].filter(Boolean).join(' · ')}</span>
               </span>
+              {a.status !== 'geplant' && <span className={'state' + (a.status === 'unterwegs' ? ' wait' : ' ok')}>{a.status}</span>}
               <Icon n="chev" className="chev" />
             </Link>
           ))}
@@ -73,7 +74,9 @@ export function Auftrag() {
       <section className="route">
         <div className="ports">{a.from_port}<span>→</span>{a.to_port}</div>
         <div className="meta">
-          <span>{a.planned_start ? 'Start ' + datum(a.planned_start) : 'Starttermin offen'}</span>
+          <span>{a.planned_start ? 'Start ' + datum(a.planned_start) : a.when_text ? 'Wann: ' + a.when_text : 'Starttermin offen'}</span>
+          {a.order_no && <span>Auftrag {a.order_no}</span>}
+          {a.status !== 'geplant' && <span>{a.status}</span>}
           {a.boat_type && <span>{a.boat_type}</span>}
           {a.boat_name && <span>„{a.boat_name}"</span>}
         </div>
