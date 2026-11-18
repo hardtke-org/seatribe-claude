@@ -256,6 +256,13 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Test-Skipper (wieder angelegt am 2026-11-18, bewusst dauerhaft):** `testlauf-a@example.com` (Anna Testskipper, bestätigt), `testlauf-b@example.com` (Ben Testskipper), `testlauf-c@example.com` (Carla Testskipper). Alle haben die Rolle Skipper. Für Agentur-Tests setzt Claude `testlauf-c` vorübergehend auf Agentur und danach zurück. Nicht löschen, außer der Auftraggeber bittet darum.
 
+**Schritt 4 beginnt mit dem Vertrag mit dem Eigner (entschieden am 2026-11-18). Noch nichts gebaut.**
+- Im Drive-Ordner „Vorlagen" liegen drei Fassungen des Kundenvertrags: „Logistikpauschale", „Reiskosten" (Reisekosten einzeln) und „Festpreis", jeweils mit angehängter AGB vom 15.09.2026. Gesichtet wurde die Fassung Logistikpauschale. Aufbau: Parteien · § 1 Vertragsgegenstand (Yachttyp, Yachtname, Start- und Zielhafen, geplanter Starttermin) · § 2 Vergütung und Auslagen (kalkulierte Gesamtkosten netto/brutto, Tagessatz, kalkulierte und Mindestabrechnungsdauer, Logistikpauschale, Administrationspauschale, voraussichtliche Nebenkosten) · § 3 Zahlungsbedingungen · § 4 Versicherung · § 6 Schlussbestimmungen (ein § 5 fehlt in der Vorlage) · Unterschriften · AGB.
+- Die Vorlage braucht: Name und Anschrift des Eigners, einen Starttermin als Datum, die Mindestabrechnungsdauer. Eine Höchstdauer kommt in dieser Fassung nicht vor.
+- Die Vorlage sagt noch „Nebenkosten" und „Sicherheitsrücklage" statt „Bordkasse".
+- **Widerspruch, zu klären:** Laut Vertrag § 3 und AGB § 11 sind bei Vertragsabschluss 50 % des Skipperhonorars sowie Administrations- **und Logistikpauschale in voller Höhe** fällig. Der Auftraggeber nannte am 2026-11-18 mündlich 100 % Administrationspauschale, **50 % Logistikpauschale**, 50 % Honorar.
+- **Idee des Auftraggebers (2026-11-18): Anzahlungsregel im Konto** (Prozentsätze, z. B. Administrationspauschale immer 100 %), damit Anzahlung und Restzahlung in der App sichtbar sind. Einwand von Claude: HubSpot liefert `anzahlung` und `restzahlung` bereits und ist führend; rechnet die App selbst, gibt es zwei Quellen. Vorschlag: HubSpot-Werte anzeigen, daneben eine Kontrollrechnung nach der Regel aus dem Konto und ein Hinweis bei Abweichung. Offen: netto oder brutto, mit oder ohne Bordkassen-Vorschuss.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
