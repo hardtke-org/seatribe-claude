@@ -16,7 +16,8 @@ export interface Baustein { k: string; phase: string; t: string; ic: string; sub
 
 export const BAUSTEINE: Baustein[] = [
   { k: 'angebot', phase: 'Vor dem Auftrag', t: 'Angebot erstellen', ic: 'euro', sub: 'Preisbaukasten, rechnet live mit' },
-  { k: 'vertrag', phase: 'Vor dem Auftrag', t: 'Vertrag erstellen', ic: 'pen', sub: 'Übernimmt die Angaben aus dem Angebot' },
+  { k: 'vertrag', phase: 'Vor dem Auftrag', t: 'Vertrag mit Eigner', ic: 'pen', sub: 'Aus den Angaben des Auftrags, mit AGB' },
+  { k: 'skippervertrag', phase: 'Vor dem Auftrag', t: 'Vertrag mit Skipper', ic: 'pen', sub: 'Für den zugewiesenen Skipper' },
   { k: 'ausruestung', phase: 'Vor der Abfahrt', t: 'Ausrüstungsliste an Eigner schicken', ic: 'clip', sub: 'Der Eigner füllt sie selbst aus' },
   { k: 'vollmacht', phase: 'Vor der Abfahrt', t: 'Vollmacht', ic: 'key', sub: 'Ansehen, versenden, unterschrieben hochladen' },
   { k: 'crew', phase: 'Vor der Abfahrt', t: 'Crewliste und Crewvereinbarung', ic: 'users', sub: 'Crew einmal eintragen' },
@@ -26,6 +27,11 @@ export const BAUSTEINE: Baustein[] = [
   { k: 'meilen', phase: 'Nach der Ankunft', t: 'Meilenbestätigung', ic: 'compass', sub: 'Für jedes Crewmitglied' },
   { k: 'abrechnung', phase: 'Nach der Ankunft', t: 'Schlussabrechnung', ic: 'doc', sub: 'Nach tatsächlichen Kalendertagen' },
 ];
+
+/** Ob ein Baustein bei dieser Überführung angehakt ist. Bausteine, die es beim Anlegen noch nicht gab, gelten als angehakt. */
+export function bausteinAn(modules: Record<string, boolean>, k: string): boolean {
+  return modules[k] ?? k !== 'meilen';
+}
 
 export function defaultModules(): Record<string, boolean> {
   return Object.fromEntries(BAUSTEINE.map((b) => [b.k, b.k !== 'meilen']));

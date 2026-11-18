@@ -292,6 +292,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Noch offen in Schritt 4: Fassungen „Reisekosten einzeln" und „Festpreis", Skippervertrag, Seite „Vertragstexte" zum Selbstanpassen (nach der Prüfung durch den Juristen).
 - Hinweis von Claude zur Idee „Kooperation mit dem Juristen, 30 % für Seatribe": Anwälte dürfen nach Claudes Kenntnis für die Vermittlung von Mandaten keine Provision zahlen (§ 49b Abs. 3 BRAO). Der Jurist soll sagen, welche Form zulässig ist.
 
+**Rückmeldung vom 2026-11-18 (umgesetzt):** Kein großer Knopf für den Vertrag. Stattdessen ist in der Bausteinliste der Überführung die Zeile „Vertrag mit Eigner" anklickbar: orange „erstellen", grün „erstellt", grün „unterschrieben". Darunter steht neu „Vertrag mit Skipper" (noch „kommt bald"). So sollen auch künftige Bausteine aktiviert werden: die Zeile in der Liste wird zum Einstieg, mit Zustand in Orange (offen) und Grün (erledigt).
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.

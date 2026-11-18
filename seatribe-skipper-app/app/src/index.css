@@ -215,3 +215,4 @@ input[type="file"].inp { padding: 9px 10px; }
 img.sign { max-height: 70px; max-width: 100%; align-self: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
 .signline { height: 52px; border-bottom: 1px solid var(--ink); margin-bottom: 4px; display: flex; align-items: flex-end; }
 .signline img { max-height: 46px; max-width: 100%; }
+.state.todo { background: var(--btn); color: var(--btn-ink); }
