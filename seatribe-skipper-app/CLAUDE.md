@@ -252,6 +252,10 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - „Wann" bleibt in HubSpot vorerst Freitext; der Auftraggeber überlegt, beim gewonnenen Deal ein echtes Datum einzutragen. Vorschlag von Claude: dafür ein eigenes Datumsfeld am Deal, das die App bevorzugt liest.
 - Mindest- und Höchsttage werden künftig in HubSpot gepflegt. Es geht nur um die Pipeline „Yachtüberführung".
 
+**Konditionen-Anzeige, Rückmeldung vom 2026-11-18 (umgesetzt):** „Tagessatz Skipperhonorar" statt „Kunde an Seatribe"; „Reisekosten (Schätzung, nach Aufwand)"; „Bordkassen-Vorschuss (Abrechnung nach Aufwand)"; ist die Logistikpauschale größer als 0, erscheinen Reisekosten und Verpflegung ausgegraut („in der Logistikpauschale"). **Der Tagessatz, den Seatribe dem Skipper zahlt, wird in der App weder angezeigt noch gespeichert** (Wunsch des Auftraggebers; die Abruf-Funktion liefert ihn noch, die App verwirft ihn). Hinweis von Claude: Für den Skippervertrag wird dieser Betrag wieder gebraucht – dann neu klären, woher er kommt. Mindest- und Höchsttage gelten als Pflichtangaben und werden als fehlend markiert. Offen: Für Skipper sollen die Tage später evtl. anders dargestellt werden.
+
+**Test-Skipper (wieder angelegt am 2026-11-18, bewusst dauerhaft):** `testlauf-a@example.com` (Anna Testskipper, bestätigt), `testlauf-b@example.com` (Ben Testskipper), `testlauf-c@example.com` (Carla Testskipper). Alle haben die Rolle Skipper. Für Agentur-Tests setzt Claude `testlauf-c` vorübergehend auf Agentur und danach zurück. Nicht löschen, außer der Auftraggeber bittet darum.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
