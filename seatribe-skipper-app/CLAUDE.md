@@ -319,6 +319,12 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Fehler behoben (2026-11-19, vom Auftraggeber gemeldet):** Auf der Vertragsseite öffnete ein Klick auf „Löschen" das Dateifenster zum Hochladen. Ursache: ein unsichtbares Dateifeld lag neben dem Knopf und fing den Klick ab. Jetzt gibt es ein einziges, wirklich verstecktes Dateifeld, das nur der Knopf „Unterschriebene Fassung hochladen" öffnet. Merke: Dateifelder nie nur unsichtbar machen, sondern mit `hidden` verstecken und über einen Knopf auslösen.
 
+**Rückmeldung zum Formular der Überführung (2026-11-19, umgesetzt):**
+- Boot: neues Feld **„Registrierungsnummer"** (so soll es heißen, egal ob WSA, ADAC o. Ä.; Spalte `boats.registration_no`, HubSpot-Feld `bootskennzeichen`). Reihenfolge: Typ, Name · Registrierungsnummer, Flagge · Länge, Breite · Tiefgang, Baujahr · MMSI, Rufzeichen.
+- Eigner: zusätzlich **Anschrift, Staatsangehörigkeit, Passnummer** (Migration `20261119_owner_identity.sql`, angewendet). Die Vollmacht-Vorlage verlangt vom Eigner Name, Anschrift, Staatsangehörigkeit und Passnummer – **kein Geburtsdatum**, deshalb nicht gebaut. Der Skipper sieht davon weiterhin nur Name, Telefon und E-Mail.
+- **Fehlermeldungen stehen jetzt direkt am Feld** (rot umrandet, Meldung darunter), die Seite springt zum ersten Fehler; korrigiert man ein Feld, verschwindet dessen Meldung. Geprüft werden Start- und Zielhafen, Länge, Breite, Tiefgang, Baujahr, MMSI und E-Mail. So auch bei künftigen Formularen: `Field` in `app/src/ui.tsx` hat dafür die Eigenschaft `error`.
+- Vollmacht-Vorlage (Drive, englisch, „Power of Attorney – Vessel Command & Delivery") gesichtet: 1 Eigner · 2 Skipper (Name, Anschrift, Staatsangehörigkeit, Geburtsdatum, Passnummer, Scheinnummer) · 3 Boot (Name, Typ, Baujahr, Flagge, Rufzeichen, MMSI, Registrierungsnummer) · 4 Umfang · 5 Route (Abfahrts- und Zielhafen, geplante Abfahrt, geschätzte Dauer, Gültigkeit von–bis) · 6 Befugnisse · 7 Unterschriften. Fehlt dafür noch in der App: Passnummer des Skippers im Profil, Gültigkeitszeitraum der Vollmacht.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.

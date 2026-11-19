@@ -63,7 +63,7 @@ export function Auftrag() {
   const boot: [string, string][] = ([
     ['Typ', a.boat_type], ['Name', a.boat_name], ['Baujahr', a.year_built ? String(a.year_built) : null],
     ['Länge', a.length_m ? komma(a.length_m) + ' m' : null], ['Breite', a.beam_m ? komma(a.beam_m) + ' m' : null], ['Tiefgang', a.draft_m ? komma(a.draft_m) + ' m' : null],
-    ['Flagge', a.flag], ['Rufzeichen', a.callsign], ['MMSI', a.mmsi], ['Registriernummer', a.registration_no],
+    ['Flagge', a.flag], ['Rufzeichen', a.callsign], ['MMSI', a.mmsi], ['Registrierungsnummer', a.registration_no],
   ] as [string, string | null][]).filter((r): r is [string, string] => !!r[1]);
 
   return (
