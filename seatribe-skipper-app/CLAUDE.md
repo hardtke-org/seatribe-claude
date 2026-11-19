@@ -305,6 +305,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Überlegung des Auftraggebers vom 2026-11-19 (nichts tun, nur Meinung):** Für Charter passt das Wort „Überführung" nicht; dort wäre es „Törn anlegen". Meinung von Claude: jetzt bei „Überführung" bleiben (so entschieden, und für Eigner und Verträge das richtige Wort). Wenn Charter kommt, bekommt jede Fahrt eine Art (Überführung, Chartertörn, später evtl. Ausbildungstörn); das Wort in der Oberfläche und die angebotenen Bausteine richten sich nach der Art, die gemeinsame Liste heißt dann „Meine Törns". Technisch ist das klein, weil die Fahrt ohnehin ein eigener Datensatz ist.
 
+**Vorgehen ab 2026-11-19 (vom Auftraggeber vorgeschlagen, von Claude befürwortet):** Erst geht der Auftraggeber die Agentur-Seite durch und gibt Rückmeldung; was sich daraus für Skipper ergibt, fließt gleich mit ein. Danach die Skipper-Seite, zuletzt die Crew-Seite. Für die spätere Auswahl „Art des Törns" nannte er: Charter, Törn, Überführung, Ausflug (auch Wochenendtörn).
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
