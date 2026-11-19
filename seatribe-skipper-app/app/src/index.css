@@ -216,3 +216,21 @@ img.sign { max-height: 70px; max-width: 100%; align-self: flex-start; background
 .signline { height: 52px; border-bottom: 1px solid var(--ink); margin-bottom: 4px; display: flex; align-items: flex-end; }
 .signline img { max-height: 46px; max-width: 100%; }
 .state.todo { background: var(--btn); color: var(--btn-ink); }
+
+/* Vertragsvorschau in der Designsprache der Dokumente */
+.v-label { font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--deep); display: block; }
+.v-kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 2px solid var(--brand); padding-bottom: 10px; }
+.v-kopf img { width: 46px; height: 46px; flex: none; }
+.v-box, .v-summe { background: color-mix(in srgb, var(--brand) 8%, var(--paper)); padding: 10px; border-radius: 4px; min-width: 0; overflow-wrap: anywhere; }
+.v-summe { border-left: 3px solid var(--brand); }
+.v-summe .total { font-size: 1.15rem; }
+.v-summe small, .v-karte small { font-weight: 400; font-size: .7rem; color: var(--muted); }
+.paper.vertrag h3 { font-size: .95rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.paper.vertrag td:last-child { white-space: normal; }
+.v-sub td { font-size: .8rem; }
+.v-sub td:first-child { padding-left: 14px; }
+.v-klein { font-size: .78rem; display: flex; flex-direction: column; gap: 5px; }
+.v-karte { border: 1px solid var(--line); border-top: 3px solid var(--brand); border-radius: 4px; padding: 8px; font-size: .78rem; margin: 0 !important; min-width: 0; }
+.v-karte + .v-karte { border-top-color: var(--deep); }
+.v-karte strong { display: block; font-size: 1.05rem; margin-block: 2px; }
+@media (prefers-color-scheme: dark) { .v-label { color: var(--brand-ink); } }
