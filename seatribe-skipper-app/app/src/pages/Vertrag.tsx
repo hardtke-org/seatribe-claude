@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../auth';
 import { eignerVertrag, luecken, ruleOf, tageHinweis, zahlung, type Block, type ContractInput } from '../contract';
@@ -81,6 +81,8 @@ export default function Vertrag() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [ask, setAsk] = useState<string | null>(null);
+  const datei = useRef<HTMLInputElement>(null);
+  const ziel = useRef<Contract | null>(null);
 
   const loadList = useCallback(async () => {
     if (!id) return;
@@ -236,6 +238,9 @@ export default function Vertrag() {
       <button className="btn wide" onClick={erzeugen} disabled={busy}>{busy ? 'Erzeugt das PDF …' : 'PDF erzeugen und ablegen'}</button>
 
       <span className="label">Fassungen</span>
+      {/* Ein einziges, wirklich verstecktes Dateifeld für alle Fassungen: Es öffnet sich nur über den Knopf „hochladen". */}
+      <input ref={datei} type="file" hidden accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/heif"
+        onChange={(e) => { const c = ziel.current; const f = e.target.files?.[0]; e.target.value = ''; if (c) void signiert(c, f); }} />
       {list.length === 0 && <p className="hint">Noch kein Vertrag erzeugt.</p>}
       {list.map((c) => (
         <div className="row doc" key={c.id}>
@@ -245,11 +250,9 @@ export default function Vertrag() {
             <span className="acts">
               <button className="linkbtn" onClick={() => open(c.file_path)}>Ansehen</button>
               {c.signed_path && <button className="linkbtn" onClick={() => open(c.signed_path!)}>Unterschriebene Fassung</button>}
-              <label className="linkbtn" style={{ cursor: 'pointer' }}>
+              <button className="linkbtn" onClick={() => { ziel.current = c; datei.current?.click(); }}>
                 {c.signed_path ? 'Unterschriebene ersetzen' : 'Unterschriebene Fassung hochladen'}
-                <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/heif" style={{ position: 'absolute', opacity: 0, width: 1, height: 1 }}
-                  onChange={(e) => { void signiert(c, e.target.files?.[0]); e.target.value = ''; }} />
-              </label>
+              </button>
               {ask === c.id
                 ? <><button className="linkbtn del" onClick={() => loeschen(c)}>Wirklich löschen</button><button className="linkbtn" onClick={() => setAsk(null)}>Abbrechen</button></>
                 : <button className="linkbtn" onClick={() => setAsk(c.id)}>Löschen</button>}

@@ -317,6 +317,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Nachtrag zum Design (2026-11-19, umgesetzt):** Die Zwischenüberschriften „Vergütung" und „Auslagen" stehen fett in Manrope in normaler Schreibweise, mit einer kräftigen dunklen Linie darunter, die die Tabelle oben abschließt (vorher klein, gesperrt und blau – wirkte verloren).
 
+**Fehler behoben (2026-11-19, vom Auftraggeber gemeldet):** Auf der Vertragsseite öffnete ein Klick auf „Löschen" das Dateifenster zum Hochladen. Ursache: ein unsichtbares Dateifeld lag neben dem Knopf und fing den Klick ab. Jetzt gibt es ein einziges, wirklich verstecktes Dateifeld, das nur der Knopf „Unterschriebene Fassung hochladen" öffnet. Merke: Dateifelder nie nur unsichtbar machen, sondern mit `hidden` verstecken und über einen Knopf auslösen.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
