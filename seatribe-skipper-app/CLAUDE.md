@@ -296,6 +296,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Formatierung des Eigner-Vertrags, Rückmeldung vom 2026-11-18 (umgesetzt):** In § 2 stehen zwei Zeilen „Reisekosten – in der Logistikpauschale enthalten" und „Verpflegung – in der Logistikpauschale enthalten" (statt einer Zeile „Verpflegungskosten … inbegriffen"). Weitere Wünsche zur Gestaltung des PDFs nimmt Claude am liebsten als Screenshot mit Anmerkungen entgegen.
 
+**Merkliste, Idee des Auftraggebers vom 2026-11-19 (nicht bauen): Sicherheitseinweisung der Crew.** Ein Baustein für den Skipper: Sicherheitseinweisung als Checkliste vor der Abfahrt. Dazu Rollen an Bord (Notrollen), die den Crewmitgliedern der Überführung zugewiesen werden; jedes Crewmitglied sieht seine Rolle in der eigenen App. Setzt den Crew-Login voraus. Ergänzungen von Claude, noch nicht besprochen: Die Einweisung ist technisch dieselbe Checkliste wie Übernahme und Übergabe (einmal bauen, mehrfach nutzen); jedes Crewmitglied bestätigt in seiner App, dass es eingewiesen wurde, mit Zeitstempel – das ist für den Skipper ein Nachweis; passt auch für Charter.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
