@@ -93,7 +93,7 @@ export default function HubspotImport() {
     ['Starthafen', order.route.from], ['Zielhafen', order.route.to], ['Wann', order.route.when],
     ['Bootstyp', b!.type], ['Bootsname', b!.name], ['Baujahr', b!.year_built ? String(b!.year_built) : null],
     ['Länge', b!.length_m ? komma(b!.length_m) + ' m' : null], ['Breite', b!.beam_m ? komma(b!.beam_m) + ' m' : null], ['Tiefgang', b!.draft_m ? komma(b!.draft_m) + ' m' : null],
-    ['Kennzeichen', b!.registration_no],
+    ['Registrierungsnummer', b!.registration_no],
   ] : [];
   const pflicht = new Set(['Starthafen', 'Zielhafen', 'Wann', 'Bootstyp', 'Bootsname', 'Länge']);
   const fehlt = order ? [

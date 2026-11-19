@@ -7,7 +7,7 @@ import { Field, Nav, Opt, Top } from '../ui';
 
 const EMPTY = {
   name: '', company: '', street: '', postal: '', city: '', phone: '', nationality: '', birth: '',
-  licence: '', licenceNo: '', emergency: '', country: 'DE', noVat: false, tax: '',
+  licence: '', licenceNo: '', emergency: '', passport: '', country: 'DE', noVat: false, tax: '',
   rAdmin: '100', rHonorar: '50', rLogistik: '50', sign: '',
 };
 type Form = typeof EMPTY;
@@ -25,7 +25,7 @@ export default function Konto() {
     setF({
       name: profile.display_name ?? '', company: profile.company ?? '', street: profile.street ?? '', postal: profile.postal_code ?? '',
       city: profile.city ?? '', phone: profile.phone ?? '', nationality: profile.nationality ?? '', birth: profile.birth_date ?? '',
-      licence: profile.highest_licence ?? '', licenceNo: profile.licence_number ?? '', emergency: profile.emergency_contact ?? '',
+      licence: profile.highest_licence ?? '', licenceNo: profile.licence_number ?? '', emergency: profile.emergency_contact ?? '', passport: profile.passport_no ?? '',
       country: profile.country, noVat: !profile.charges_vat, tax: profile.tax_number ?? '',
       rAdmin: String(ruleOf(profile).admin), rHonorar: String(ruleOf(profile).honorar), rLogistik: String(ruleOf(profile).logistik), sign: profile.signature_data ?? '',
     });
@@ -52,6 +52,7 @@ export default function Konto() {
       display_name: t(f.name), company: t(f.company), street: t(f.street), postal_code: t(f.postal), city: t(f.city),
       phone: t(f.phone), nationality: t(f.nationality), birth_date: f.birth || null,
       highest_licence: t(f.licence), licence_number: t(f.licenceNo), emergency_contact: t(f.emergency),
+      ...(profile?.role === 'agentur' ? {} : { passport_no: t(f.passport) }),
       country: f.country, charges_vat: !f.noVat, tax_number: t(f.tax),
       ...(profile?.role === 'agentur' ? { deposit_rule: rule, signature_data: f.sign || null } : {}),
     }).eq('id', session.user.id);
@@ -94,6 +95,7 @@ export default function Konto() {
       ...(agency ? [] : [
         ['Geburtsdatum', datum(profile.birth_date) || '–'],
         ['Nationalität', profile.nationality || '–'],
+        ['Passnummer', profile.passport_no || '–'],
         ['Höchster Schein', profile.highest_licence || '–'],
         ['Scheinnummer', profile.licence_number || '–'],
         ['Notfallkontakt', profile.emergency_contact || '–'],
@@ -148,6 +150,7 @@ export default function Konto() {
               <Field id="k-geburt" label="Geburtsdatum" type="date" value={f.birth} onChange={set('birth')} />
               <Field id="k-nation" label="Nationalität" value={f.nationality} onChange={set('nationality')} />
             </div>
+            <Field id="k-pass" label="Passnummer" value={f.passport} onChange={set('passport')} autoComplete="off" hint="Steht in Vollmacht und Crewliste. Sehen können sie nur du und Seatribe." />
             <span className="label">Befähigung</span>
             <Field id="k-schein" label="Höchster Segelschein" value={f.licence} onChange={set('licence')} placeholder="z. B. SSS, Yachtmaster Offshore" />
             <Field id="k-scheinnr" label="Scheinnummer" value={f.licenceNo} onChange={set('licenceNo')} autoComplete="off" />

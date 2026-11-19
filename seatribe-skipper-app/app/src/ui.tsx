@@ -63,17 +63,21 @@ interface FieldProps {
   required?: boolean;
   maxLength?: number;
   autoComplete?: string;
+  /** Fehlermeldung direkt am Feld */
+  error?: string;
 }
 
-export function Field({ id, label, value, onChange, hint, unit, type = 'text', ...rest }: FieldProps) {
+export function Field({ id, label, value, onChange, hint, unit, type = 'text', error, ...rest }: FieldProps) {
   const input = (
-    <input id={id} className={unit ? undefined : 'inp'} type={type} value={value} onChange={(e) => onChange(e.target.value)} {...rest} />
+    <input id={id} className={unit ? undefined : 'inp'} type={type} value={value} onChange={(e) => onChange(e.target.value)}
+      aria-invalid={error ? true : undefined} aria-describedby={error ? id + '-err' : undefined} {...rest} />
   );
   return (
-    <label className="field" htmlFor={id}>
+    <label className={'field' + (error ? ' bad' : '')} htmlFor={id}>
       <span>{label}</span>
       {unit ? <span className="unit">{input}<b>{unit}</b></span> : input}
-      {hint && <small>{hint}</small>}
+      {error && <small className="ferr" id={id + '-err'} role="alert">{error}</small>}
+      {hint && !error && <small>{hint}</small>}
     </label>
   );
 }

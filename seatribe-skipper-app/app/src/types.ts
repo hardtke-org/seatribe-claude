@@ -23,6 +23,7 @@ export interface Profile {
   highest_licence: string | null;
   licence_number: string | null;
   emergency_contact: string | null;
+  passport_no: string | null;
   deposit_rule: { admin?: number; honorar?: number; logistik?: number } | null;
   signature_data: string | null;
   created_at: string;
@@ -51,6 +52,7 @@ export interface Boat {
   flag: string | null;
   callsign: string | null;
   mmsi: string | null;
+  registration_no: string | null;
   length_m: number | null;
   beam_m: number | null;
   draft_m: number | null;
@@ -62,6 +64,8 @@ export interface Owner {
   email: string | null;
   phone: string | null;
   address: string | null;
+  nationality: string | null;
+  passport_no: string | null;
 }
 
 export interface Delivery {
