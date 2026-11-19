@@ -42,7 +42,7 @@ export default function AgenturSkipper() {
   const adresse = [p.street, [p.postal_code, p.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
   const rows: [string, string][] = [
     ['E-Mail', p.email || '–'], ['Telefon', p.phone || '–'], ['Firma', p.company || '–'], ['Anschrift', adresse || '–'],
-    ['Geburtsdatum', datum(p.birth_date) || '–'], ['Nationalität', p.nationality || '–'],
+    ['Geburtsdatum', datum(p.birth_date) || '–'], ['Nationalität', p.nationality || '–'], ['Passnummer', p.passport_no || '–'],
     ['Höchster Schein', p.highest_licence || '–'], ['Scheinnummer', p.licence_number || '–'], ['Notfallkontakt', p.emergency_contact || '–'],
     ['Mehrwertsteuer', p.charges_vat ? 'weist sie aus' : 'weist keine aus'],
     ...(p.charges_vat ? [['Umsatzsteuer-ID oder Steuernummer', p.tax_number || '–'] as [string, string]] : []),

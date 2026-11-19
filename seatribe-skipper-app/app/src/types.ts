@@ -23,6 +23,7 @@ export interface Profile {
   highest_licence: string | null;
   licence_number: string | null;
   emergency_contact: string | null;
+  passport_no: string | null;
   deposit_rule: { admin?: number; honorar?: number; logistik?: number } | null;
   signature_data: string | null;
   created_at: string;
