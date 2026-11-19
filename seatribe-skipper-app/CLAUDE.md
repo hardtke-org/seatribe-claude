@@ -329,6 +329,12 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Vollmacht: Gültigkeit (Vorschlag von Claude, vom Auftraggeber am 2026-11-19 bestätigt, noch nicht gebaut; reicht der Zeitraum einmal nicht, soll sich die Vollmacht in der App mit neuem Zeitraum neu erzeugen lassen):** Die App schlägt den Zeitraum vor, er bleibt änderbar. Beginn = geplanter Start minus 7 Tage. Ende = geplanter Start + Höchsttage (ersatzweise kalkulierte Tage) + Puffer; Puffer = 14 Tage, bei langen Fahrten die halbe Dauer, wenn das mehr ist. Beispiel des Auftraggebers: zwei Wochen Fahrt → eine Woche vorher, zwei Wochen danach. Die geschätzte Dauer in Seetagen kommt aus den Segeltagen des Auftrags. In der Vorlage war bei 50 Seetagen ein Fenster von rund 12 Tagen vorher und 59 Tagen nach dem geplanten Ende eingetragen – passt zur Regel „halbe Dauer".
 
+**Abgleich mit HubSpot (geprüft am 2026-11-19 auf Wunsch des Auftraggebers: Boots- und Eignerdaten sollen aus HubSpot kommen und zugleich in der App frei pflegbar sein, weil Skipper kein HubSpot haben):**
+- Kommt schon aus HubSpot: Bootsname, Bootstyp, Registrierungsnummer (`bootskennzeichen`), Baujahr, Länge, Breite, Tiefgang; vom Kontakt Name, E-Mail, Telefon und Anschrift (`address`, `zip`, `city`, `country`).
+- **Gibt es in HubSpot nicht** (Suche in den Feldern von Deal und Kontakt): MMSI, Rufzeichen, Flagge am Deal; Staatsangehörigkeit und Passnummer am Kontakt. Der Kontakt hat nur das Standardfeld `date_of_birth`. Diese Angaben lassen sich erst abrufen, wenn der Auftraggeber die Felder in HubSpot anlegt; dann die Abruf-Funktion `hubspot-order` erweitern und neu einspielen.
+- Frei pflegbar ist in der App bereits alles (Formular „Daten bearbeiten"). Beim erneuten Abruf überschreibt HubSpot nur, was dort gefüllt ist; in der App ergänzte Angaben bleiben stehen.
+- Einwand von Claude: Die Passnummer des Eigners besser nur in der App führen und nicht zusätzlich in HubSpot (weniger Orte mit heiklen Daten) – es sei denn, sie kommt ohnehin über ein HubSpot-Formular herein. Entscheidung offen.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
