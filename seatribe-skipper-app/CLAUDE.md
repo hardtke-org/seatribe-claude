@@ -333,7 +333,7 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - Kommt schon aus HubSpot: Bootsname, Bootstyp, Registrierungsnummer (`bootskennzeichen`), Baujahr, Länge, Breite, Tiefgang; vom Kontakt Name, E-Mail, Telefon und Anschrift (`address`, `zip`, `city`, `country`).
 - **Gibt es in HubSpot nicht** (Suche in den Feldern von Deal und Kontakt): MMSI, Rufzeichen, Flagge am Deal; Staatsangehörigkeit und Passnummer am Kontakt. Der Kontakt hat nur das Standardfeld `date_of_birth`. Diese Angaben lassen sich erst abrufen, wenn der Auftraggeber die Felder in HubSpot anlegt; dann die Abruf-Funktion `hubspot-order` erweitern und neu einspielen.
 - Frei pflegbar ist in der App bereits alles (Formular „Daten bearbeiten"). Beim erneuten Abruf überschreibt HubSpot nur, was dort gefüllt ist; in der App ergänzte Angaben bleiben stehen.
-- Einwand von Claude: Die Passnummer des Eigners besser nur in der App führen und nicht zusätzlich in HubSpot (weniger Orte mit heiklen Daten) – es sei denn, sie kommt ohnehin über ein HubSpot-Formular herein. Entscheidung offen.
+- **Passnummer und Staatsangehörigkeit des Eigners bleiben nur in der App** (geklärt am 2026-11-19): Der Auftraggeber fragt sie heute an und bekommt sie per E-Mail; in HubSpot werden dafür keine Felder angelegt. Vorerst trägt die Agentur sie in der App ein. Später soll der Eigner sie selbst eingeben können – das gehört zum Eigner-Link (ohne Login), zusammen mit Ausrüstungsliste und Unterlagen. Für HubSpot bleiben nur die Bootsdaten MMSI, Rufzeichen und Flagge als mögliche neue Deal-Felder.
 
 ## Liste für den Juristen
 
