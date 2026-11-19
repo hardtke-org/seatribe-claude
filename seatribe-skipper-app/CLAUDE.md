@@ -296,6 +296,72 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Formatierung des Eigner-Vertrags, Rückmeldung vom 2026-11-18 (umgesetzt):** In § 2 stehen zwei Zeilen „Reisekosten – in der Logistikpauschale enthalten" und „Verpflegung – in der Logistikpauschale enthalten" (statt einer Zeile „Verpflegungskosten … inbegriffen"). Weitere Wünsche zur Gestaltung des PDFs nimmt Claude am liebsten als Screenshot mit Anmerkungen entgegen.
 
+**Merkliste, Idee des Auftraggebers vom 2026-11-19 (nicht bauen): Sicherheitseinweisung der Crew.** Ein Baustein für den Skipper: Sicherheitseinweisung als Checkliste vor der Abfahrt. Dazu Rollen an Bord (Notrollen), die den Crewmitgliedern der Überführung zugewiesen werden; jedes Crewmitglied sieht seine Rolle in der eigenen App. Setzt den Crew-Login voraus. Ergänzungen von Claude, noch nicht besprochen: Die Einweisung ist technisch dieselbe Checkliste wie Übernahme und Übergabe (einmal bauen, mehrfach nutzen); jedes Crewmitglied bestätigt in seiner App, dass es eingewiesen wurde, mit Zeitstempel – das ist für den Skipper ein Nachweis; passt auch für Charter.
+
+**Merkliste, ergänzt am 2026-11-19 (nicht bauen):**
+- Sicherheitseinweisung: sieht aus wie die Bootsübernahme (dieselbe Checklisten-Technik). Jedes Crewmitglied bestätigt per Klick; die Bestätigung wird gespeichert. Vom Auftraggeber so bestätigt.
+- Dazu ein **Haftungsausschluss**, den das Crewmitglied mit bestätigt (Gedanke des Auftraggebers: Freizeittörn). Hinweis von Claude: Ein Haftungsausschluss per Klick hat enge gesetzliche Grenzen – für Vorsatz, grobe Fahrlässigkeit und für Schäden an Leben, Körper und Gesundheit lässt er sich in vorformulierten Texten nach Claudes Kenntnis nicht wirksam ausschließen (§ 309 Nr. 7 BGB). Außerdem ist eine bezahlte Überführung mit Crew „Hand gegen Koje" nicht ohne Weiteres ein Freizeittörn. Der Text gehört zum Juristen; die bestehende Crewvereinbarung regelt das Thema vermutlich schon und sollte die Grundlage sein.
+- **Profilfoto:** Jeder kann ein Foto von sich im Konto hinterlegen. Der Skipper sieht bei seiner Crew nicht nur Namen, sondern Gesichter (Erfahrung des Auftraggebers: bei wechselnder Crew sind Namen schwer zu merken). Vorschlag von Claude: freiwillig; sichtbar nur für Skipper, Agentur und die Crew derselben Überführung.
+
+**Überlegung des Auftraggebers vom 2026-11-19 (nichts tun, nur Meinung):** Für Charter passt das Wort „Überführung" nicht; dort wäre es „Törn anlegen". Meinung von Claude: jetzt bei „Überführung" bleiben (so entschieden, und für Eigner und Verträge das richtige Wort). Wenn Charter kommt, bekommt jede Fahrt eine Art (Überführung, Chartertörn, später evtl. Ausbildungstörn); das Wort in der Oberfläche und die angebotenen Bausteine richten sich nach der Art, die gemeinsame Liste heißt dann „Meine Törns". Technisch ist das klein, weil die Fahrt ohnehin ein eigener Datensatz ist.
+
+**Vorgehen ab 2026-11-19 (vom Auftraggeber vorgeschlagen, von Claude befürwortet):** Erst geht der Auftraggeber die Agentur-Seite durch und gibt Rückmeldung; was sich daraus für Skipper ergibt, fließt gleich mit ein. Danach die Skipper-Seite, zuletzt die Crew-Seite. Für die spätere Auswahl „Art des Törns" nannte er: Charter, Törn, Überführung, Ausflug (auch Wochenendtörn).
+
+**Designsprache für Dokumente (Entwurf des Auftraggebers vom 2026-11-19, zweite Fassung „Design 2"; noch nicht umgesetzt, wartet auf sein Los):** Kopf mit „SEATRIBE DELIVERIES" (klein, gesperrt), Titel groß, Ort und Datum, Logo rechts, hellblaue Linie · zwei Kästen Auftragnehmer / Auftraggeber auf sehr hellem Blau, dazwischen „und" · Paragrafen-Nummer am linken Rand, Überschrift daneben, Text eingerückt · Datenkasten mit kleinen Beschriftungen (Yachttyp, Yachtname, Starthafen → Zielhafen mit Pfeil, geplanter Starttermin) · Block „Kalkulierte Gesamtkosten" auf sehr hellem Blau mit hellblauem Balken links, netto und brutto groß · Tabelle „Vergütung – Zusammensetzung" mit eingerückten Unterzeilen für Mindest- und Höchstdauer · § 3 als zwei Karten „1 · Anzahlung" und „2 · Restbetrag" mit Betrag und Erläuterung · Unterschriften mit je einer Linie für Ort/Datum und Unterschrift · Fußzeile: Dokument und Firma links, Entwurfsvermerk rot in der Mitte, „Seite x von y" rechts. Farben: Schrift `#0f2534`; kleine Beschriftungen und Paragrafen-Nummern Dunkelblau `#005b84`; Hellblau `#009fe0` nur Linien, Pfeil, Balken; kein fast schwarzer Flächenblock. Titel in Manrope. Die Logistikpauschale steht in **einer** Zeile „– inkl. Reisekosten und Verpflegung" (ersetzt die zwei Zeilen vom Vortag). Leere Felder bleiben leer statt Strich. Diese Bausteine gelten für alle künftigen Dokumente. Die AGB-Seiten gefallen dem Auftraggeber, wie sie sind; nur Kopf- und Fußzeile angleichen.
+
+**Schriften in Dokumenten (klargestellt am 2026-11-19):** Der Auftraggeber hat seinen Entwurf mit **Manrope für Überschriften und Open Sans für den Fließtext** gebrieft. Das gilt für die Dokumente. In diesem Chat war zuvor nur „Manrope" genannt worden, deshalb läuft die App bisher ganz in Manrope; ob die App angeglichen wird, ist offen.
+
+**§ 2 des Eigner-Vertrags, Rückmeldung des Auftraggebers vom 2026-11-19 (noch offen, nicht umgesetzt):** Paragrafen-Nummern evtl. in Fast-Schwarz wie die Überschrift daneben. Zeilen der Tabelle „Vergütung – Zusammensetzung" etwas kleiner. Unter der Tabelle kurze Erläuterungen in kleiner Schrift zu Abrechnungsdauer, Logistikpauschale und Administrationspauschale. Der Teil „Auslagen" passt noch nicht: Überschrift zu klein gegenüber „Vergütung", beim Bordkassen-Vorschuss fehlt die Summe, und es muss klar sein, wofür er ist. Vorschlag von Claude: § 2 in zwei gleichrangige Teile „Vergütung" und „Auslagen", je mit Tabelle und Erläuterung; Erläuterungstexte wörtlich aus den AGB nehmen (§ 2 Abs. 5 zur Logistikpauschale, § 11 Abs. 1 und § 14 Abs. 3 zur Administrationspauschale), damit Vertrag und AGB dasselbe sagen.
+
+**Designsprache umgesetzt (2026-11-19), nach „Design 3" des Auftraggebers.** Der Eigner-Vertrag entsteht jetzt in diesem Design: Manrope (fett) für Titel, Paragrafen und Beträge, Open Sans für Text; Schriften in `app/public/fonts`. § 2 hat zwei gleichrangige Teile „Vergütung" und „Auslagen", je mit Tabelle und kleinen Erläuterungen mit fettem Stichwort (Abrechnungsdauer; Mindest- und Höchstdauer; Logistikpauschale; Administrationspauschale; Bordkasse). Paragrafen-Nummern in `#0f2534`, kleine Beschriftungen in `#005b84`, Hellblau nur Linien, Pfeil und Balken. § 3 als zwei Karten. Unterschriften stehen unten auf der letzten Vertragsseite, das hinterlegte Unterschriftsbild über der Linie. AGB mit gleicher Kopf- und Fußzeile, eigene Seitenzählung. Die Bausteine in `app/src/contract.ts` (Typ `Block`) und `app/src/contractPdf.ts` sind die Vorlage für alle weiteren Dokumente. Neu in der App: Hinweis, wenn Mindest-, kalkulierte und Höchsttage nicht zusammenpassen. Getestet mit erfundenen Zahlen; PDF angesehen (zwei Seiten Vertrag, drei Seiten AGB). Die neuen Erläuterungstexte zu Logistik- und Administrationspauschale stammen aus AGB § 2 Abs. 5, § 11 Abs. 1 und § 14 Abs. 3; neu formuliert sind nur Höchstdauer und Bordkasse (stehen auf der Liste für den Juristen unter A). Offen: ob auch die App selbst Text in Open Sans bekommt.
+
+**Nachtrag zum Design (2026-11-19, umgesetzt):** Die Zwischenüberschriften „Vergütung" und „Auslagen" stehen fett in Manrope in normaler Schreibweise, mit einer kräftigen dunklen Linie darunter, die die Tabelle oben abschließt (vorher klein, gesperrt und blau – wirkte verloren).
+
+## Liste für den Juristen
+
+Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
+
+**A. Vertrag mit dem Eigner (in der App gebaut, trägt bis zur Freigabe den Entwurfsvermerk)**
+1. Neuer Satz zur Bordkasse (ersetzt „Nebenkosten" und „Sicherheitsrücklage").
+2. Neuer Satz zur Höchstabrechnungsdauer: Deckel gilt nicht bei Verzögerungen durch Yacht, Reparaturen, Behörden, Auftraggeber oder Dritte.
+3. § 3 Zahlungsbedingungen nach der Anzahlungsregel (Administrationspauschale 100 %, Skipperhonorar 50 %, Logistikpauschale einstellbar); Rest 14 Tage vor dem Start; Bordkassen-Vorschuss vor der Abfahrt.
+4. Fassungen „Reisekosten einzeln" und „Festpreis" – gleiche Prüfung, sobald gebaut.
+
+**B. AGB vom 15.09.2026**
+5. § 10 „Sicherheitsrücklage" auf „Bordkasse" umstellen; ebenso § 14 Abs. 5.
+6. § 11 Fälligkeit: nennt die Logistikpauschale bei Vertragsabschluss in voller Höhe – an die neue Regel anpassen.
+7. § 14 Storno: Erstattung der Logistikpauschale, wenn Reisekosten schon gebucht sind; passt das zur späteren Fälligkeit?
+8. § 15 Abs. 3 Gerichtsstand: Wortlaut gegen das Original prüfen (in der ausgelesenen Vorlage verstümmelt).
+9. Ob die drei älteren AGB-Fassungen noch irgendwo gelten.
+
+**C. Unterschriften**
+10. Hinterlegtes Unterschriftsbild der Agentur im Vertrag: ausreichend?
+11. Unterschrift per Klick in der App für Skipper und Crew, mit Protokoll (wer, wann, welche Fassung): ausreichend, und was muss protokolliert werden?
+12. Unterschrift des Eigners: reicht das zurückgeschickte PDF, oder lohnt ein Signaturdienst?
+
+**D. Crew**
+13. Haftungsausschluss bei der Sicherheitseinweisung, per Klick bestätigt: Was lässt sich wirksam ausschließen? (Claude: nicht Vorsatz, grobe Fahrlässigkeit, Leben/Körper/Gesundheit.)
+14. Ist eine bezahlte Überführung mit Crew „Hand gegen Koje" ein Freizeittörn? Folgen für Haftung und Versicherung.
+15. Welchen Beweiswert hat die gespeicherte Bestätigung der Sicherheitseinweisung, und was sollte die Checkliste mindestens enthalten?
+16. Crewvereinbarung: wer schließt sie (Agentur oder Skipper), Text an die App anpassen.
+
+**E. Skipper**
+17. Skippervertrag: Text prüfen, Kundenschutz und Geheimhaltung; darf der Skipper die Konditionen mit dem Eigner nicht sehen (so umgesetzt).
+18. Ergänzung von Claude: Abgrenzung zur Scheinselbstständigkeit, wenn Skipper regelmäßig für Seatribe fahren und Aufträge über die App zugewiesen bekommen.
+
+**F. Ausweise und Daten**
+19. Ausweis- und Passkopien von Skippern und Crew: Darf die Agentur sie speichern und an den Eigner weitergeben, oder nur der Inhaber selbst per Freigabe?
+20. Profilfotos, Crewlisten mit Passdaten: Einwilligung, Sichtbarkeit, Löschfristen.
+21. Datenschutzerklärung, Impressum, Vertrag zur Auftragsverarbeitung, Löschkonzept – nötig vor dem Start mit fremden Nutzern.
+
+**G. Verkauf an freie Skipper**
+22. Darf Seatribe Vertrags- und AGB-Muster anbieten, und wie lautet der Haftungshinweis?
+23. Eigene Fassung für Skipper, die selbst fahren (die Agentur-Texte passen nicht).
+24. Zusammenarbeit mit dem Juristen bei bezahlten Prüfungen: Welche Form ist zulässig? (Claude: eine Provision für vermittelte Mandate ist nach § 49b Abs. 3 BRAO wohl nicht erlaubt.)
+25. Nutzungsbedingungen der App und Haftung von Seatribe für Fehler in erzeugten Dokumenten.
+
+**Für den Steuerberater, nicht für den Anwalt:** Steuernummer auf Rechnungen von Kleinunternehmern; Mehrwertsteuer bei Tagen außerhalb der EU; Steuersätze anderer Länder.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.

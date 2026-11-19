@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../auth';
-import { eignerVertrag, luecken, ruleOf, zahlung, type Block, type ContractInput } from '../contract';
+import { eignerVertrag, luecken, ruleOf, tageHinweis, zahlung, type Block, type ContractInput } from '../contract';
 import { datum, euro, isoDatum } from '../data';
 import { getDelivery } from '../deliveries';
 import { supabase } from '../supabase';
@@ -17,16 +17,50 @@ function Vorschau({ blocks }: { blocks: Block[] }) {
   return (
     <div className="paper vertrag">
       {blocks.slice(0, bisAgb < 0 ? undefined : bisAgb).map((b, n) => {
-        if (b.t === 'titel') return <div key={n} className="title" style={{ textAlign: 'center' }}>{b.text}</div>;
-        if (b.t === 'mitte') return <p key={n} style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>{b.text}</p>;
-        if (b.t === 'h') return <h3 key={n}>{b.text}</h3>;
-        if (b.t === 'h2') return <p key={n}><strong>{b.text}</strong></p>;
+        if (b.t === 'kopf') return (
+          <div key={n} className="v-kopf">
+            <div><span className="v-label">{b.marke}</span><div className="title">{b.titel}</div><div className="when">{b.ort}</div></div>
+            <img src="/logo-192.png" alt="" />
+          </div>
+        );
+        if (b.t === 'parteien') return (
+          <div key={n} className="stack" style={{ gap: 6 }}>
+            <div className="two">
+              {[b.a, b.b].map((p) => (
+                <div key={p.label} className="v-box"><span className="v-label">{p.label}</span><strong className={p.name ? undefined : 'miss'}>{p.name || 'fehlt'}</strong>{p.zeilen.map((z) => <div key={z}>{z}</div>)}</div>
+              ))}
+            </div>
+            <small className="when">{b.nach}</small>
+          </div>
+        );
+        if (b.t === 'h') return <h3 key={n}>{b.nr ? b.nr + '  ' : ''}{b.text}</h3>;
         if (b.t === 'p') return <p key={n} className={b.neu ? 'neu' : undefined}>{b.text}</p>;
-        if (b.t === 'zeilen') return (<dl key={n}>{b.zeilen.map(([k, v]) => (<div key={k} style={{ display: 'contents' }}><dt>{k}</dt><dd className={v ? undefined : 'miss'}>{v || 'fehlt'}</dd></div>))}</dl>);
+        if (b.t === 'yacht') return (
+          <dl key={n}>
+            {([['Yachttyp', b.typ], ['Yachtname', b.name], ['Starthafen', b.von], ['Zielhafen', b.nach], ['Geplanter Starttermin', b.start]] as const).map(([k, v]) => (
+              <div key={k} style={{ display: 'contents' }}><dt>{k}</dt><dd>{v || '–'}</dd></div>
+            ))}
+          </dl>
+        );
+        if (b.t === 'summe') return (
+          <div key={n} className="v-summe"><span className="v-label">{b.titel}</span><div>{b.sub}</div><div className="total">{b.netto || '–'} <small>netto</small> · {b.brutto || '–'} <small>brutto</small></div></div>
+        );
+        if (b.t === 'label') return <strong key={n} className="v-zwischen">{b.text}</strong>;
+        if (b.t === 'tabelle') return (
+          <table key={n}><tbody>
+            {b.zeilen.map((z) => (<tr key={z.k} className={z.sub ? 'v-sub' : undefined}><td>{z.k}{z.zusatz}</td><td className={z.v ? undefined : 'miss'}>{z.v ? <><strong>{z.v}</strong>{z.vz}</> : 'fehlt'}</td></tr>))}
+          </tbody></table>
+        );
+        if (b.t === 'klein') return (<div key={n} className="v-klein">{b.punkte.map((p) => <p key={p.s} className={p.neu ? 'neu' : undefined}><strong>{p.s}</strong> {p.text}</p>)}</div>);
+        if (b.t === 'karten') return (
+          <div key={n} className="two">
+            {b.karten.map((k) => (<div key={k.kopf} className="v-karte neu"><span className="v-label">{k.kopf}</span><div className="when">{k.sub}</div><strong>{k.betrag} <small>brutto</small></strong><div>{k.text}</div></div>))}
+          </div>
+        );
         if (b.t === 'unterschrift') return (
-          <div key={n} className="two" style={{ fontSize: '.84rem' }}>
-            <div style={{ whiteSpace: 'pre-line' }}>{b.links.ort}<div className="signline" />{b.links.name}</div>
-            <div style={{ whiteSpace: 'pre-line' }}>{b.rechts.ort}<div className="signline">{b.bild && <img src={b.bild} alt="Deine Unterschrift" />}</div>{b.rechts.name}</div>
+          <div key={n} className="two" style={{ fontSize: '.8rem' }}>
+            <div><span className="v-label">{b.links.label}</span><div className="signline" />{b.links.name}</div>
+            <div><span className="v-label">{b.rechts.label}</span><div>{b.rechts.ort}</div><div className="signline">{b.bild && <img src={b.bild} alt="Deine Unterschrift" />}</div>{b.rechts.name}</div>
           </div>
         );
         return null;
@@ -111,7 +145,8 @@ export default function Vertrag() {
       setTerms(neu);
 
       const { renderPdf } = await import('../contractPdf');
-      const pdf = await renderPdf(blocks, { fuss: 'Überführungsvertrag', entwurf });
+      const firma = profile?.company || profile?.display_name || '';
+      const pdf = await renderPdf(blocks, { fuss: 'Überführungsvertrag', firma, kopf: [firma, f.ownerName.trim()].filter(Boolean).join(' / '), entwurf });
       const kurz = (d.order_no ? 'Auftrag-' + d.order_no : `${d.from_port}-${d.to_port}`).normalize('NFKD').replace(/[^\w-]+/g, '-').replace(/-+/g, '-').slice(0, 60);
       const name = `Ueberfuehrungsvertrag-${kurz}${entwurf ? '-Entwurf' : ''}.pdf`;
       const path = `${uid}/${d.id}/${crypto.randomUUID()}.pdf`;
@@ -189,6 +224,7 @@ export default function Vertrag() {
       {z?.abweichung != null && <p className="note">Skipperhonorar, Logistik- und Administrationspauschale ergeben zusammen {euro(z.gesamt)} brutto. In HubSpot steht als Angebot brutto {euro(terms.angebot_brutto)}. Bitte in HubSpot prüfen, welche Zahl stimmt.</p>}
       {!profile.signature_data && <p className="hint">Du hast noch keine Unterschrift hinterlegt. Das geht unter „Mein Konto“; bis dahin bleibt das Feld im Vertrag frei.</p>}
       {fehlt.length > 0 && <p className="note">Für einen vollständigen Vertrag fehlt noch: {fehlt.join(', ')}.</p>}
+      {input && tageHinweis(input) && <p className="note">{tageHinweis(input)}</p>}
 
       <span className="label">Vorschau (ohne AGB)</span>
       <Vorschau blocks={blocks} />
