@@ -298,6 +298,11 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Merkliste, Idee des Auftraggebers vom 2026-11-19 (nicht bauen): Sicherheitseinweisung der Crew.** Ein Baustein für den Skipper: Sicherheitseinweisung als Checkliste vor der Abfahrt. Dazu Rollen an Bord (Notrollen), die den Crewmitgliedern der Überführung zugewiesen werden; jedes Crewmitglied sieht seine Rolle in der eigenen App. Setzt den Crew-Login voraus. Ergänzungen von Claude, noch nicht besprochen: Die Einweisung ist technisch dieselbe Checkliste wie Übernahme und Übergabe (einmal bauen, mehrfach nutzen); jedes Crewmitglied bestätigt in seiner App, dass es eingewiesen wurde, mit Zeitstempel – das ist für den Skipper ein Nachweis; passt auch für Charter.
 
+**Merkliste, ergänzt am 2026-11-19 (nicht bauen):**
+- Sicherheitseinweisung: sieht aus wie die Bootsübernahme (dieselbe Checklisten-Technik). Jedes Crewmitglied bestätigt per Klick; die Bestätigung wird gespeichert. Vom Auftraggeber so bestätigt.
+- Dazu ein **Haftungsausschluss**, den das Crewmitglied mit bestätigt (Gedanke des Auftraggebers: Freizeittörn). Hinweis von Claude: Ein Haftungsausschluss per Klick hat enge gesetzliche Grenzen – für Vorsatz, grobe Fahrlässigkeit und für Schäden an Leben, Körper und Gesundheit lässt er sich in vorformulierten Texten nach Claudes Kenntnis nicht wirksam ausschließen (§ 309 Nr. 7 BGB). Außerdem ist eine bezahlte Überführung mit Crew „Hand gegen Koje" nicht ohne Weiteres ein Freizeittörn. Der Text gehört zum Juristen; die bestehende Crewvereinbarung regelt das Thema vermutlich schon und sollte die Grundlage sein.
+- **Profilfoto:** Jeder kann ein Foto von sich im Konto hinterlegen. Der Skipper sieht bei seiner Crew nicht nur Namen, sondern Gesichter (Erfahrung des Auftraggebers: bei wechselnder Crew sind Namen schwer zu merken). Vorschlag von Claude: freiwillig; sichtbar nur für Skipper, Agentur und die Crew derselben Überführung.
+
 ## Offene Punkte
 
 - AGB vom 15.09.2026 an die App-Begriffe anpassen (u. a. Paragraf „Sicherheitsrücklage" in „Bordkasse" überführen), danach juristisch prüfen.
