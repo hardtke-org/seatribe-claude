@@ -311,6 +311,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Schriften in Dokumenten (klargestellt am 2026-11-19):** Der Auftraggeber hat seinen Entwurf mit **Manrope für Überschriften und Open Sans für den Fließtext** gebrieft. Das gilt für die Dokumente. In diesem Chat war zuvor nur „Manrope" genannt worden, deshalb läuft die App bisher ganz in Manrope; ob die App angeglichen wird, ist offen.
 
+**§ 2 des Eigner-Vertrags, Rückmeldung des Auftraggebers vom 2026-11-19 (noch offen, nicht umgesetzt):** Paragrafen-Nummern evtl. in Fast-Schwarz wie die Überschrift daneben. Zeilen der Tabelle „Vergütung – Zusammensetzung" etwas kleiner. Unter der Tabelle kurze Erläuterungen in kleiner Schrift zu Abrechnungsdauer, Logistikpauschale und Administrationspauschale. Der Teil „Auslagen" passt noch nicht: Überschrift zu klein gegenüber „Vergütung", beim Bordkassen-Vorschuss fehlt die Summe, und es muss klar sein, wofür er ist. Vorschlag von Claude: § 2 in zwei gleichrangige Teile „Vergütung" und „Auslagen", je mit Tabelle und Erläuterung; Erläuterungstexte wörtlich aus den AGB nehmen (§ 2 Abs. 5 zur Logistikpauschale, § 11 Abs. 1 und § 14 Abs. 3 zur Administrationspauschale), damit Vertrag und AGB dasselbe sagen.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
