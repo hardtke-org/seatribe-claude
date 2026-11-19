@@ -45,7 +45,7 @@ function Vorschau({ blocks }: { blocks: Block[] }) {
         if (b.t === 'summe') return (
           <div key={n} className="v-summe"><span className="v-label">{b.titel}</span><div>{b.sub}</div><div className="total">{b.netto || '–'} <small>netto</small> · {b.brutto || '–'} <small>brutto</small></div></div>
         );
-        if (b.t === 'label') return <span key={n} className="v-label">{b.text}</span>;
+        if (b.t === 'label') return <strong key={n} className="v-zwischen">{b.text}</strong>;
         if (b.t === 'tabelle') return (
           <table key={n}><tbody>
             {b.zeilen.map((z) => (<tr key={z.k} className={z.sub ? 'v-sub' : undefined}><td>{z.k}{z.zusatz}</td><td className={z.v ? undefined : 'miss'}>{z.v ? <><strong>{z.v}</strong>{z.vz}</> : 'fehlt'}</td></tr>))}

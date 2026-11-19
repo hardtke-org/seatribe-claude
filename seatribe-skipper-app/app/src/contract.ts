@@ -127,7 +127,7 @@ export function eignerVertrag(i: ContractInput): Block[] {
 
     { t: 'h', nr: '§ 2', text: 'Vergütung & Auslagen' },
     { t: 'summe', titel: 'KALKULIERTE GESAMTKOSTEN', sub: 'ca., zzgl. Auslagen', netto: euro(t.angebot_netto), brutto: euro(t.angebot_brutto) },
-    { t: 'label', text: 'VERGÜTUNG' },
+    { t: 'label', text: 'Vergütung' },
     { t: 'tabelle', zeilen: [
       { k: 'Tagessatz', v: t.tagessatz_kunde != null ? `${euro(t.tagessatz_kunde)} netto` : '', vz: t.tagessatz_kunde != null ? ' / Kalendertag' : '' },
       { k: 'Kalkulierte Abrechnungsdauer', v: tage(t.tage_gesamt) },
@@ -142,7 +142,7 @@ export function eignerVertrag(i: ContractInput): Block[] {
       { s: 'Logistikpauschale:', neu: true, text: 'Sie umfasst die planmäßigen Reise- und Verpflegungskosten des Schiffsführers und der Crew. Zusätzliche Reise- und Verpflegungskosten aufgrund yachtbedingter Verzögerungen trägt der Auftraggeber gegen Nachweis.' },
       { s: 'Administrationspauschale:', neu: true, text: 'Sie ist mit Beginn der Vorbereitung verdient und wird danach nicht erstattet.' },
     ] },
-    { t: 'label', text: 'AUSLAGEN' },
+    { t: 'label', text: 'Auslagen' },
     { t: 'tabelle', zeilen: [{ k: 'Bordkassen-Vorschuss', zusatz: ' (Schätzwert)', v: euro(t.bordkasse) }] },
     { t: 'klein', punkte: [
       { s: 'Bordkasse:', neu: true, text: 'Sie deckt die Kosten des Yachtbetriebs nach § 2 Absatz 3 der AGB, insbesondere Treibstoffe, Hafengebühren, Ersatzteile und Reparaturen. Sie wird nach Abschluss der Überführung gegen Nachweis abgerechnet. Nicht verwendete Teile werden erstattet.' },

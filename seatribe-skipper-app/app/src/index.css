@@ -234,3 +234,4 @@ img.sign { max-height: 70px; max-width: 100%; align-self: flex-start; background
 .v-karte + .v-karte { border-top-color: var(--deep); }
 .v-karte strong { display: block; font-size: 1.05rem; margin-block: 2px; }
 @media (prefers-color-scheme: dark) { .v-label { color: var(--brand-ink); } }
+.v-zwischen { display: block; font-family: var(--f-display); border-bottom: 1.5px solid var(--ink); padding-bottom: 3px; margin-bottom: -6px; }

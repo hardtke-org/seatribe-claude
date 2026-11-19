@@ -136,8 +136,10 @@ export async function renderPdf(blocks: Block[], opt: { fuss: string; firma: str
     else if (b.t === 'label') {
       // Eine Zwischenüberschrift steht nie allein am Seitenende: Platz für die folgende Tabelle mit prüfen.
       const folgt = blocks[n + 1];
-      platz(8 + (folgt?.t === 'tabelle' ? folgt.zeilen.reduce((s, z) => s + (z.sub ? 5.6 : 7.2), 4) : 10));
-      label(b.text, X, y, 7.2); y += 3.2;
+      platz(10 + (folgt?.t === 'tabelle' ? folgt.zeilen.reduce((s, z) => s + (z.sub ? 5.6 : 7.2), 4) : 10));
+      // Zwischenüberschrift: fett in Manrope, mit kräftiger Linie darunter, die die Tabelle oben abschließt
+      y += 1.2; font('kopf', 10.5); doc.text(b.text, X, y); y += 2.4;
+      linie(X, y, R, INK, 0.35);
     }
 
     else if (b.t === 'tabelle') {
