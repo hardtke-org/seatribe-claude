@@ -382,6 +382,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - **Voreinstellungen für Preise** stehen im Konto: beim Skipper sein Tagessatz und seine üblichen Posten, bei der Agentur ihre Regeln (wie schon die Anzahlungsregel).
 - Der Nutzen soll schon beim **Angebot** beginnen, nicht erst beim Vertrag. **Versand von Angebot und Vertrag aus der App** kann sich der Auftraggeber vorstellen; das würde die Abrede vom 2026-11-17 („Versand nicht aus der App, weiter über das eigene Postfach") ändern und ist noch nicht entschieden. Die 49 € waren nur ein Beispiel.
 
+**Versand und Übertragen (Idee des Auftraggebers vom 2026-11-21, ausdrücklich für die Zukunft, nicht bauen):** Zwei Wege, damit nichts mehr heruntergeladen werden muss. (1) Der Nutzer hinterlegt einmal sein eigenes Postfach; danach reicht in der App ein Klick auf „Senden", die Mail geht über seinen eigenen Mailserver hinaus (so war es schon am 2026-11-15 für den Prototyp gedacht). (2) Haben Eigner und Skipper bzw. Agentur beide die App, wird ein Dokument gar nicht verschickt, sondern „übertragen": Es erscheint beim Eigner, und der setzt dort seine Unterschrift. Hinweis von Claude: (2) hängt am Eigner-Zugang und an der Frage der Unterschrift per Klick (Liste für den Juristen, Punkt 11 und 12). Reihenfolge bleibt: erst Agentur-Seite durchgehen, dann Skipper-Seite; diese Ideen kommen am Ende.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
