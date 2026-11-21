@@ -230,7 +230,7 @@ export default function Vertrag() {
 
       <span className="label">Vorschau (ohne AGB)</span>
       <Vorschau blocks={blocks} />
-      <p className="lead">Gelb markiert sind die Stellen, die von deiner bisherigen Vorlage abweichen. Im PDF folgen die AGB in der Fassung vom 15.09.2026.</p>
+      <p className="lead">Gelb markiert sind die Stellen, die von deiner bisherigen Vorlage abweichen. Im PDF folgen die AGB in der Fassung vom 15.09.2026; dort verweist § 11 jetzt auf Anzahlung und Restbetrag in diesem Vertrag.</p>
 
       <Opt type="checkbox" name="v-entwurf" value="ja" checked={entwurf} onChange={() => setEntwurf(!entwurf)} title="Als Entwurf kennzeichnen"
         sub="Unten auf jeder Seite steht in Rot „ENTWURF“. Nimm den Haken erst heraus, wenn dein Jurist die Texte freigegeben hat." />

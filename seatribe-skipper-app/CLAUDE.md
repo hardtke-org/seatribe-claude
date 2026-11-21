@@ -366,6 +366,8 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 
 **Entwurfsvermerk gekürzt (2026-11-21, umgesetzt):** Der Auftraggeber hat den ersten echten Vertrag aus einem HubSpot-Auftrag über die App erzeugt und ist sehr zufrieden (große Zeitersparnis). Auf dem PDF steht jetzt nur noch „ENTWURF" statt „ENTWURF – noch nicht juristisch geprüft": Den Entwurf will er dem Eigner vorab schicken, auch wenn noch Angaben fehlen; dass die Texte noch beim Juristen liegen, muss der Eigner nicht lesen. Der Haken „Als Entwurf kennzeichnen" bleibt voreingestellt. Hinweis von Claude: Die juristische Prüfung steht weiter aus (Liste für den Juristen, Teil A und B); eine endgültige Fassung ohne Vermerk erst danach verschicken.
 
+**Widerspruch Vertrag/AGB zur Logistikpauschale behoben (2026-11-21, umgesetzt auf Wunsch des Auftraggebers, Jurist steht noch aus):** Der Vertrag rechnet die Anzahlung nach der Regel im Konto (Voreinstellung 50 % Logistikpauschale), die AGB nannten in § 11 die Logistikpauschale bei Vertragsabschluss in voller Höhe. Geändert: (1) AGB § 11 Abs. 1 lautet jetzt „Bei Vertragsabschluss wird die im Vertrag genannte Anzahlung fällig. Die Administrationspauschale ist mit Beginn der Vorbereitung verdient."; Abs. 2 beginnt „Der im Vertrag genannte Restbetrag ist spätestens 14 Tage vor dem geplanten Starttermin zu zahlen." – so passt der Text zu jeder Regel im Konto. (2) Vertrag § 5 hat einen zweiten Satz: „Bei Abweichungen zwischen diesem Vertrag und den Allgemeinen Geschäftsbedingungen gehen die Regelungen dieses Vertrages vor." (in der Vorschau gelb). Damit sind die AGB in der App **nicht mehr wortgleich mit der Vorlage vom 15.09.2026**; das Datum der Fassung steht unverändert auf dem PDF. Offen, vom Auftraggeber zu entscheiden: neues Fassungsdatum für die geänderten AGB. Getestet mit erfundenen Zahlen: PDF weiter zwei Seiten Vertrag und drei Seiten AGB, Unterschriften unten auf Seite 2.
+
 ## Liste für den Juristen
 
 Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angelegt am 2026-11-19 auf seinen Wunsch). Neue rechtliche Fragen hier ergänzen. Einschätzungen von Claude sind keine Rechtsberatung.
@@ -378,7 +380,7 @@ Sammelstelle für alles, was der Auftraggeber mit seinem Anwalt bespricht (angel
 
 **B. AGB vom 15.09.2026**
 5. § 10 „Sicherheitsrücklage" auf „Bordkasse" umstellen; ebenso § 14 Abs. 5.
-6. § 11 Fälligkeit: nennt die Logistikpauschale bei Vertragsabschluss in voller Höhe – an die neue Regel anpassen.
+6. § 11 Fälligkeit: in der App am 2026-11-21 geändert – Abs. 1 und 2 verweisen jetzt auf Anzahlung und Restbetrag im Vertrag statt feste Anteile zu nennen. Wortlaut prüfen; dazu der neue Vorrang-Satz in § 5 des Vertrags und die Frage, ob die AGB ein neues Fassungsdatum brauchen.
 7. § 14 Storno: Erstattung der Logistikpauschale, wenn Reisekosten schon gebucht sind; passt das zur späteren Fälligkeit?
 8. § 15 Abs. 3 Gerichtsstand: Wortlaut gegen das Original prüfen (in der ausgelesenen Vorlage verstümmelt).
 9. Ob die drei älteren AGB-Fassungen noch irgendwo gelten.
