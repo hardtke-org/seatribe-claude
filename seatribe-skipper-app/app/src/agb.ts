@@ -1,5 +1,7 @@
 /**
- * AGB der Seatribe GmbH, Fassung vom 15.09.2026, unverändert aus der Vorlage übernommen.
+ * AGB der Seatribe GmbH, Fassung vom 15.09.2026, aus der Vorlage übernommen.
+ * Einzige Abweichung (2026-11-21, auf Wunsch des Auftraggebers, Jurist steht noch aus):
+ * § 11 Abs. 1 und 2 nennen keine festen Anteile mehr, sondern verweisen auf Anzahlung und Restbetrag im Vertrag.
  * Änderungen nur nach juristischer Prüfung. Offene Stellen stehen im Projektgedächtnis.
  */
 export const AGB_FASSUNG = '15.09.2026';
@@ -56,8 +58,8 @@ export const AGB: AgbAbschnitt[] = [
     'Über die Verwendung entscheidet der Schiffsführer. Soweit möglich, wird der Auftraggeber vorab informiert.',
   ] },
   { titel: '§ 11 Rechnungslegung und Fälligkeit', absaetze: [
-    'Bei Vertragsabschluss werden 50 % des kalkulierten Skipperhonorars sowie die Administrations- und Logistikpauschale fällig. Die Administrationspauschale ist mit Beginn der Vorbereitung verdient.',
-    'Das verbleibende Skipperhonorar ist spätestens 14 Tage vor dem geplanten Starttermin zu zahlen. Voraussetzung für den Beginn der Überführung ist der vollständige Zahlungseingang.',
+    'Bei Vertragsabschluss wird die im Vertrag genannte Anzahlung fällig. Die Administrationspauschale ist mit Beginn der Vorbereitung verdient.',
+    'Der im Vertrag genannte Restbetrag ist spätestens 14 Tage vor dem geplanten Starttermin zu zahlen. Voraussetzung für den Beginn der Überführung ist der vollständige Zahlungseingang.',
     'Nach Beendigung des Einsatzes erfolgt die Schlussabrechnung auf Grundlage der tatsächlich angefallenen Kalendertage. § 7 Absatz 3 bleibt unberührt.',
     'Nachforderungen sind innerhalb von sieben Tagen zu zahlen. Erstattungen erfolgen innerhalb von sieben Tagen nach der Schlussabrechnung.',
     'Bei einer Stornierung werden geleistete Zahlungen auf die gemäß § 14 geschuldete Stornoentschädigung angerechnet.',

@@ -161,6 +161,7 @@ export function eignerVertrag(i: ContractInput): Block[] {
 
     { t: 'h', nr: '§ 5', text: 'Schlussbestimmungen' },
     { t: 'p', text: 'Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.' },
+    { t: 'p', neu: true, text: 'Bei Abweichungen zwischen diesem Vertrag und den Allgemeinen Geschäftsbedingungen gehen die Regelungen dieses Vertrages vor.' },
 
     { t: 'unterschrift',
       links: { label: 'AUFTRAGGEBER', ort: '', name: `Unterschrift Auftraggeber${i.ownerName.trim() ? ' · ' + i.ownerName.trim() : ''}` },
