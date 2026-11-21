@@ -233,7 +233,7 @@ export default function Vertrag() {
       <p className="lead">Gelb markiert sind die Stellen, die von deiner bisherigen Vorlage abweichen. Im PDF folgen die AGB in der Fassung vom 15.09.2026.</p>
 
       <Opt type="checkbox" name="v-entwurf" value="ja" checked={entwurf} onChange={() => setEntwurf(!entwurf)} title="Als Entwurf kennzeichnen"
-        sub="Oben auf jeder Seite steht „ENTWURF – noch nicht juristisch geprüft“. Nimm den Haken erst heraus, wenn dein Jurist die Texte freigegeben hat." />
+        sub="Unten auf jeder Seite steht in Rot „ENTWURF“. Nimm den Haken erst heraus, wenn dein Jurist die Texte freigegeben hat." />
       {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}
       <button className="btn wide" onClick={erzeugen} disabled={busy}>{busy ? 'Erzeugt das PDF …' : 'PDF erzeugen und ablegen'}</button>
 
