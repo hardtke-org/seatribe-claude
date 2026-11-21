@@ -226,7 +226,7 @@ export async function renderPdf(blocks: Block[], opt: { fuss: string; firma: str
     const links = `${s.fuss} · ${opt.firma}`;
     doc.text(opt.entwurf && breite(links) > 62 ? s.fuss : links, L, 286.4);   // sonst läuft der Text in den Entwurfsvermerk
     doc.text(`Seite ${s.nr} von ${von}`, R, 286.4, { align: 'right' });
-    if (opt.entwurf) { font('stark', 7.6, ROT, 0.25); doc.text('ENTWURF – noch nicht juristisch geprüft', 105, 286.4, { align: 'center' }); doc.setCharSpace(0); }
+    if (opt.entwurf) { font('stark', 7.6, ROT, 0.25); doc.text('ENTWURF', 105, 286.4, { align: 'center' }); doc.setCharSpace(0); }
   }
   return doc.output('blob');
 }
