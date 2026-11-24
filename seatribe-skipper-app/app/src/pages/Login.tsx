@@ -15,8 +15,10 @@ function deutsch(msg: string): string {
 }
 
 export default function Login() {
-  const [mode, setMode] = useState<Mode>('login');
-  const [email, setEmail] = useState('');
+  // Einladungslink: /?einladung=adresse öffnet „Konto anlegen" mit der eingeladenen Adresse.
+  const eingeladen = new URLSearchParams(window.location.search).get('einladung')?.trim() ?? '';
+  const [mode, setMode] = useState<Mode>(eingeladen ? 'signup' : 'login');
+  const [email, setEmail] = useState(eingeladen);
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +60,7 @@ export default function Login() {
         <h1>{title}</h1>
         <p className="lead">
           {mode === 'login' && 'Mit deinem Seatribe-Konto.'}
-          {mode === 'signup' && 'Ein Konto für die Skipper App und später auch für die Academy.'}
+          {mode === 'signup' && (eingeladen ? 'Du wurdest eingeladen. Leg dein Konto bitte mit dieser E-Mail-Adresse an, dann wirst du gleich zugeordnet.' : 'Ein Konto für die Skipper App und später auch für die Academy.')}
           {mode === 'reset' && 'Wir schicken dir einen Link, über den du ein neues Passwort setzt.'}
         </p>
       </div>

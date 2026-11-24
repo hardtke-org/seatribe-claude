@@ -125,6 +125,16 @@ export interface HubspotOrder {
   terms: Terms;
 }
 
+export interface Invitation {
+  id: string;
+  invited_by: string;
+  email: string;
+  role: 'skipper' | 'crew';
+  created_at: string;
+  accepted_at: string | null;
+  accepted_by: string | null;
+}
+
 export interface Contract {
   id: string;
   delivery_id: string;
