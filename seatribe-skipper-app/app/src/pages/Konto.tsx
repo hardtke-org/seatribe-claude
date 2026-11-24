@@ -88,6 +88,7 @@ export default function Konto() {
     const adresse = [profile.street, [profile.postal_code, profile.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
     const rows: [string, string][] = [
       ['Rolle', agency ? 'Agentur' : 'Skipper'],
+      ['E-Mail', session?.user.email || '–'],
       ['Name', profile.display_name || '–'],
       ['Firma', profile.company || '–'],
       ['Anschrift', adresse || '–'],
@@ -114,7 +115,6 @@ export default function Konto() {
         <Nav to="/" label="Start" right={<button className="back" onClick={() => { setMsg(null); setEditing(true); }}>Bearbeiten</button>} />
         <div className="stack">
           <h1>Mein Konto</h1>
-          <p className="lead">Angemeldet als {session?.user.email}</p>
         </div>
         {msg && <p className={msg.ok ? 'okmsg' : 'err'} role="status">{msg.text}</p>}
         <dl className="facts">
@@ -135,6 +135,11 @@ export default function Konto() {
       </div>
       <form className="stack" onSubmit={save} noValidate>
         <span className="label">Person</span>
+        <label className="field" htmlFor="k-email">
+          <span>E-Mail</span>
+          <input className="inp" id="k-email" type="email" value={session?.user.email ?? ''} readOnly disabled />
+          <small>Mit dieser Adresse meldest du dich an. Sie lässt sich hier nicht ändern.</small>
+        </label>
         <Field id="k-name" label="Vor- und Nachname" value={f.name} onChange={set('name')} autoComplete="name" />
         <Field id="k-firma" label={agency ? 'Firma' : 'Firma (falls vorhanden)'} value={f.company} onChange={set('company')} autoComplete="organization" />
         <Field id="k-strasse" label="Straße und Hausnummer" value={f.street} onChange={set('street')} autoComplete="street-address" />
