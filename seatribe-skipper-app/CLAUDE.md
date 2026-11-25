@@ -3,7 +3,7 @@
 Diese Datei ist die eine gültige Fassung aller Entscheidungen zu diesem Projekt.
 Sie wird in jeder Sitzung gelesen. Wenn sich etwas ändert oder neu entschieden wird: hier nachtragen.
 
-Stand: 2026-11-17 – Rollen (Agentur/Skipper), Skipper-Profil und Nachweise sind gebaut, siehe „Erste Version für Seatribe und seine Skipper". Zuvor, 2026-11-15: Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
+Stand: 2026-11-25 – Gebaut und live: Rollen Agentur / Skipper / Crew, Skipper-Profil mit Nachweisen, Skipper und Crew einladen und bestätigen, Skipper zuweisen, Auftrag aus HubSpot holen, Vertrag mit dem Eigner als PDF (Entwurf). Die neuesten Einträge stehen jeweils am Ende des Abschnitts „HubSpot als Quelle …", direkt vor der „Liste für den Juristen". Als Nächstes: Umzug in ein eigenes Repository (siehe „Umzug des Repositorys"), dann Crew einer Überführung zuordnen, dann Skipper-Seite durchgehen. Ältere Standzeile: Stand: 2026-11-17 – Rollen (Agentur/Skipper), Skipper-Profil und Nachweise sind gebaut, siehe „Erste Version für Seatribe und seine Skipper". Zuvor, 2026-11-15: Die echte App ist begonnen (`app/`): Login, Mein Konto, Überführungen anlegen/bearbeiten/löschen laufen gegen Supabase. Veröffentlicht unter https://seatribe-skipper-app.vercel.app. Der klickbare Prototyp (`prototyp/index.html`) bleibt die Vorlage für alles, was noch fehlt.
 
 ## Worum es geht
 
@@ -405,6 +405,34 @@ Fünf Schritte: (1) Agentur-Rolle, Bestätigung der Skipper, Seite „Agentur" m
 - **Eine Person, beide Rollen:** Skipper und Crew sehen Unterschiedliches (andere Verträge) und müssen zwischen den Ansichten wechseln können. Noch nicht gebaut; heute hat ein Konto genau eine Rolle. Vorschlag von Claude: Die Rolle im Konto bleibt, aber was jemand bei einer Überführung ist, ergibt sich aus der Zuordnung (als Skipper oder als Crew); ein bestätigter Skipper ist auch als Crew wählbar. Dann braucht es keinen Umschalter – „Meine Aufträge" zeigt bei jedem Auftrag, in welcher Funktion man dabei ist.
 - **Wer braucht welche Dokumente (Vorschlag von Claude zur Abstimmung):** Agentur: Vertrag mit Eigner + AGB, Skippervertrag, Crewvereinbarung, Vollmacht, Ausrüstungsliste, Crewliste, alle Protokolle, Meilenbestätigungen, Rechnungen. Skipper: sein Skippervertrag, Vollmacht, Ausrüstungsliste, Crewliste, Übernahme/Schaden/Übergabe (füllt er aus), eigene Nachweise; keine Eigner-Verträge, keine Preise. Crew: ihre Crewvereinbarung mit Packliste, ihre Meilenbestätigung, eigene Nachweise, später Sicherheitseinweisung.
 - **Nächster Schritt:** Agentur-Seite fertig durchgehen, dann Crew einer Überführung zuordnen und Crew-Ansicht „Meine Törns" (Stufe 2), dann Skipper-Seite durchgehen.
+
+**Skipper und Crew bei der Zuordnung (entschieden vom Auftraggeber am 2026-11-25, noch nicht gebaut):** Ein bestätigter Skipper ist auch als Crew wählbar, **aber nicht umgekehrt: Crew ist nie als Skipper wählbar.** In der Auswahl und in den Listen steht bei jeder Person ein Kennzeichen „Skipper" oder „Crew", damit man sieht, wen man vor sich hat. Die Rolle im Konto bleibt also die Qualifikation; in welcher Funktion jemand bei einer Überführung dabei ist, ergibt sich aus der Zuordnung. Wird aus einem Crewmitglied ein Skipper, stellt die Agentur die Rolle um (Knopf dafür noch nicht gebaut); Konto und Nachweise bleiben. Der Pull Request 20 (Crew einladen, Logo-Link, Bausteine-Knopf) ist bestätigt und live.
+
+**Stand der Testkonten (2026-11-25):** `testlauf-a` Skipper, bestätigt; `testlauf-b` und `testlauf-c` Skipper, Status „wartet". Für Tests werden `testlauf-c` vorübergehend zur Agentur und `testlauf-b` vorübergehend zur Crew gemacht und danach zurückgestellt. In der Skipper-Liste des Auftraggebers stehen sie deshalb mit „wartet" – das sind keine echten Skipper.
+
+### Umzug des Repositorys (vom Auftraggeber am 2026-11-25 gewünscht, noch nicht ausgeführt)
+
+Die Skipper App soll aus `hardtke-org/seatribe-claude` (Unterordner `seatribe-skipper-app/`) in ein eigenes Repository `hardtke-org/seatribe-skipper-app` ziehen, auf dieselbe Ebene wie `hardtke-org/seatribe-academy-portal`. Ablauf, so mit dem Auftraggeber besprochen:
+1. Der Auftraggeber legt in GitHub das leere Repository `seatribe-skipper-app` unter `hardtke-org` an (Claude kann keine Repositories anlegen).
+2. Claude kopiert den Ordner mit seiner Änderungsgeschichte dorthin (Inhalt des Ordners wird zur obersten Ebene: `app/`, `prototyp/`, `supabase/`, `CLAUDE.md`). Das alte Repository bleibt zunächst unverändert.
+3. Vercel-Projekt `seatribe-skipper-app` auf das neue Repository umstellen, Root Directory von `seatribe-skipper-app/app` auf `app`. Ob Claude das über den Connector darf, ist offen; sonst macht es der Auftraggeber in Vercel unter Settings → Git und Settings → Build and Deployment.
+4. Prüfen, dass die App unter https://seatribe-skipper-app.vercel.app neu gebaut wird und läuft.
+5. Erst danach den Ordner im alten Repository löschen und dort einen Hinweis auf den neuen Ort hinterlassen; die Tabelle in der obersten `CLAUDE.md` des alten Repositorys anpassen.
+
+Zu beachten: Die Arbeit geht danach in einer **neuen Claude-Sitzung im neuen Repository** weiter; diese Datei ist dann die einzige Übergabe, der Gesprächsverlauf zieht nicht mit. Nach dem Umzug in dieser Datei alle Pfade prüfen (`../boat-check` liegt dann in einem anderen Repository) und den Abschnitt „Die echte App" (Root Directory) berichtigen. Supabase, die Adresse der App und die Konten ändern sich nicht. Boat Check, Anfrage-Formular und „defender" bleiben in `seatribe-claude`. Beide Repositories sind derzeit öffentlich; Empfehlung von Claude: nach dem Umzug privat stellen.
+
+### Software-Übersicht (zusammengestellt am 2026-11-25 für den Auftraggeber; er führt die Liste an anderer Stelle selbst weiter)
+
+Keine Schlüssel oder Passwörter hier – nur, was es gibt.
+- **GitHub:** Organisation `hardtke-org` mit `seatribe-claude` und `seatribe-academy-portal` (beide öffentlich).
+- **Vercel:** ein Team „hardtke-org's projects" (kostenlos) mit drei Projekten: `seatribe-skipper-app`, `seatribe-onboarding` (der Boat Check), `seatribe-academy-portal`.
+- **Supabase:** Organisation „Seatribe GmbH" (kostenlos) mit zwei Projekten: „Seatribe Skipper App" (`kfyltkepnyrdqvhmjymg`) und „seatribe-academy-portal" (`zjfrolqpnoxctswutape`). Im kostenlosen Tarif sind nach Claudes Wissen nur zwei aktive Projekte möglich.
+- **HubSpot:** Portal 27171859, ein Nutzer. **n8n:** eine Instanz mit 19 Workflows (Preisindikationen Segelboot/LKW/Frachtschiff, Auto-Mail, Nachfass-Mail, Pipeline-Routing, Bootsdaten-Bot, Auftrags-ID, Duplikat-Wächter, Daten-Bereinigung); Cloud oder eigener Server ist Claude unbekannt. **Make:** Organisation „My Organization", Tarif Core – vermutlich durch n8n ersetzt, zu prüfen.
+- **Website:** WordPress unter seatribe-deliveries.com, angebunden über den Dienst WPVibe (dessen Konto läuft auf eine andere E-Mail-Adresse als die übrigen Dienste).
+- **Marketing:** Metricool mit drei Marken (Seatribe Sailing & Deliveries, hardtke.org, Matthias Hardtke); Canva mit zwei Marken-Kits; Google Ads.
+- **Büro:** Google-Konto (Drive, Gmail, Kalender), IONOS-Postfach, Resend (Mails des Boat Check), Calendly (`seatribe-gmbh`), Notion, Miro, Slack, Zoom, Wispr Flow; ElevenLabs und Prompt Edit für Medien.
+- **Noch nicht vorhanden bzw. Claude unbekannt:** Stripe, Ort der Domains, Hoster der Website, Video-Streaming für die Academy, Buchhaltung.
+- Hinweise von Claude: Fast alles hängt an einem Google-Login (Zwei-Faktor-Anmeldung, Wiederherstellungs-Codes); Supabase kostenlos heißt keine tägliche Sicherung; Vercel kostenlos ist nur für nicht-kommerzielle Nutzung.
 
 ## Liste für den Juristen
 
