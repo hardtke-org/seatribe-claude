@@ -32,11 +32,13 @@ export function Icon({ n, className }: { n: string; className?: string }) {
 export function Top() {
   return (
     <header className="top">
-      <img src="/logo-192.png" alt="Seatribe Deliveries" />
-      <div>
-        <div className="name">Skipper App</div>
-        <div className="tag">Seatribe Deliveries</div>
-      </div>
+      <Link className="home" to="/" aria-label="Zur Startseite">
+        <img src="/logo-192.png" alt="" />
+        <span>
+          <span className="name">Skipper App</span>
+          <span className="tag">Seatribe Deliveries</span>
+        </span>
+      </Link>
     </header>
   );
 }

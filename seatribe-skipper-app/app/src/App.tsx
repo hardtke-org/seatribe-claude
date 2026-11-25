@@ -28,7 +28,9 @@ export default function App() {
       <Route path="/agentur" element={<Agentur />} />
       {agentur ? (
         <>
+          <Route path="/agentur/crew" element={<Agentur rolle="crew" />} />
           <Route path="/agentur/skipper/:id" element={<AgenturSkipper />} />
+          <Route path="/agentur/crew/:id" element={<AgenturSkipper />} />
           <Route path="/ueberfuehrungen" element={<Liste />} />
           <Route path="/ueberfuehrungen/hubspot" element={<HubspotImport />} />
           <Route path="/ueberfuehrungen/neu" element={<DeliveryForm />} />

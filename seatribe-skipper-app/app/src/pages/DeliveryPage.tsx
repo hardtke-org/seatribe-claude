@@ -13,6 +13,7 @@ export default function DeliveryPage() {
   const [d, setD] = useState<Delivery | null>(null);
   const [state, setState] = useState<'loading' | 'ok' | 'missing' | 'error'>('loading');
   const [choosing, setChoosing] = useState(false);
+  const [changed, setChanged] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState('');
   const [terms, setTerms] = useState<Terms | null>(null);
@@ -44,6 +45,7 @@ export default function DeliveryPage() {
     if (!d) return;
     const modules = { ...d.modules, [k]: !bausteinAn(d.modules, k) };
     const before = d;
+    setChanged(true);
     setD({ ...d, modules });
     const { error } = await supabase.from('deliveries').update({ modules }).eq('id', d.id);
     if (error) { setD(before); setError('Die Auswahl konnte nicht gespeichert werden: ' + error.message); }
@@ -143,7 +145,7 @@ export default function DeliveryPage() {
       })}
 
       <div className="stack">
-        <button className="btn ghost" aria-expanded={choosing} onClick={() => setChoosing(!choosing)}>{choosing ? 'Auswahl schließen' : 'Bausteine auswählen'}</button>
+        <button className={choosing && changed ? 'btn' : 'btn ghost'} aria-expanded={choosing} onClick={() => { setChoosing(!choosing); setChanged(false); }}>{choosing ? 'Speichern und schließen' : 'Bausteine auswählen'}</button>
         {choosing && (
           <>
             <p className="lead">Nur was angehakt ist, erscheint oben und wird später zum PDF.</p>

@@ -55,6 +55,8 @@ button { cursor: pointer; }
 
 .top { display: flex; align-items: center; gap: 12px; background: var(--deep); color: var(--deep-ink); margin-inline: -16px;
   padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px; border-radius: 0 0 18px 18px; }
+.top .home { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; border-radius: 8px; }
+.top .name, .top .tag { display: block; }
 .top img { width: 48px; height: 48px; flex: none; background: #fff; border-radius: 50%; }
 .top .name { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; line-height: 1.1; }
 .top .tag { color: var(--deep-soft); font-size: .8rem; }
