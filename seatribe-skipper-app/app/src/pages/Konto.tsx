@@ -87,7 +87,7 @@ export default function Konto() {
     const land = LAENDER.find((l) => l[0] === profile.country)?.[1] ?? profile.country;
     const adresse = [profile.street, [profile.postal_code, profile.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
     const rows: [string, string][] = [
-      ['Rolle', agency ? 'Agentur' : 'Skipper'],
+      ['Rolle', agency ? 'Agentur' : profile.role === 'crew' ? 'Crew' : 'Skipper'],
       ['E-Mail', session?.user.email || '–'],
       ['Name', profile.display_name || '–'],
       ['Firma', profile.company || '–'],

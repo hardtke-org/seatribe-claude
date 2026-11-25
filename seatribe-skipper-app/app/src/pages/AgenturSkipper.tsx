@@ -19,7 +19,7 @@ export default function AgenturSkipper() {
 
   const load = useCallback(async () => {
     if (!id) return;
-    const { data, error } = await supabase.from('profiles').select('*').eq('id', id).eq('role', 'skipper').maybeSingle();
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', id).neq('role', 'agentur').maybeSingle();
     if (error) { setError(error.message); setP(null); return; }
     setP((data as Profile | null) ?? null);
     if (data) listDocuments(id).then(setDocs).catch((e) => setError(String(e.message ?? e)));
@@ -37,7 +37,9 @@ export default function AgenturSkipper() {
 
   if (me && me.role !== 'agentur') return <Navigate to="/agentur" replace />;
   if (p === undefined) return (<><Top /><Nav to="/agentur" label="Skipper" /><p className="lead">Lädt …</p></>);
-  if (p === null) return (<><Top /><Nav to="/agentur" label="Skipper" /><p className="hint">Diesen Skipper gibt es nicht.</p>{error && <p className="err">{error}</p>}</>);
+  if (p === null) return (<><Top /><Nav to="/agentur" label="Skipper" /><p className="hint">Dieses Konto gibt es nicht.</p>{error && <p className="err">{error}</p>}</>);
+  const crew = p.role === 'crew';
+  const zurueck = crew ? { to: '/agentur/crew', label: 'Crew' } : { to: '/agentur', label: 'Skipper' };
 
   const adresse = [p.street, [p.postal_code, p.city].filter(Boolean).join(' ')].filter(Boolean).join(', ');
   const rows: [string, string][] = [
@@ -53,7 +55,7 @@ export default function AgenturSkipper() {
   return (
     <>
       <Top />
-      <Nav to="/agentur" label="Skipper" />
+      <Nav to={zurueck.to} label={zurueck.label} />
       <div className="stack">
         <h1>{p.display_name || p.email || 'Ohne Namen'}</h1>
         <p><span className={'state ' + STATUS[p.seatribe_status].c}>{STATUS[p.seatribe_status].t}</span></p>
@@ -61,7 +63,7 @@ export default function AgenturSkipper() {
       {error && <p className="err" role="alert">{error}</p>}
 
       {p.seatribe_status !== 'bestaetigt' && (
-        <button className="btn wide" disabled={busy} onClick={() => setStatus('bestaetigt')}>Als Seatribe-Skipper bestätigen</button>
+        <button className="btn wide" disabled={busy} onClick={() => setStatus('bestaetigt')}>{crew ? 'Als Seatribe-Crew bestätigen' : 'Als Seatribe-Skipper bestätigen'}</button>
       )}
       {p.seatribe_status === 'neu' && (
         <button className="btn ghost wide" disabled={busy} onClick={() => setStatus('abgelehnt')}>Nicht freigeben</button>

@@ -11,7 +11,7 @@ export interface Profile {
   tax_number: string | null;
   mail_mode: MailMode;
   sender_email: string | null;
-  role: 'skipper' | 'agentur';
+  role: 'skipper' | 'crew' | 'agentur';
   seatribe_status: 'neu' | 'bestaetigt' | 'abgelehnt';
   email: string | null;
   phone: string | null;
